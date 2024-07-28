@@ -1,0 +1,132 @@
+.cauto-settings-wrappers {
+    padding-right: 20px;
+    height: 100%;
+}
+
+.cauto-settings-wrappers .wrap{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.cauto-settings-wrappers .wrap .col-80 {
+    width: 80%;
+}
+
+.cauto-settings-wrappers .wrap .col-20 {
+    width: 20%;
+}
+
+.cauto-settings-wrappers .wrap .title {
+    font-size: 23px;
+    line-height: 23px;
+    font-weight: 600;
+    position: relative;
+}
+
+.cauto-settings-wrappers .wrap .title span {
+    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.cauto-settings-wrappers .wrap .controls ul{
+    display: inline;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+.cauto-settings-wrappers .head {
+    padding: 20px 0;
+}   
+
+.cauto-settings-wrappers .wrap .controls ul li {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0;
+}
+
+.cauto-button {
+    border-radius: 50px;
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 14px;
+    background-color: #CCC;
+    border: 0;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    margin: 0 3px;
+    position: relative;
+}
+
+.cauto-button .dashicons {
+    vertical-align: middle;
+    display: inline;
+    margin-right: 5px;
+}
+ 
+
+.cauto-settings-wrappers .wrap .controls ul li:last-child button {
+    margin-right: 0;
+}
+
+.cauto-button.primary {
+    background-color: #f25405;
+    color: white;
+}
+
+.cauto-settings-wrappers .wrap .controls:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+
+/* Ripple effect */
+.caut-ripple {
+    background-position: center;
+    transition: background 0.8s;
+}
+.caut-ripple:hover {
+    background: #e0e0e0 radial-gradient(circle, transparent 1%, #e0e0e0 1%) center/15000%;
+}
+
+.caut-ripple.primary:hover {
+    background: #fc8244 radial-gradient(circle, transparent 1%, #fc8244 1%) center/15000%;
+}
+.caut-ripple:active {
+    background-color: #CCC;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.caut-ripple.primary:active {
+    background-color: #f25405;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+/* popus */
+.cauto-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: none;
+}
+
+.cauto-popup .cauto-new-flow {
+    position: relative;
+    max-width: 500px;
+    height: 500px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+}
