@@ -90,7 +90,7 @@ class class_utils
                             $attr = (is_array($attr))? implode(' ', $attr) : $attr;
                             $composed_string .= sprintf("%s=\"%s\" ", $iii, $attr);
                         }
-                        $data[$i][$ii] = $composed_string; 
+                        $data[$i]['iattr'] = $composed_string; 
                     }
                 }
             }

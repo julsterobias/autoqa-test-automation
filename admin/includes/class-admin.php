@@ -10,6 +10,7 @@
 namespace cauto\admin\includes;
 use cauto\includes\class_utils;
 use cauto\admin\includes\class_admin_init;
+use cauto\admin\includes\class_admin_ui;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -33,64 +34,10 @@ class class_admin extends class_utils
 
         add_action('admin_enqueue_scripts', [$this, 'load_assets']);
         add_action('admin_menu', [$this, 'load_tool']);
-
-
-        //prepare UI
-        add_action('cauto_top_control', [$this, 'load_top_controls']);
-        //load new flow
-        add_action('cauto-load-new-flow', [$this, 'load_new_flow']);
-    }
-
-    public function load_top_controls()
-    {
-        $controls = [
-            [
-                'attr'  => [
-                    "class"     => "cauto-top-class cauto-button primary caut-ripple",
-                    "id"        => "cauto-new-case"
-                ],
-                'label' => __('New Test Flow', 'codecorun-test-automation'),
-                'icon'  => '<span class="dashicons dashicons-insert"></span>'
-            ],
-            [
-                'attr'  => [
-                    "class" => "cauto-top-class cauto-button caut-ripple",
-                    "id"    => "cauto-support"
-                ],
-                'label' =>  __('Support', 'codecorun-test-automation'),
-                'icon'  => '<span class="dashicons dashicons-sos"></span>'
-            ],
-           
-        ];
-        $controls = apply_filters('cauto_top_controls', $controls);
-        $controls = $this->prepare_attr($controls);
-        $this->get_view('part-controls', ['path' => 'admin', 'controls' => $controls]);
-    }
-
-    public function load_new_flow()
-    {
-        $fiels = [
-            [
-                'type'  => 'text',
-                'attr'  => [
-                    'id'    => 'cauto-new-flow-name',
-                    'class' => 'cauto-field'
-                ],
-                'label'     => __('Flow Name', 'codecorun-test-automation'),
-                'icon'      => null
-            ],
-            [
-                'type'  => 'toggle',
-                'attr'  => [
-                    'id'    => 'cauto-flow-stop-on-error',
-                    'class' => 'cauto-field-checkbox'
-                ],
-                'label'     => __('Stop on error', 'codecorun-test-automation'),
-                'icon'      => null
-            ]
-        ];
-
-        $this->get_view('popups/new-flow', ['path' => 'admin', 'fields' => $fiels]);
+        
+        //admin UIs
+        new class_admin_ui;
+        
     }
 
     /**

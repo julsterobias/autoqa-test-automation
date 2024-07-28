@@ -1,5 +1,3 @@
-<div class="cauto-popup">
-    <div class="cauto-popup-wrapper" id="cauto-popup-content">
-        <?php do_action('cauto-load-new-flow'); ?>
-    </div> 
+<div class="cauto-popup" id="cauto-popup-new-flow">
+    <?php do_action('cauto_load_new_flow'); ?>
 </div>
