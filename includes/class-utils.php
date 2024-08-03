@@ -2,7 +2,7 @@
 /**
  * 
  * 
- * class_utils
+ * cuato_utils
  * @since 1.0.0
  * 
  * 
@@ -22,11 +22,15 @@ if ( !function_exists( 'add_filter' ) ){
     exit();
 }
 
-class class_utils 
+class cauto_utils 
 {
 
 
-    public string $slug = 'codecorun-test-automation';
+    public string $slug             = 'codecorun-automation';
+
+    public string $nonce            = 'cauto-S3cR3t_KEY';
+
+    public string $settings_page    = 'test-tools';
 
     /**
 	*

@@ -1,0 +1,114 @@
+.cauto-settings-wrappers .wrapper{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.cauto-settings-wrappers .wrapper .col {
+    position: relative;
+}
+
+.cauto-settings-wrappers .wrapper .col-1 {
+    width: 1%;
+}
+.cauto-settings-wrappers .wrapper .col-2 {
+    width: 2%;
+}
+.cauto-settings-wrappers .wrapper .col-3 {
+    width: 3%;
+}
+.cauto-settings-wrappers .wrapper .col-4 {
+    width: 4%;
+}
+
+.cauto-settings-wrappers .wrapper .col-5 {
+    width: 5%;
+}
+
+.cauto-settings-wrappers .wrapper .col-10 {
+    width: 10%;
+}
+
+.cauto-settings-wrappers .wrapper .col-15 {
+    width: 15%;
+}
+
+.cauto-settings-wrappers .wrapper .col-20 {
+    width: 20%;
+}
+
+.cauto-settings-wrappers .wrapper .col-25 {
+    width: 25%;
+}
+
+.cauto-settings-wrappers .wrapper .col-30 {
+    width: 30%;
+}
+
+.cauto-settings-wrappers .wrapper .col-35 {
+    width: 35%;
+}
+
+.cauto-settings-wrappers .wrapper .col-40 {
+    width: 40%;
+}
+
+.cauto-settings-wrappers .wrapper .col-45 {
+    width: 45%;
+}
+
+.cauto-settings-wrappers .wrapper .col-50 {
+    width: 50%;
+}
+
+.cauto-settings-wrappers .wrapper .col-55 {
+    width: 55%;
+}
+
+.cauto-settings-wrappers .wrapper .col-60 {
+    width: 60%;
+}
+
+.cauto-settings-wrappers .wrapper .col-65 {
+    width: 65%;
+}
+
+.cauto-settings-wrappers .wrapper .col-70 {
+    width: 70%;
+}
+
+.cauto-settings-wrappers .wrapper .col-75 {
+    width: 75%;
+}
+
+.cauto-settings-wrappers .wrapper .col-80 {
+    width: 80%;
+}
+
+.cauto-settings-wrappers .wrapper .col-85 {
+    width: 85%;
+}
+
+.cauto-settings-wrappers .wrapper .col-90 {
+    width: 90%;
+}
+
+.cauto-settings-wrappers .wrapper .col-95 {
+    width: 95%;
+}
+
+.cauto-settings-wrappers .wrapper .col-95 {
+    width: 95%;
+}
+
+.cauto-settings-wrappers .wrapper .col-94 {
+    width: 94%;
+}
+.cauto-settings-wrappers .wrapper .col-93 {
+    width: 93%;
+}
+.cauto-settings-wrappers .wrapper .col-92 {
+    width: 92%;
+}
+.cauto-settings-wrappers .wrapper .col-91 {
+    width: 91%;
+}

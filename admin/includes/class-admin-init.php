@@ -9,7 +9,7 @@
  * 
  */
 namespace cauto\admin\includes;
-use cauto\includes\class_utils;
+use cauto\includes\cauto_utils;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -23,14 +23,15 @@ if ( !function_exists( 'add_filter' ) ){
     exit();
 }
 
-class class_admin_init extends class_utils
+class cauto_admin_init extends cauto_utils
 {
     public function __construct()
     {
-        add_action('init', [$this, 'register_post_type']);
+        add_action('init', [$this, 'register_post']);
+        add_action('admin_menu', [$this, 'load_tool']);
     }
 
-    function register_post_type() {
+    function register_post() {
         $labels = array(
             'name'                  => _x( 'Codecorun Test Automation', 'Post type general name', 'codecorun-test-automation' ),
             'singular_name'         => _x( 'Codecorun Test Automation', 'Post type singular name', 'codecorun-test-automation' ),
@@ -62,8 +63,8 @@ class class_admin_init extends class_utils
             'labels'             => $labels,
             'public'             => false,
             'publicly_queryable' => false,
-            'show_ui'            => false,
-            'show_in_menu'       => false,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
             'query_var'          => false,
             'rewrite'            => array( 'slug' => $this->slug ),
             'capability_type'    => 'post',
@@ -74,6 +75,44 @@ class class_admin_init extends class_utils
         );
     
         register_post_type( $this->slug, $args );
+    }
+
+    /**
+     * 
+     * 
+     * load_tool
+     * @since 1.0.0
+     * 
+     * 
+     */
+    public function load_tool()
+    {
+        add_management_page(
+            __('Test Automation', 'codecorun_automation'),        
+            __('Test Automation', 'codecorun_automation'),        
+            'manage_options',  
+            $this->settings_page,   
+            [$this, 'test_tools']      
+        );
+    }
+
+
+    /**
+     * 
+     * 
+     * load_assets
+     * @since 1.0.0
+     * 
+     * 
+     */
+    public function test_tools()
+    {
+        $flow_id = (isset($_GET['flow']))? $_GET['flow'] : null; 
+        $flow_details = null;
+        if ($flow_id) {
+            $flow_details = get_post($flow_id);
+        }
+        $this->get_view('part-tools', ['path' => 'admin', 'details' => $flow_details]);
     }
 
 }

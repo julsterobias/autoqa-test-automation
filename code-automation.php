@@ -23,6 +23,7 @@ defined( 'ABSPATH' ) or die( 'No access area' );
 define('CAUTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 define('CAUTO_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('CAUTO_PLUGIN_VERSION','1.0.0');
+define('CAUTO_PLUGIN_VERSION_DESC','Proto');
 define('CAUTO_NAMESPACES', ['includes','admin/includes']);
 
 
@@ -89,6 +90,9 @@ if (!function_exists('cauto_deactivate_plugin')) {
  */
 function cauto_init_depencies()
 {
+    //load in priority
+    include_once 'includes/class-utils.php';
+
     foreach (CAUTO_NAMESPACES as $path) {
         $fullpath = CAUTO_PLUGIN_PATH.$path;
         if (is_dir($fullpath)) {
@@ -116,6 +120,8 @@ function cauto_init_depencies()
         } 
 
     }
+
+
 }
 
 
@@ -130,7 +136,7 @@ add_action('plugins_loaded', 'cauto_plugin_loaded');
 function cauto_plugin_loaded(){
     if (function_exists('cauto_init_depencies')) {
         cauto_init_depencies();
-        new cauto\admin\includes\class_admin; 
+        new cauto\admin\includes\cauto_admin; 
     }
 }
 ?>
