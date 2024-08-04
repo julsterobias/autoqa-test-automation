@@ -6,9 +6,19 @@ if (!empty($data['data']['fields'])):
 ?>
                 <div class="cauto-ui-wrapper">
                     <div class="cauto-input-wrapper">
-                        <label><?php echo esc_html($field['label']); ?>
-                            <input <?php echo $field['iattr'] ?>>
+                        <?php 
+                            if ($field['attr']['type'] === 'checkbox'):
+                        ?>  
+                        <label>
+                            <input <?php echo $field['iattr']; ?>> <?php echo esc_html($field['label']); ?>
                         </label>
+                        <?php
+                            else:
+                        ?>
+                        <label><?php echo esc_html($field['label']); ?>
+                            <input <?php echo $field['iattr']; ?>>
+                        </label>
+                        <?php endif; ?>
                     </div>
                 </div>
 <?php
@@ -41,6 +51,11 @@ if (!empty($data['data']['fields'])):
                 </div>
             </div>
 <?php
+            break;
+            case 'group':
+?>
+            
+<?php              
             break;
             case 'custom':
 ?>

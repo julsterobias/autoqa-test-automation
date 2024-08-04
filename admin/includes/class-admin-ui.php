@@ -53,6 +53,8 @@ class cauto_admin_ui extends cauto_utils
         add_action('wp_ajax_cauto_steps_ui', [$this, 'load_step_ui']);
         //load start popup
         add_action('cauto_load_step_config', [$this, 'load_step_popup']);
+        //load step controls
+        add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 2);
     }
 
     public function init_steps()
@@ -69,6 +71,61 @@ class cauto_admin_ui extends cauto_utils
                             'class' => 'cauto-step-nodes cauto-start-step cauto-field wide'
                         ],
                         'label'         => __('Page URL', 'codecorun-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'checkbox',
+                            'id'    => 'cauto_test1_checkbox',
+                            'class' => 'cauto-start-step-checkbox'
+                        ],
+                        'label'         => __('Checkbox 1', 'codecorun-test-automation')
+                    ],
+                    [
+                        'field' => 'group',
+                        'attr'  => [
+                            'type'  => 'checbox',
+                            'id'    => '',
+                            'class' => 'cauto-start-step-checkbox-group'
+                        ],
+                        'label'         => __('Group checkbox Label', 'codecorun-test-automation'),
+                        'options'       => [
+                            [
+                                'label' => 'Group Checkbox 1',
+                                'value' => 'gc1'
+                            ],
+                            [
+                                'label' => 'Group Checkbox 2',
+                                'value' => 'gc2'
+                            ],
+                            [
+                                'label' => 'Group Checkbox 3',
+                                'value' => 'gc3'
+                            ]
+                        ]
+                    ],
+                    [
+                        'field' => 'group',
+                        'attr'  => [
+                            'type'  => 'radio',
+                            'id'    => '',
+                            'class' => 'cauto-start-step-radio-group'
+                        ],
+                        'label'         => __('Group Radio Label', 'codecorun-test-automation'),
+                        'options'       => [
+                            [
+                                'label' => 'Group Radio 1',
+                                'value' => 'gc1'
+                            ],
+                            [
+                                'label' => 'Group Radio 2',
+                                'value' => 'gc2'
+                            ],
+                            [
+                                'label' => 'Group Radio 3',
+                                'value' => 'gc3'
+                            ]
+                        ]
                     ]
                 ],
                 'icon'      => '<span class="dashicons dashicons-laptop"></span>',
@@ -82,11 +139,24 @@ class cauto_admin_ui extends cauto_utils
                 'label'     => __('Click', 'codecorun-test-automation'),
                 'settings'      => [
                     [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_selector_type',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
+                        ],
+                        'label'     => __('Selector', 'codecorun-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'codecorun-test-automation'),
+                            'id'    => __('ID', 'codecorun-test-automation'),
+                            'xpath' => __('Xpath', 'codecorun-test-automation')
+                        ]
+                    ],
+                    [
                         'field' => 'input',
                         'attr'  => [
                             'type'  => 'text',
-                            'id'    => uniqid(),
-                            'class' => 'cauto-step-nodes cauto-click-step'
+                            'id'    => 'cauto_step_selector',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
                         'label' => __('Identifier', 'codecorun-test-automation')
                     ]
@@ -102,10 +172,24 @@ class cauto_admin_ui extends cauto_utils
                 'label'     => __('Page Title', 'codecorun-test-automation'),
                 'settings'      => [
                     [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_title_condition',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'codecorun-test-automation'),
+                        'options'   => [
+                            'equals_to'     => __('Equals to', 'codecorun-test-automation'),
+                            'contains_with'      => __('Contains with', 'codecorun-test-automation'),
+                            'start_with'    => __('Start with', 'codecorun-test-automation'),
+                            'end_with'      => __('End with', 'codecorun-test-automation')
+                        ]
+                    ],
+                    [
                         'field' => 'input',
                         'attr'  => [
                             'type'  => 'text',
-                            'id'    => uniqid(),
+                            'id'    => 'cauto_field_check_title',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
                         'label' => __('Title', 'codecorun-test-automation')
@@ -208,7 +292,7 @@ class cauto_admin_ui extends cauto_utils
                     "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
                 ],
                 'label' =>  __('Cancel', 'codecorun-test-automation'),
-                'icon'  => '<span class="dashicons dashicons-redo"></span>'
+                'icon'  => '<span class="dashicons dashicons-no"></span>'
             ]
         ];
 
@@ -325,9 +409,20 @@ class cauto_admin_ui extends cauto_utils
 
             $start_ui = $this->prepare_attr($this->steps[$type]['settings']);
 
+            $field_ids = [];
+            foreach ($this->steps[$type]['settings'] as $step) {
+                if (isset($step['attr']['id'])) {
+                    $field_ids[] = [
+                        'field'     => $step['field'],
+                        'type'      => (isset($step['attr']['type']))? $step['attr']['type'] : null,
+                        'class'     => (isset($step['attr']['class']))? $step['attr']['class'] : null,
+                        'id'        => $step['attr']['id']
+                    ];
+                }
+            }
 
             ob_start();
-            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $start_ui]);
+            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $start_ui, 'field_ids' => $field_ids]);
             $reponse = ob_get_clean();
 
             echo json_encode(
@@ -353,6 +448,53 @@ class cauto_admin_ui extends cauto_utils
     public function load_step_popup()
     {
         $this->get_view('popups/step-config', ['path' => 'admin']);
+    }
+
+    public function load_step_controls($type = null, $field_ids = [])
+    {
+        $right_buttons = [
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-top-class cauto-button primary caut-ripple",
+                    "id"        => "cauto-save-step",
+                    "title"     => __('Save Changes', 'condecorun-test-automation')
+                ],
+                'label'     => __('Save', 'condecorun-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-saved"></span>'
+            ],
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-top-class cauto-button caut-ripple cauto-cancel",
+                    "id"        => "",
+                    "title"     => __('Abort Changes', 'condecorun-test-automation')
+                ],
+                'label'     =>  __('Cancel', 'condecorun-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-no"></span>'
+            ],
+        ];
+        $right_buttons = apply_filters('cauto_step_config_buttons', $right_buttons);
+        $right_buttons = $this->prepare_attr($right_buttons);
+
+
+        $left_control = [
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-button-icon",
+                    "id"        => "cauto-delete-step",
+                    "title"     => __('Delete Step', 'condecorun-test-automation')
+                ],
+                'label'     => null,
+                'icon'      => '<span class="dashicons dashicons-trash"></span>'
+            ]
+        ];
+        $left_control = apply_filters('cauto_step_config_delete_buttons', $left_control);
+        $left_control = $this->prepare_attr($left_control);
+
+        $this->get_view('steps/part-controls', ['path' => 'admin', 'field_ids' => $field_ids, 'right_controls' => $right_buttons, 'left_controls' => $left_control]);
+
     }
 
 

@@ -7,4 +7,7 @@
             do_action('cauto_load_ui', ['fields' => $data['config']], 'fields', []);
         endif; ?>
     </div>
+    <div class="cauto-step-controls">
+        <?php do_action('cauto_step_controls', 'check-title', $data['field_ids']); ?>
+    </div>
 </div>

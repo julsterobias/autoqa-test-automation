@@ -1,6 +1,6 @@
 <div class="cauto-step-config">
     <div class="cauto-step-config-header">
-        <h3><?php esc_html_e('Start', 'codecorun-test-automation'); ?></h3>
+        <h3><?php esc_html_e('Click', 'codecorun-test-automation'); ?></h3>
     </div>
     <div class="cauto-fields auto-type-start">
         <?php if (!empty($data['config'])): 
@@ -8,6 +8,6 @@
         endif; ?>
     </div>
     <div class="cauto-step-controls">
-        <?php do_action('cauto_step_controls', 'start', $data['field_ids']); ?>
+        <?php do_action('cauto_step_controls', 'click', $data['field_ids']); ?>
     </div>
 </div>

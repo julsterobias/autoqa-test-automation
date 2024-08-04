@@ -4,7 +4,7 @@
         <div class="cauto-new-flow-fields">
             <?php do_action('cauto_load_ui', $data, 'fields'); ?>
         </div>
-        <div class="cauto-new-flow-controls">
+        <div class="cauto-modal-below-controls">
             <?php do_action('cauto_load_ui', $data, 'buttons'); ?>
         </div>
     </div>

@@ -3,6 +3,10 @@
     height: 100%;
 }
 
+.cauto-settings-wrappers .version {
+    margin-right: 20px;
+}
+
 .cauto-settings-wrappers .wrapper .title {
     font-size: 23px;
     line-height: 23px;
@@ -176,6 +180,11 @@
 
 .cauto-popup .cauto-popup-content .cauto-field.wide {
     width: 100%;
+    max-width: none;
+}
+
+.cauto-popup .cauto-popup-content .cauto-field.block {
+    display: block;
 }
 
 /*
@@ -230,9 +239,19 @@ label.cauto-toggle-label:active:after {
     padding: 15px 0;
 }
 
-.cauto-new-flow-controls {
+.cauto-modal-below-controls {
     border-top: 1px solid #f2f2f2;
     padding-top: 20px;
+    text-align: right;
+}
+
+.cauto-modal-control-area {
+    border-top: 1px solid #f2f2f2;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.cauto-modal-control-area .wrapper div:last-child {
     text-align: right;
 }
 
