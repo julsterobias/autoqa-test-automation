@@ -84,7 +84,7 @@ class cauto_admin_ui extends cauto_utils
                     [
                         'field' => 'group',
                         'attr'  => [
-                            'type'  => 'checbox',
+                            'type'  => 'checkbox',
                             'id'    => '',
                             'class' => 'cauto-start-step-checkbox-group'
                         ],
@@ -109,7 +109,8 @@ class cauto_admin_ui extends cauto_utils
                         'attr'  => [
                             'type'  => 'radio',
                             'id'    => '',
-                            'class' => 'cauto-start-step-radio-group'
+                            'class' => 'cauto-start-step-radio-group',
+                            'name'  => 'testradiogroup'
                         ],
                         'label'         => __('Group Radio Label', 'codecorun-test-automation'),
                         'options'       => [
@@ -180,6 +181,7 @@ class cauto_admin_ui extends cauto_utils
                         'label'     => __('Condition', 'codecorun-test-automation'),
                         'options'   => [
                             'equals_to'     => __('Equals to', 'codecorun-test-automation'),
+                            'not_equals_to' => __('Not equals to', 'codecorun-test-automation'),
                             'contains_with'      => __('Contains with', 'codecorun-test-automation'),
                             'start_with'    => __('Start with', 'codecorun-test-automation'),
                             'end_with'      => __('End with', 'codecorun-test-automation')

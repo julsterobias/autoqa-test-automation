@@ -54,7 +54,24 @@ if (!empty($data['data']['fields'])):
             break;
             case 'group':
 ?>
-            
+            <div class="cauto-ui-wrapper">
+                <div class="cauto-group-wrapper">
+                    <?php if ($field['label']): ?>
+                        <h4><?php echo esc_html($field['label']); ?></h4>
+                        <?php if (count($field['options']) > 0): ?>
+                            <ul>
+                            <?php foreach ($field['options'] as $option): ?>
+                                <li>
+                                    <label>
+                                        <input <?php echo $field['iattr']; ?> value="<?php echo esc_attr($option['value']); ?>"> <?php echo esc_html($option['label']); ?>
+                                    </label>
+                                </li>
+                            <?php endforeach; ?>
+                            </ul>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
 <?php              
             break;
             case 'custom':

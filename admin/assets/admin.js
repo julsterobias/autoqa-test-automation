@@ -70,33 +70,25 @@ var cauto_validate_set_step_config = (fields = null) => {
                 case 'input':
                 case 'select':
                 case 'textarea':
+                case 'group':
                 case 'toggle':
                     switch (fields[x].type) {
                         case 'checkbox':
                         case 'radio':
                             if (fields[x].id) {
-                                if (jQuery(fields[x].id).is(':checked')) {
-                                    let checked_value = jQuery(fields[x].id).val();
+                                if (jQuery('#'+fields[x].id).is(':checked')) {
+                                    let checked_value = jQuery('#'+fields[x].id).val();
                                     fields[x]['value'] = (checked_value)? checked_value : true;
                                 }
                             } else if (fields[x].class) {
-                                if (fields[x].type === 'checkbox') {
-                                    let multi_checkbox = [];
-                                    //loop with class
-                                    //checkbox could have one or more value
-                                    jQuery(fields[x].class).each(function(){
-                                        if (jQuery(fields[x].class).is(':checked')) {
-                                            let checked_value = (jQuery(fields[x].class).val())? jQuery(fields[x].class).val() : true;
-                                            multi_checkbox.push(checked_value);
-                                        }
-                                    });
-                                    fields[x]['value'] = multi_checkbox;
-                                } else {
-                                    if (jQuery(fields[x].class).is(':checked')) {
-                                        let checked_value = jQuery(fields[x].class).val();
-                                        fields[x]['value'] = (checked_value)? checked_value : true;
+                                let multi_checkbox = [];
+                                jQuery('.'+fields[x].class).each(function(){
+                                    if (jQuery(this).is(':checked')) {
+                                        let checked_value = (jQuery(this).val())? jQuery(this).val() : true;
+                                        multi_checkbox.push(checked_value);
                                     }
-                                }
+                                });
+                                fields[x]['value'] = multi_checkbox;
                             } else {
                                 //no identifier
                                 console.error("CAUTO STEP FIELD ERROR: No element identifier was found for radio button");
