@@ -54,7 +54,10 @@ class cauto_admin_ui extends cauto_utils
         //load start popup
         add_action('cauto_load_step_config', [$this, 'load_step_popup']);
         //load step controls
-        add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 2);
+        add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 3);
+
+        //load flow hidden field
+        add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
     }
 
     public function init_steps()
@@ -71,66 +74,14 @@ class cauto_admin_ui extends cauto_utils
                             'class' => 'cauto-step-nodes cauto-start-step cauto-field wide'
                         ],
                         'label'         => __('Page URL', 'codecorun-test-automation')
-                    ],
-                    [
-                        'field' => 'input',
-                        'attr'  => [
-                            'type'  => 'checkbox',
-                            'id'    => 'cauto_test1_checkbox',
-                            'class' => 'cauto-start-step-checkbox'
-                        ],
-                        'label'         => __('Checkbox 1', 'codecorun-test-automation')
-                    ],
-                    [
-                        'field' => 'group',
-                        'attr'  => [
-                            'type'  => 'checkbox',
-                            'id'    => '',
-                            'class' => 'cauto-start-step-checkbox-group'
-                        ],
-                        'label'         => __('Group checkbox Label', 'codecorun-test-automation'),
-                        'options'       => [
-                            [
-                                'label' => 'Group Checkbox 1',
-                                'value' => 'gc1'
-                            ],
-                            [
-                                'label' => 'Group Checkbox 2',
-                                'value' => 'gc2'
-                            ],
-                            [
-                                'label' => 'Group Checkbox 3',
-                                'value' => 'gc3'
-                            ]
-                        ]
-                    ],
-                    [
-                        'field' => 'group',
-                        'attr'  => [
-                            'type'  => 'radio',
-                            'id'    => '',
-                            'class' => 'cauto-start-step-radio-group',
-                            'name'  => 'testradiogroup'
-                        ],
-                        'label'         => __('Group Radio Label', 'codecorun-test-automation'),
-                        'options'       => [
-                            [
-                                'label' => 'Group Radio 1',
-                                'value' => 'gc1'
-                            ],
-                            [
-                                'label' => 'Group Radio 2',
-                                'value' => 'gc2'
-                            ],
-                            [
-                                'label' => 'Group Radio 3',
-                                'value' => 'gc3'
-                            ]
-                        ]
                     ]
                 ],
-                'icon'      => '<span class="dashicons dashicons-laptop"></span>',
-                'group'     => 'default'
+                'icon'              => '<span class="dashicons dashicons-laptop"></span>',
+                'group'             => 'default',
+                'step_indicator'    => [
+                    'selector'      => '#cauto_start_name',
+                    'describe_text' => __('to open', 'codecorun-test-automation')
+                ] 
             ],
             'events_divider' => [
                 'divider'    => true,
@@ -145,7 +96,7 @@ class cauto_admin_ui extends cauto_utils
                             'id'    => 'cauto_step_selector_type',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
                         ],
-                        'label'     => __('Selector', 'codecorun-test-automation'),
+                        'label'     => __('Attribute', 'codecorun-test-automation'),
                         'options'   => [
                             'class' => __('Class', 'codecorun-test-automation'),
                             'id'    => __('ID', 'codecorun-test-automation'),
@@ -159,11 +110,25 @@ class cauto_admin_ui extends cauto_utils
                             'id'    => 'cauto_step_selector',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
-                        'label' => __('Identifier', 'codecorun-test-automation')
+                        'label' => __('Selector', 'codecorun-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_step_click_alias',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide',
+                            'placeholder'   => __('Element temporary name', 'codecorun-test-automation')
+                        ],
+                        'label'         => __('Alias', 'codecorun-test-automation')
                     ]
                 ],
                 'icon'      => '<span class="cauto-icon cauto-icon-point-up"></span>',
-                'group'     => 'events'
+                'group'     => 'events',
+                'step_indicator'    => [
+                    'selector'      => '#cauto_step_click_alias',
+                    'describe_text' => __('to', 'codecorun-test-automation')
+                ] 
             ],
             'check_divider' => [
                 'divider'    => true,
@@ -180,11 +145,11 @@ class cauto_admin_ui extends cauto_utils
                         ],
                         'label'     => __('Condition', 'codecorun-test-automation'),
                         'options'   => [
-                            'equals_to'     => __('Equals to', 'codecorun-test-automation'),
-                            'not_equals_to' => __('Not equals to', 'codecorun-test-automation'),
-                            'contains_with'      => __('Contains with', 'codecorun-test-automation'),
-                            'start_with'    => __('Start with', 'codecorun-test-automation'),
-                            'end_with'      => __('End with', 'codecorun-test-automation')
+                            'equals to'     => __('Equals to', 'codecorun-test-automation'),
+                            'not equals to' => __('Not equals to', 'codecorun-test-automation'),
+                            'contains with'      => __('Contains with', 'codecorun-test-automation'),
+                            'start with'    => __('Start with', 'codecorun-test-automation'),
+                            'end with'      => __('End with', 'codecorun-test-automation')
                         ]
                     ],
                     [
@@ -198,7 +163,11 @@ class cauto_admin_ui extends cauto_utils
                     ]
                 ],
                 'icon'      => '<span class="dashicons dashicons-admin-site"></span>',
-                'group'     => 'check'
+                'group'     => 'check',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_title_condition', '#cauto_field_check_title'],
+                    'describe_text' => null
+                ] 
             ],
         ];
 
@@ -423,8 +392,10 @@ class cauto_admin_ui extends cauto_utils
                 }
             }
 
+            $describe_text = $this->steps[$type]['step_indicator'];
+
             ob_start();
-            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $start_ui, 'field_ids' => $field_ids]);
+            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $start_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text]);
             $reponse = ob_get_clean();
 
             echo json_encode(
@@ -452,8 +423,9 @@ class cauto_admin_ui extends cauto_utils
         $this->get_view('popups/step-config', ['path' => 'admin']);
     }
 
-    public function load_step_controls($type = null, $field_ids = [])
+    public function load_step_controls($type = null, $field_ids = [], $step_indicator = [])
     {
+
         $right_buttons = [
             [
                 'field'     => 'button',
@@ -490,13 +462,45 @@ class cauto_admin_ui extends cauto_utils
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-trash"></span>'
+            ],
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-top-class cauto-button caut-ripple",
+                    "id"        => "cauto-delete-step-confirm",
+                    "title"     => __('Detele', 'condecorun-test-automation')
+                ],
+                'label'     => __("Yes", 'condecorun-test-automation'),
+                'text'      => __("You sure?", 'condecorun-test-automation'),
+                'icon'      => null,
+                'hidden'    => true
             ]
         ];
         $left_control = apply_filters('cauto_step_config_delete_buttons', $left_control);
         $left_control = $this->prepare_attr($left_control);
 
-        $this->get_view('steps/part-controls', ['path' => 'admin', 'field_ids' => $field_ids, 'right_controls' => $right_buttons, 'left_controls' => $left_control]);
+        $this->get_view('steps/part-controls', ['path' => 'admin', 'field_ids' => $field_ids, 'right_controls' => $right_buttons, 'left_controls' => $left_control, 'step_indicator' => $step_indicator]);
 
+    }
+
+    public function load_flow_hidden_field($flow_id)
+    {
+        $fields = [
+            [
+                'field'     => 'input',
+                'attr'      => [
+                    "type"      => "hidden",
+                    "class"     => "",
+                    "id"        => "cauto-flow-id",
+                    "title"     => "",
+                    "value"     => esc_attr($flow_id)
+                ],
+                'label'     => '',
+                'icon'      => ''
+            ]
+        ];
+        $fields = $this->prepare_attr($fields);
+        $this->render_ui(['fields' => $fields], 'fields', []);
     }
 
 

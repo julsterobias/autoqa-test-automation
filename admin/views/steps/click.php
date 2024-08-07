@@ -8,6 +8,6 @@
         endif; ?>
     </div>
     <div class="cauto-step-controls">
-        <?php do_action('cauto_step_controls', 'click', $data['field_ids']); ?>
+        <?php do_action('cauto_step_controls', 'click', $data['field_ids'], $data['step_indicator']); ?>
     </div>
 </div>

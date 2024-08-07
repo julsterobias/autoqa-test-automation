@@ -5,9 +5,10 @@
     <div class="cauto-fields auto-type-start">
         <?php if (!empty($data['config'])): 
             do_action('cauto_load_ui', ['fields' => $data['config']], 'fields', []);
-        endif; ?>
+        endif; 
+        ?>
     </div>
     <div class="cauto-step-controls">
-        <?php do_action('cauto_step_controls', 'start', $data['field_ids']); ?>
+        <?php do_action('cauto_step_controls', 'start', $data['field_ids'], $data['step_indicator']); ?>
     </div>
 </div>

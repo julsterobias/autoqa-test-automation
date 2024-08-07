@@ -1,4 +1,5 @@
 var cuato_active_selected_step = null;
+var cauto_step_popup_step = '#cauto-popup-start-step';
 
 jQuery(document).ready(function(){
 
@@ -29,6 +30,8 @@ jQuery(document).ready(function(){
         stop: function(event, ui){
             ui.helper.addClass('cauto-added-step');
             ui.helper.append('<input type="hidden">');
+            let title_div = ui.helper.find('div');
+            jQuery(title_div).append('<span class="cauto_describe_step_label"></span>');
         }
     });
 
@@ -39,7 +42,7 @@ jQuery(document).ready(function(){
             cuato_active_selected_step = jQuery(this);
             jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
             //show popup
-            jQuery('#cauto-popup-start-step').fadeIn(200, function(){
+            jQuery(cauto_step_popup_step).fadeIn(200, function(){
                 cauto_build_step_settings(type);
             });
         }
@@ -49,12 +52,65 @@ jQuery(document).ready(function(){
     //save step changes
     //save step configuration
     jQuery('body').on('click', '#cauto-save-step', function(){
+
+        //do this after saving
         let parent = jQuery(this).closest('div#cauto-step-config-control-area');
-        let fields = jQuery(parent).find('input[type=hidden]').val();
+        let fields = jQuery(parent).find('input[type=hidden]#cauto_step_config_field_ids').val();
         cauto_validate_set_step_config(fields);
+        cauto_describe_step_action(jQuery('#cauto_step_config_describe').val());
+
+        //now save the data
+        cauto_do_save_step(this);
+        
+    });
+
+    jQuery('body').on('click', '#cauto-delete-step', function(){
+        jQuery(this).hide();
+        let confirm_wrapper = jQuery('#cauto-delete-step-confirm').closest('div.cauto_button_wrapper');
+        jQuery(confirm_wrapper).removeClass('hidden');
+    });
+
+    jQuery('body').on('click', '#cauto-delete-step-confirm', function(){
+        jQuery(cuato_active_selected_step).remove();
+        cuato_active_selected_step = null;
+        //save changes here
     });
 
 });
+
+// save step on close
+var cauto_do_save_step = (obj) => {
+
+    jQuery(obj).prop('disabled', true);
+    jQuery(obj).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+    jQuery('.cauto-cancel').prop('disabled', true);
+    jQuery('#cauto-delete-step').hide();
+
+
+
+    //jQuery(cauto_step_popup_step).fadeOut(200);
+}
+
+//set step describe
+var cauto_describe_step_action = (describe = null) => {
+    if (!describe) return;
+
+    describe = JSON.parse(describe);
+
+    let text = '';
+
+    if (Array.isArray(describe.selector)) {
+        for (let x in describe.selector) {
+            text += ' '+jQuery(describe.selector[x]).val();
+        }
+    } else {
+        text = ' '+describe.describe_text+ ' ' + jQuery(describe.selector).val(); 
+    }
+
+    //cauto_describe_step_label
+    jQuery(cuato_active_selected_step).addClass('cauto_step_set_wide');
+    jQuery(cuato_active_selected_step).find('span.cauto_describe_step_label').text(text);
+}
 
 //save config
 var cauto_validate_set_step_config = (fields = null) => {
@@ -138,7 +194,7 @@ var cauto_build_step_settings = (type) => {
             if (data) {
                 data = JSON.parse(data);
                 if (data.status === 'success') {
-                    jQuery('#cauto-popup-start-step .cauto-popup-content').html(data.html);
+                    jQuery(cauto_step_popup_step+' .cauto-popup-content').html(data.html);
                 } else {
                     alert(data.message);
                 }

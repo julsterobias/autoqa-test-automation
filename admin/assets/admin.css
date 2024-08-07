@@ -187,6 +187,14 @@
     display: block;
 }
 
+.cauto_button_wrapper {
+    display: inline-block;
+}
+
+.cauto_button_wrapper.hidden{
+    display: none;
+}
+
 /*
 toggle
 */
@@ -297,6 +305,14 @@ label.cauto-toggle-label:active:after {
     padding: 15px;
     border-radius: 5px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
+    bottom: auto;
+    top: 50px;
 }
 
 .cauto-builder-steps ul {
@@ -304,7 +320,8 @@ label.cauto-toggle-label:active:after {
 }
 
 .cauto-builder-steps .cauto-step-divider {
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 13px;
     font-weight: 600;
     margin-top: 20px;
     margin-bottom: 15px;
@@ -332,8 +349,16 @@ label.cauto-toggle-label:active:after {
 .cauto-builder-steps .cauto-steps-el span.dashicons,
 .cauto-builder-steps .cauto-steps-el span.cauto-icon,
 .cauto_steps_builder span.cauto-icon,
-.cauto_steps_builder span.dashicons {
+.cauto_steps_builder span.dashicons,
+.cauto-button span.cauto-icon {
     margin-right: 10px;
+    vertical-align: middle;
+}
+
+.cauto-icon {
+    font-size: 18px;
+    line-height: 20px !important;
+    display: inline-block;
 }
 
 .cauto_steps_builder li:last-child {
@@ -497,4 +522,6 @@ label.cauto-toggle-label:active:after {
     background-color: #b8c0ff;
 }
 
-
+.cauto_step_set_wide {
+    width: auto !important;
+}

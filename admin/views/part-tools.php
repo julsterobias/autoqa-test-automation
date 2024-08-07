@@ -21,3 +21,8 @@
 
     <?php $this->get_view('part-popups', ['path' => 'admin']); ?>
 </div>
+<?php 
+if ((isset($_GET['flow']))): 
+    do_action('cauto_load_flow_id', $_GET['flow']);
+endif; 
+?>
