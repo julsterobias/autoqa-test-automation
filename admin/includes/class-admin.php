@@ -256,56 +256,49 @@ class cauto_admin extends cauto_utils
 
         foreach ($get_steps as $steps) {
         
-            $step_type          = ($steps['step'] === 'start')? 'default' : $steps['step'];
-            $step_group         = $data[$steps['step']]['group']; 
-            $step_indicator     = $data[$steps['step']]['step_indicator'];
-            $step_selectors     = $step_indicator['selector'];
-            $icon               = $data[$steps['step']]['icon'];
-            $step_label         = $data[$steps['step']]['label'];
+            //$step_type          = ($steps['step'] === 'start')? 'default' : $steps['step'];
+            $step_group         = (isset($data[$steps['step']]['group']))? $data[$steps['step']]['group'] : []; 
+            $step_indicator     = (isset($data[$steps['step']]['step_indicator']))? $data[$steps['step']]['step_indicator'] : [];
+            $step_selectors     = (isset($step_indicator['selector']))? $step_indicator['selector'] : [];
+            $icon               = (isset($data[$steps['step']]['icon']))? $data[$steps['step']]['icon'] : [];
+            $step_label         = (isset($data[$steps['step']]['label']))? $data[$steps['step']]['label'] : [];
 
     
-            $describe_text      = '';
-            if (!empty($steps['record'])) {
+            $describe_text      = $step_indicator['describe_text'];
+            $describe_text_set  = [];
 
-                $is_in = false;
+            if (is_array($step_selectors)) { 
+
+                $clean_selector = array_map(function($selector){
+                    return substr($selector, 1);
+                },$step_selectors);
+
                 foreach ($steps['record'] as $record) {
-                    if (is_array($step_selectors)) {
-                        $step_selectors = array_map(function($selectors) {
-                            return substr($selectors, 0);
-                        }, $step_selectors);
-
-                
-                        foreach ($step_selectors as $selector) {
-                            if (strpos($selector, $record['class'])) {
-                                $is_in = true;
-                            }
-                            if (strpos($selector, $record['id'])) {
-                                $is_in = true;
-                            }
-                        }
-
-                    } else {
-                        $step_selectors = substr($step_selectors, 0);
-                        if (strpos($step_selectors, $record['class'])) {
-                            $is_in = true;
-                        }
-                        if (strpos($step_selectors, $record['id'])) {
-                            $is_in = true;
-                        }
+                    if (in_array($record['id'], $clean_selector)) {
+                        $describe_text_set['#'.$record['id']] = $record['value'];
                     }
+                }
 
-                    if ($is_in) {
-                        $describe_text .= ' '.$record['value'];
+            } else {
+                $clean_selector = substr($step_selectors, 1);
+                foreach ($steps['record'] as $record) {
+                    if ($record['id'] === $clean_selector) {
+                        $describe_text_set['#'.$record['id']] = $record['value'];
                     }
-                    
                 }
             }
+
+
+       
+            foreach ($describe_text_set as $index => $describe_set) {
+                $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
+            }
+     
 
             $flow_steps[] = [
                 'step_group'        => $step_group,
                 'step'              => $steps['step'],
                 'icon_label'        => $icon.$step_label,
-                'describe_text'     => $step_indicator['describe_text'],
                 'record'            => $steps['record'],
                 'describe_label'    => $describe_text,
                 'icon'              => $icon,

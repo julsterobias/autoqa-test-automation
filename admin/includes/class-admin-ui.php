@@ -81,12 +81,12 @@ class cauto_admin_ui extends cauto_utils
                 'group'             => 'default',
                 'step_indicator'    => [
                     'selector'      => '#cauto_start_name',
-                    'describe_text' => __('to open', 'codecorun-test-automation')
+                    'describe_text' => __(' to open {#cauto_start_name}', 'codecorun-test-automation')
                 ] 
             ],
             'events_divider' => [
                 'divider'    => true,
-                'label'     => __('Events', 'codecorun-test-automation') 
+                'label'     => __('Input', 'codecorun-test-automation') 
             ],
             'click' => [
                 'label'     => __('Click', 'codecorun-test-automation'),
@@ -121,19 +121,70 @@ class cauto_admin_ui extends cauto_utils
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide',
                             'placeholder'   => __('Element temporary name', 'codecorun-test-automation')
                         ],
-                        'label'         => __('Alias', 'codecorun-test-automation')
+                        'label'         => __('Field Name', 'codecorun-test-automation')
                     ]
                 ],
                 'icon'      => '<span class="cauto-icon cauto-icon-point-up"></span>',
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_click_alias',
-                    'describe_text' => __('to', 'codecorun-test-automation')
+                    'describe_text' => __(' to {#cauto_step_click_alias}', 'codecorun-test-automation')
+                ] 
+            ],
+            'set-text'           => [
+                'label'         => __('Set Text', 'codecorun-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_selector_type',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'codecorun-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'codecorun-test-automation'),
+                            'id'    => __('ID', 'codecorun-test-automation'),
+                            'xpath' => __('Xpath', 'codecorun-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_set_text_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Selector', 'codecorun-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_set_text_selector_alias',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Field Name', 'codecorun-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_set_text',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Text', 'codecorun-test-automation')
+                    ]
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-keyboard"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_set_text_selector_alias', '#cauto_step_set_text'],
+                    'describe_text' => __(' {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'codecorun-test-automation')
                 ] 
             ],
             'check_divider' => [
                 'divider'    => true,
-                'label'     => __('Check', 'codecorun-test-automation') 
+                'label'     => __('Check', 'codecorun-test-automation'), 
             ],
             'check-title' => [
                 'label'     => __('Page Title', 'codecorun-test-automation'),
@@ -167,7 +218,7 @@ class cauto_admin_ui extends cauto_utils
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_title_condition', '#cauto_field_check_title'],
-                    'describe_text' => null
+                    'describe_text' => __(' {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'codecorun-test-automation')
                 ] 
             ],
         ];
@@ -376,20 +427,8 @@ class cauto_admin_ui extends cauto_utils
             exit();
         }
 
-        $type       = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
-
-        //get saved steps
-        $saved_steps    = [];
-        $steps          = get_post_meta($flow_id, $this->flow_steps_key, true); 
-
-        if (!empty($steps)) {
-            foreach ($steps as $step) {
-                if ($step['step'] === $type) {
-                    $saved_steps = $step['record'];
-                }
-            }
-        }
+        $type           = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
+        $saved_steps    = (isset($_POST['saved_data']))? json_decode(stripslashes($_POST['saved_data'])) : null;
 
         if (isset($this->steps[$type])) {
 
@@ -407,7 +446,7 @@ class cauto_admin_ui extends cauto_utils
                 }
             }
 
-            $describe_text = $this->steps[$type]['step_indicator'];
+            $describe_text = (isset($this->steps[$type]['step_indicator']))? $this->steps[$type]['step_indicator'] : null;
 
             ob_start();
             $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps]);

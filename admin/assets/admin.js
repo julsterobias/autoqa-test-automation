@@ -138,21 +138,25 @@ var cauto_do_save_step = (source = null) => {
 
 //set step describe
 var cauto_describe_step_action = (describe = null) => {
+    
     if (!describe) return;
 
     describe = JSON.parse(describe);
 
-    let text = '';
+    let text = describe.describe_text;
+
+    if (typeof describe.describe_text === "undefined" || !describe.describe_text || describe.describe_text === '') {
+        return;
+    }
 
     if (Array.isArray(describe.selector)) {
         for (let x in describe.selector) {
-            text += ' '+jQuery(describe.selector[x]).val();
+            text = text.replace('{'+describe.selector[x]+'}', jQuery(describe.selector[x]).val());    
         }
     } else {
-        text = ' '+describe.describe_text+ ' ' + jQuery(describe.selector).val(); 
+        text = text.replace('{'+describe.selector+'}', jQuery(describe.selector).val());
     }
 
-    //cauto_describe_step_label
     jQuery(cuato_active_selected_step).addClass('cauto_step_set_wide');
     jQuery(cuato_active_selected_step).find('span.cauto_describe_step_label').text(text);
 }
@@ -226,7 +230,8 @@ var cauto_create_unique_id = () => {
 
 var cauto_build_step_settings = (type) => {
     //generate UI via ajax
-    let flow_id = jQuery('#cauto-flow-id').val();
+    let flow_id         = jQuery('#cauto-flow-id').val();
+    let get_saved_data  = jQuery(cuato_active_selected_step).find('input[type=hidden]').val();
     jQuery.ajax( {
         type : "post",  
         url: cauto_ajax.ajaxurl,
@@ -234,7 +239,8 @@ var cauto_build_step_settings = (type) => {
             action: 'cauto_steps_ui', 
             nonce: cauto_ajax.nonce,
             type: type,
-            flow_id: flow_id
+            flow_id: flow_id,
+            saved_data: get_saved_data
         },
         success: function( data ) {
             //response data

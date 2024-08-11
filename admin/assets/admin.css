@@ -337,8 +337,8 @@ label.cauto-toggle-label:active:after {
     padding-bottom: 10px;
 }
 
-.cauto-builder-steps .cauto-steps-el,
-.cauto_steps_builder .cauto-steps-el {
+.cauto-builder-steps .cauto-steps-el .cauto-step-element,
+.cauto_steps_builder .cauto-steps-el .cauto-step-element{
     padding: 10px;
     border-radius: 5px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
@@ -480,7 +480,7 @@ label.cauto-toggle-label:active:after {
     position: relative;
 }
 
-.cauto_steps_builder .cauto-steps-el:active {
+.cauto_steps_builder .cauto-steps-el:active .cauto-step-element {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
@@ -515,15 +515,15 @@ label.cauto-toggle-label:active:after {
 }
 
 
-.cauto-step-group_default {
+.cauto-step-group_default .cauto-step-element {
     background-color: #b3ffc6;
 }
 
-.cauto-step-group_events {
+.cauto-step-group_events .cauto-step-element {
     background-color: #ffbcb8;
 }
 
-.cauto-step-group_check {
+.cauto-step-group_check .cauto-step-element {
     background-color: #b8c0ff;
 }
 

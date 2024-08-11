@@ -108,7 +108,8 @@ class cauto_utils
     /**
      * 
      * 
-     * prepare 
+     * prepare_value
+     * @since 1.0.0 
      * 
      * 
      */
@@ -116,12 +117,13 @@ class cauto_utils
     {
         if (empty($step_setttings) || empty($data) || !$type) return;
         
+
         $value = '';
 
         if (!empty($data['value'])) {
             foreach ($data['value'] as $saved_data) {
-                if ($saved_data['class'] === $step_setttings['attr']['class'] && $saved_data['id'] === $step_setttings['attr']['id'] && $saved_data['field'] === $type) {
-                    $value = $saved_data['value'];
+                if ($saved_data->class === $step_setttings['attr']['class'] && $saved_data->id === $step_setttings['attr']['id'] && $saved_data->field === $type) {
+                    $value = $saved_data->value;
                     break;
                 }
             }
