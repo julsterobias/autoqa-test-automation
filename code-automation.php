@@ -3,12 +3,12 @@
 *
 *
 *
-* Plugin Name: Codecorun Test Automation
-* Description: A plugin that will automate the testing of your website.
+* Plugin Name: Codecorun autoQA
+* Description: A plugin that will automate the testing of your website without the need of coding.
 * Author:      Codecorun
 * Plugin Type: Test Tool
 * Author URI: 
-* Version: 1.0.0.2
+* Version: 1.0.0
 * Text Domain: codecorun-automation
 * License:     GPLv3
 * License URI: https://www.gnu.org/licenses/gpl.html

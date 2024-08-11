@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
         forceHelperSize: true,
     });
 
-    jQuery('.cauto-steps-el').draggable({
+    jQuery('.cauto-steps-draggable').draggable({
         connectToSortable: ".cauto_steps_builder",
         helper: 'clone',
         revert: "invalid",
@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         }
     });
 
-    jQuery('body').on('dblclick','.cauto_steps_builder .cauto-steps-el' ,function(){
+    jQuery('body').on('dblclick','.cauto_steps_builder .cauto-steps-draggable, .cauto_steps_builder .cauto-steps-el-saved' ,function(){
 
         let type    = jQuery(this).find('div').data('step');
         if (type) {
@@ -53,14 +53,15 @@ jQuery(document).ready(function(){
     //save step configuration
     jQuery('body').on('click', '#cauto-save-step', function(){
 
-        //do this after saving
         let parent = jQuery(this).closest('div#cauto-step-config-control-area');
         let fields = jQuery(parent).find('input[type=hidden]#cauto_step_config_field_ids').val();
         cauto_validate_set_step_config(fields);
-        cauto_describe_step_action(jQuery('#cauto_step_config_describe').val());
-
+        jQuery(this).prop('disabled', true);
+        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        jQuery('.cauto-cancel').prop('disabled', true);
+        jQuery('#cauto-delete-step').hide();
         //now save the data
-        cauto_do_save_step(this);
+        cauto_do_save_step();
         
     });
 
@@ -74,21 +75,65 @@ jQuery(document).ready(function(){
         jQuery(cuato_active_selected_step).remove();
         cuato_active_selected_step = null;
         //save changes here
+        jQuery(this).prop('disabled', true);
+        jQuery('.cauto-cancel').prop('disabled', true);
+        jQuery('#cauto-save-step').prop('disabled', true);
+        cauto_do_save_step();
+    });
+    
+    jQuery('#cauto-save-flow').on('click', function(){
+        jQuery('#cauto-run-flow, #cauto-delete-flow').prop('disabled', true);
+        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        cauto_do_save_step('flow_save');
     });
 
 });
 
 // save step on close
-var cauto_do_save_step = (obj) => {
+var cauto_do_save_step = (source = null) => {
 
-    jQuery(obj).prop('disabled', true);
-    jQuery(obj).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
-    jQuery('.cauto-cancel').prop('disabled', true);
-    jQuery('#cauto-delete-step').hide();
+    let flow_id = jQuery('#cauto-flow-id').val();
 
+    let step_data = [];
+    jQuery('.cauto_steps_builder').find('li.cauto-steps-el').each(function(){
+        let type        = jQuery(this).find('div').data('step');
+        let field_data  = jQuery(this).find('input[type=hidden]').val(); 
+        step_data.push({
+            step: type,
+            record: field_data
+        });
+    });
 
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_do_save_flow', 
+            nonce: cauto_ajax.nonce,
+            step: JSON.stringify(step_data),
+            flow_id: flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    //do this after saving
+                    if (source === 'flow_save') {
+                        jQuery('#cauto-run-flow, #cauto-delete-flow').prop('disabled', false);
+                        jQuery('#cauto-save-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-saved');
+                    } else {
+                        cauto_describe_step_action(jQuery('#cauto_step_config_describe').val());
+                        jQuery(cauto_step_popup_step).fadeOut(200);
+                    }
+                    
+                } else {
+                    console.error('CAUTO ERROR: unable to save step, please contact support');
+                }
+            }
+        }
+    });
 
-    //jQuery(cauto_step_popup_step).fadeOut(200);
 }
 
 //set step describe
@@ -181,13 +226,15 @@ var cauto_create_unique_id = () => {
 
 var cauto_build_step_settings = (type) => {
     //generate UI via ajax
+    let flow_id = jQuery('#cauto-flow-id').val();
     jQuery.ajax( {
         type : "post",  
         url: cauto_ajax.ajaxurl,
         data : {    
             action: 'cauto_steps_ui', 
             nonce: cauto_ajax.nonce,
-            type: type
+            type: type,
+            flow_id: flow_id
         },
         success: function( data ) {
             //response data

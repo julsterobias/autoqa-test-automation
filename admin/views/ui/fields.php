@@ -3,6 +3,7 @@ if (!empty($data['data']['fields'])):
     foreach ($data['data']['fields'] as $field):  
         switch($field['field']):  
             case 'input':
+                $value = $this->prepare_value($field, $data, $field['field']);
 ?>
                 <div class="cauto-ui-wrapper">
                     <div class="cauto-input-wrapper">
@@ -10,13 +11,13 @@ if (!empty($data['data']['fields'])):
                             if ($field['attr']['type'] === 'checkbox'):
                         ?>  
                         <label>
-                            <input <?php echo $field['iattr']; ?>> <?php echo esc_html($field['label']); ?>
+                            <input <?php echo $field['iattr']; ?> <?php echo ($value)? 'checked' : null; ?>> <?php echo esc_html($field['label']); ?>
                         </label>
                         <?php
                             else:
                         ?>
                         <label><?php echo esc_html($field['label']); ?>
-                            <input <?php echo $field['iattr']; ?>>
+                            <input <?php echo $field['iattr']; ?> value="<?php echo esc_attr($value); ?>">
                         </label>
                         <?php endif; ?>
                     </div>
@@ -24,6 +25,7 @@ if (!empty($data['data']['fields'])):
 <?php
                 break;
             case 'select':
+                $selected = $this->prepare_value($field, $data, $field['field']);
 ?>
             <div class="cauto-ui-wrapper">
                 <div class="cauto-select-wrapper">
@@ -32,7 +34,7 @@ if (!empty($data['data']['fields'])):
                             <?php if (!empty($field['options'])): 
                                 foreach ($field['options'] as $value => $label):    
                             ?>
-                                <option value="<?php echo esc_attr($value) ?>"><?php echo  esc_html($label); ?></option>
+                                <option value="<?php echo esc_attr($value) ?>" <?php echo ($selected === $value)? 'selected' : null; ?>><?php echo  esc_html($label); ?></option>
                             <?php 
                                 endforeach;
                             endif; ?>

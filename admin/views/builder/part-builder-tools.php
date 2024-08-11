@@ -11,7 +11,7 @@
                     <?php do_action('cauto_load_builder_control', $data['details']); ?>
                 </div>
                 <div class="builder-site">
-                    <ul class="cauto_steps_builder"></ul>
+                    <ul class="cauto_steps_builder"><?php do_action('cauto_load_saved_steps'); ?></ul>
                 </div>
             </div>
         </div>

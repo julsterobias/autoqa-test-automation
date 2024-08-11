@@ -32,6 +32,8 @@ class cauto_utils
 
     public string $settings_page    = 'test-tools';
 
+    public string $flow_steps_key   = '_cauto_test_automation_steps';
+
     /**
 	*
 	*
@@ -100,6 +102,33 @@ class cauto_utils
             }
         } 
         return $data;
+    }
+
+
+    /**
+     * 
+     * 
+     * prepare 
+     * 
+     * 
+     */
+    public function prepare_value($step_setttings = [], $data =[], $type = null)
+    {
+        if (empty($step_setttings) || empty($data) || !$type) return;
+        
+        $value = '';
+
+        if (!empty($data['value'])) {
+            foreach ($data['value'] as $saved_data) {
+                if ($saved_data['class'] === $step_setttings['attr']['class'] && $saved_data['id'] === $step_setttings['attr']['id'] && $saved_data['field'] === $type) {
+                    $value = $saved_data['value'];
+                    break;
+                }
+            }
+        }
+
+        return $value;
+
     }
 }
 ?>

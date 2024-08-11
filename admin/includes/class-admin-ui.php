@@ -58,6 +58,7 @@ class cauto_admin_ui extends cauto_utils
 
         //load flow hidden field
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
+
     }
 
     public function init_steps()
@@ -178,12 +179,13 @@ class cauto_admin_ui extends cauto_utils
     {
         if (empty($data) || !$type) return;
 
+        //add more fields in the future
         switch($type) {
             case 'fields':
-                $this->get_view('ui/fields', ['path' => 'admin', 'data' => $data]);
+                $this->get_view('ui/fields', ['path' => 'admin', 'data' => $data, 'value' => $value]);
                 break;
             case 'buttons':
-                $this->get_view('ui/buttons', ['path' => 'admin', 'data' => $data]);
+                $this->get_view('ui/buttons', ['path' => 'admin', 'data' => $data, 'value' => $value]);
                 break;
             case 'steps':
                 $this->get_view('builder/part-builder-steps', ['path' => 'admin', 'data' => $data]);
@@ -299,7 +301,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"     => "cauto-button-icon",
-                    "id"        => "cauto-save-flow",
+                    "id"        => "cauto-delete-flow",
                     "title"     => __('Delete Flow', 'condecorun-test-automation')
                 ],
                 'label'     =>  null,
@@ -374,15 +376,28 @@ class cauto_admin_ui extends cauto_utils
             exit();
         }
 
-        $type = (isset($_POST['type']))? $_POST['type'] : null;
+        $type       = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+
+        //get saved steps
+        $saved_steps    = [];
+        $steps          = get_post_meta($flow_id, $this->flow_steps_key, true); 
+
+        if (!empty($steps)) {
+            foreach ($steps as $step) {
+                if ($step['step'] === $type) {
+                    $saved_steps = $step['record'];
+                }
+            }
+        }
 
         if (isset($this->steps[$type])) {
 
-            $start_ui = $this->prepare_attr($this->steps[$type]['settings']);
+            $setting_ui = $this->prepare_attr($this->steps[$type]['settings']);
 
             $field_ids = [];
             foreach ($this->steps[$type]['settings'] as $step) {
-                if (isset($step['attr']['id'])) {
+                if (isset($step['attr']['id']) || isset($step['attr']['class'])) {
                     $field_ids[] = [
                         'field'     => $step['field'],
                         'type'      => (isset($step['attr']['type']))? $step['attr']['type'] : null,
@@ -395,7 +410,7 @@ class cauto_admin_ui extends cauto_utils
             $describe_text = $this->steps[$type]['step_indicator'];
 
             ob_start();
-            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $start_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text]);
+            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps]);
             $reponse = ob_get_clean();
 
             echo json_encode(

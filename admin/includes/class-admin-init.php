@@ -88,8 +88,8 @@ class cauto_admin_init extends cauto_utils
     public function load_tool()
     {
         add_management_page(
-            __('Test Automation', 'codecorun_automation'),        
-            __('Test Automation', 'codecorun_automation'),        
+            __('Codecorun autoQA', 'codecorun-test-automation'),        
+            __('Codecorun autoQA', 'codecorun-test-automation'),        
             'manage_options',  
             $this->settings_page,   
             [$this, 'test_tools']      
@@ -116,3 +116,6 @@ class cauto_admin_init extends cauto_utils
     }
 
 }
+
+//register custom post type
+new cauto_admin_init();

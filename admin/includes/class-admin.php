@@ -9,7 +9,6 @@
  */
 namespace cauto\admin\includes;
 use cauto\includes\cauto_utils;
-use cauto\admin\includes\cauto_admin_init;
 use cauto\admin\includes\cauto_admin_ui;
 use cauto\includes\cauto_test_automation;
 
@@ -32,9 +31,6 @@ class cauto_admin extends cauto_utils
 
     public function __construct()
     {
-        //register custom post type
-        new cauto_admin_init();
-
         add_action('admin_enqueue_scripts', [$this, 'load_assets']);
 
         //admin UIs
@@ -43,6 +39,10 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_new_flow', [$this, 'new_flow']);
         add_action('cauto_flow_builder', [$this, 'load_builder'], 10);
         add_action('cauto_render_flows', [$this, 'load_flows']);
+        //save flow
+        add_action('wp_ajax_cauto_do_save_flow', [$this, 'save_steps']);
+        //load flow steps in the builder
+        add_action('cauto_load_saved_steps', [$this, 'load_saved_steps']);
         
     }
 
@@ -130,12 +130,14 @@ class cauto_admin extends cauto_utils
 
         if ($flowname) {
             
+            do_action('cauto_before_update_flow', ['flow_name' => $flowname, 'stop_on_error' => $stop_on_error]);
+
             $cflows = new cauto_test_automation();
             $cflows->set_name($flowname);
             $cflows->set_stop_on_error($stop_on_error);
             $post_id = $cflows->save_flow();
 
-            do_action('cauto_update_flow', $post_id);
+            do_action('cauto_after_update_flow', $post_id, ['flow_name' => $flowname, 'stop_on_error' => $stop_on_error]);
 
             if ($post_id) {
                 echo json_encode(
@@ -159,4 +161,162 @@ class cauto_admin extends cauto_utils
         exit();
 
     }
+
+    /**
+     * 
+     * 
+     * save_steps
+     * @since 1.0.0
+     * 
+     * 
+     */
+    public function save_steps()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                ]
+            );
+            exit();
+        }
+
+
+        $step_data  = (isset($_POST['step']))? $_POST['step'] : null;
+        $flow_id    = (is_numeric($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+
+
+        if ($step_data) {
+
+            $step_data = json_decode(stripslashes($step_data));
+
+            if (empty($step_data)) {
+                $res = delete_post_meta($flow_id, $this->flow_steps_key);
+                if ($res) {
+                    echo json_encode(
+                        [
+                            'status'    => 'success'
+                        ]
+                    );
+                }
+                exit();
+            }
+
+            //map array to sanitize
+            //this will choke the server? we find it soon
+            foreach ($step_data as $index => $step) {
+                $step = (array) $step;
+                foreach ($step as $i => $data) {
+                    if ($i === 'record' && !empty($data)) {
+                        $data = json_decode(stripslashes($data));
+                        $data = (array) $data;
+                        foreach ($data as $x => $indata) {
+                            $indata = (array) $indata;
+                            $indata['value'] = sanitize_text_field($indata['value']);
+                            $data[$x] = $indata;
+                        }
+                    }
+                    $step[$i] = $data;
+                }
+                $step_data[$index] = $step;
+            }
+        } 
+        
+        if ($step_data && !empty($step_data) && $flow_id) {
+
+            do_action('cauto_before_save_steps',$flow_id, $step_data);
+            
+            update_post_meta($flow_id, $this->flow_steps_key, $step_data);
+
+            do_action('cauto_after_save_steps',$flow_id, $step_data);
+
+            echo json_encode(
+                [
+                    'status'    => 'success'
+                ]
+            );
+        }
+
+        exit();
+
+    }
+
+    public function load_saved_steps()
+    {
+        if (!isset($_GET['flow'])) return;
+
+        $flow_id = sanitize_text_field($_GET['flow']);
+        $get_steps = get_post_meta($flow_id, $this->flow_steps_key, true);
+
+        if (!$get_steps) return;
+
+        $data = $this->admin_ui->init_steps();
+        $flow_steps = [];
+
+        foreach ($get_steps as $steps) {
+        
+            $step_type          = ($steps['step'] === 'start')? 'default' : $steps['step'];
+            $step_group         = $data[$steps['step']]['group']; 
+            $step_indicator     = $data[$steps['step']]['step_indicator'];
+            $step_selectors     = $step_indicator['selector'];
+            $icon               = $data[$steps['step']]['icon'];
+            $step_label         = $data[$steps['step']]['label'];
+
+    
+            $describe_text      = '';
+            if (!empty($steps['record'])) {
+
+                $is_in = false;
+                foreach ($steps['record'] as $record) {
+                    if (is_array($step_selectors)) {
+                        $step_selectors = array_map(function($selectors) {
+                            return substr($selectors, 0);
+                        }, $step_selectors);
+
+                
+                        foreach ($step_selectors as $selector) {
+                            if (strpos($selector, $record['class'])) {
+                                $is_in = true;
+                            }
+                            if (strpos($selector, $record['id'])) {
+                                $is_in = true;
+                            }
+                        }
+
+                    } else {
+                        $step_selectors = substr($step_selectors, 0);
+                        if (strpos($step_selectors, $record['class'])) {
+                            $is_in = true;
+                        }
+                        if (strpos($step_selectors, $record['id'])) {
+                            $is_in = true;
+                        }
+                    }
+
+                    if ($is_in) {
+                        $describe_text .= ' '.$record['value'];
+                    }
+                    
+                }
+            }
+
+            $flow_steps[] = [
+                'step_group'        => $step_group,
+                'step'              => $steps['step'],
+                'icon_label'        => $icon.$step_label,
+                'describe_text'     => $step_indicator['describe_text'],
+                'record'            => $steps['record'],
+                'describe_label'    => $describe_text,
+                'icon'              => $icon,
+                'step_label'        => $step_label
+            ]; 
+
+        }
+
+        $this->get_view('flow/saved-steps', ['path' => 'admin', 'flow_steps' => $flow_steps]);
+
+    }
+
+    
 }

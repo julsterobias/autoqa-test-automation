@@ -4,7 +4,7 @@
     </div>
     <div class="cauto-fields auto-type-start">
         <?php if (!empty($data['config'])): 
-            do_action('cauto_load_ui', ['fields' => $data['config']], 'fields', []);
+            do_action('cauto_load_ui', ['fields' => $data['config']], 'fields', $data['saved_steps']);
         endif; 
         ?>
     </div>

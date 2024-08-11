@@ -1,7 +1,7 @@
 <div class="cauto-settings-wrappers">
     <div class="head">
         <div class="wrapper">
-            <div class="col-50 title"><span><?php echo (!empty($data['details']))? $data['details']->post_title : __('Codecorun Test Automation', 'codecorun-test-automation'); ?></span></div>
+            <div class="col-50 title"><span><?php echo (!empty($data['details']))? $data['details']->post_title : __('Codecorun autoQA', 'codecorun-test-automation'); ?></span></div>
             <div class="col-50 controls">
                 <span class="version"><?php esc_html_e('Version', 'codecorun-test-automation'); ?> <?php echo CAUTO_PLUGIN_VERSION.' '.CAUTO_PLUGIN_VERSION_CODE; ?></span>
                 <?php do_action('cauto_top_control'); ?>
