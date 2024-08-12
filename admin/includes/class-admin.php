@@ -11,6 +11,7 @@ namespace cauto\admin\includes;
 use cauto\includes\cauto_utils;
 use cauto\admin\includes\cauto_admin_ui;
 use cauto\includes\cauto_test_automation;
+use cauto\includes\cauto_steps;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -251,7 +252,7 @@ class cauto_admin extends cauto_utils
 
         if (!$get_steps) return;
 
-        $data = $this->admin_ui->init_steps();
+        $data = cauto_steps::steps();
         $flow_steps = [];
 
         foreach ($get_steps as $steps) {

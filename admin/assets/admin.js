@@ -90,7 +90,7 @@ jQuery(document).ready(function(){
 });
 
 // save step on close
-var cauto_do_save_step = (source = null) => {
+const cauto_do_save_step = (source = null) => {
 
     let flow_id = jQuery('#cauto-flow-id').val();
 
@@ -137,7 +137,7 @@ var cauto_do_save_step = (source = null) => {
 }
 
 //set step describe
-var cauto_describe_step_action = (describe = null) => {
+const cauto_describe_step_action = (describe = null) => {
     
     if (!describe) return;
 
@@ -158,11 +158,11 @@ var cauto_describe_step_action = (describe = null) => {
     }
 
     jQuery(cuato_active_selected_step).addClass('cauto_step_set_wide');
-    jQuery(cuato_active_selected_step).find('span.cauto_describe_step_label').text(text);
+    jQuery(cuato_active_selected_step).find('span.cauto_describe_step_label').html('<b>'+text+'</b>');
 }
 
 //save config
-var cauto_validate_set_step_config = (fields = null) => {
+const cauto_validate_set_step_config = (fields = null) => {
 
     if (!fields) return;
 
@@ -223,12 +223,12 @@ var cauto_validate_set_step_config = (fields = null) => {
 }
 
 //I'll keep you for now
-var cauto_create_unique_id = () => {
+const cauto_create_unique_id = () => {
     return Math.round(new Date().getTime() + (Math.random() * 100));
 }
 
 
-var cauto_build_step_settings = (type) => {
+const cauto_build_step_settings = (type) => {
     //generate UI via ajax
     let flow_id         = jQuery('#cauto-flow-id').val();
     let get_saved_data  = jQuery(cuato_active_selected_step).find('input[type=hidden]').val();
@@ -257,7 +257,7 @@ var cauto_build_step_settings = (type) => {
 }
 
 
-var cauto_do_save_flow = (btn) => {
+const cauto_do_save_flow = (btn) => {
 
     let flowname = jQuery('#cauto-new-flow-name').val();
     if (!flowname) {
