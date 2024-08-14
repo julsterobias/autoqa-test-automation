@@ -41,7 +41,7 @@ class cauto_admin_ui extends cauto_utils
         //load ui
         add_action('cauto_load_ui', [$this, 'render_ui'], 10, 3);
         //load builder buttons
-        add_action('cauto_load_builder_control', [$this, 'builder_buttons']);
+        add_action('cauto_load_builder_control', [$this, 'builder_buttons'], 10, 1);
         //load steps in builder
         add_action('cauto_load_builder_steps', [$this,'load_steps']);
         //add run button to saved flows
@@ -161,8 +161,11 @@ class cauto_admin_ui extends cauto_utils
         $this->get_view('popups/new-flow', ['path' => 'admin', 'fields' => $fields, 'buttons' => $buttons]);
     }
 
-    public function builder_buttons()
+    public function builder_buttons($data)
     {
+
+        $url = $this->prepare_run_url($data->ID);
+
         $controls = [
             [
                 'field'     => 'a',
@@ -170,7 +173,7 @@ class cauto_admin_ui extends cauto_utils
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
                     "title"     => __('Run Flow', 'condecorun-test-automation'),
-                    'href'      => get_site_url().'?flow='.sanitize_text_field($_GET['flow']).'&run=1',
+                    'href'      => $url,
                     'target'    => '_blank'
                 ],
                 'label'     => null,

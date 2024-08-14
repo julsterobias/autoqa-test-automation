@@ -132,5 +132,31 @@ class cauto_utils
         return $value;
 
     }
+
+    /**
+     * 
+     * prepare_run_url
+     * 
+     */
+
+     public function prepare_run_url($flow_id)
+     {
+        $get_steps = get_post_meta($flow_id, $this->flow_steps_key, true);
+        $url = 'javascript:void(0);';
+        //check URL for start
+        if (isset($get_steps[0])) {
+            if ($get_steps[0]['step'] === 'start' && isset($get_steps[0]['record'][0]['value'])) {
+
+                if (strpos($get_steps[0]['record'][0]['value'], get_admin_url()) !== false) {
+                    $url = $get_steps[0]['record'][0]['value'].'&run=1';
+                } else {
+                    $url = $get_steps[0]['record'][0]['value'].'?flow='.$flow_id.'&run=1';
+                }
+            }
+        }
+
+        return $url;
+
+     }
 }
 ?>

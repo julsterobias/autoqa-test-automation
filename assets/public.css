@@ -1,0 +1,44 @@
+.cuato-runner-indicator {
+    position: fixed;
+    z-index: 99999;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.cuato-runner-indicator .cauto-runner-bars {
+    background-color: white;
+    display: flex;
+    flex-wrap: nowrap;
+} 
+.cuato-runner-indicator .cauto-runner-bars .cauto-bar {
+    height: 10px;
+    background-color: #CCC;
+    margin: 3px;
+}
+
+
+
+/* gradient loader */
+
+.cauto_bar_loader {
+    animation-duration: 1.8s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: cauto_placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #CCC;
+    background: linear-gradient(to right, #fa9866 8%, #f25405 38%, #fa9866 54%);
+    background-size: 1000px 640px;
+    position: relative;
+    
+}
+
+@keyframes cauto_placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
