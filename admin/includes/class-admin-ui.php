@@ -164,17 +164,13 @@ class cauto_admin_ui extends cauto_utils
     public function builder_buttons($data)
     {
 
-        $url = $this->prepare_run_url($data->ID);
-
         $controls = [
             [
-                'field'     => 'a',
+                'field'     => 'button',
                 'attr'      => [
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
-                    "title"     => __('Run Flow', 'condecorun-test-automation'),
-                    'href'      => $url,
-                    'target'    => '_blank'
+                    "title"     => __('Run Flow', 'condecorun-test-automation')
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-controls-play"></span>'

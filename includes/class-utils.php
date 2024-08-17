@@ -28,6 +28,8 @@ class cauto_utils
 
     public string $slug             = 'codecorun-automation';
 
+    public string $runner_slug      = 'codecorun-runner';
+
     public string $nonce            = 'cauto-S3cR3t_KEY';
 
     public string $settings_page    = 'test-tools';
@@ -146,7 +148,6 @@ class cauto_utils
         //check URL for start
         if (isset($get_steps[0])) {
             if ($get_steps[0]['step'] === 'start' && isset($get_steps[0]['record'][0]['value'])) {
-
                 if (strpos($get_steps[0]['record'][0]['value'], get_admin_url()) !== false) {
                     $url = $get_steps[0]['record'][0]['value'].'&run=1';
                 } else {

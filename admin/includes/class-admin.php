@@ -44,6 +44,12 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_do_save_flow', [$this, 'save_steps']);
         //load flow steps in the builder
         add_action('cauto_load_saved_steps', [$this, 'load_saved_steps']);
+
+        add_action('admin_head', function(){
+            if (isset($_GET['reset'])) {
+                delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
+            }
+        });
         
     }
 
@@ -187,20 +193,17 @@ class cauto_admin extends cauto_utils
         $step_data  = (isset($_POST['step']))? $_POST['step'] : null;
         $flow_id    = (is_numeric($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
 
-
         if ($step_data) {
 
             $step_data = json_decode(stripslashes($step_data));
 
             if (empty($step_data)) {
-                $res = delete_post_meta($flow_id, $this->flow_steps_key);
-                if ($res) {
-                    echo json_encode(
-                        [
-                            'status'    => 'success'
-                        ]
-                    );
-                }
+                delete_post_meta($flow_id, $this->flow_steps_key);
+                echo json_encode(
+                    [
+                        'status'    => 'success'
+                    ]
+                );
                 exit();
             }
 
@@ -227,9 +230,7 @@ class cauto_admin extends cauto_utils
         if ($step_data && !empty($step_data) && $flow_id) {
 
             do_action('cauto_before_save_steps',$flow_id, $step_data);
-            
             update_post_meta($flow_id, $this->flow_steps_key, $step_data);
-
             do_action('cauto_after_save_steps',$flow_id, $step_data);
 
             echo json_encode(

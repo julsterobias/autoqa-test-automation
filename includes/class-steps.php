@@ -46,7 +46,8 @@ class cauto_steps
                 'step_indicator'    => [
                     'selector'      => '#cauto_start_name',
                     'describe_text' => __(' to open {#cauto_start_name}', 'codecorun-test-automation')
-                ] 
+                ],
+                'callback'          => 'cauto_default_do_start' 
             ],
             'events_divider'    => [
                 'divider'       => true,
@@ -93,7 +94,8 @@ class cauto_steps
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_click_alias',
                     'describe_text' => __(' to {#cauto_step_click_alias}', 'codecorun-test-automation')
-                ] 
+                ],
+                'callback'  => 'cauto_default_click_step' 
             ],
             'double-click' => [
                 'label'     => __('Double Click', 'codecorun-test-automation'),
@@ -136,7 +138,8 @@ class cauto_steps
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_double_click_alias',
                     'describe_text' => __(' to {#cauto_step_double_click_alias}', 'codecorun-test-automation')
-                ] 
+                ],
+                'callback'  => 'cauto_default_double_click_step'  
             ],
             'set-text'           => [
                 'label'         => __('Set Text', 'codecorun-test-automation'),
@@ -187,7 +190,8 @@ class cauto_steps
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_set_text_selector_alias', '#cauto_step_set_text'],
                     'describe_text' => __(' {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'codecorun-test-automation')
-                ] 
+                ],
+                'callback'  => 'cauto_default_set_text_step'  
             ],
             'check_divider' => [
                 'divider'    => true,
@@ -226,7 +230,8 @@ class cauto_steps
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_title_condition', '#cauto_field_check_title'],
                     'describe_text' => __(' {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'codecorun-test-automation')
-                ] 
+                ],
+                'callback'  => 'cauto_default_check_page_title_step'
             ],
         ];
 
