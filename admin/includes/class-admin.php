@@ -12,6 +12,7 @@ use cauto\includes\cauto_utils;
 use cauto\admin\includes\cauto_admin_ui;
 use cauto\includes\cauto_test_automation;
 use cauto\includes\cauto_steps;
+use cauto\includes\cauto_test_runners;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -44,10 +45,17 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_do_save_flow', [$this, 'save_steps']);
         //load flow steps in the builder
         add_action('cauto_load_saved_steps', [$this, 'load_saved_steps']);
+        //setup and run the flow
+        add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
 
         add_action('admin_head', function(){
             if (isset($_GET['reset'])) {
                 delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
+            }
+
+            if (isset($_GET['debug'])) {
+                print_r(get_post_meta(18, '_flow_steps', true));
+                die();
             }
         });
         
@@ -289,13 +297,10 @@ class cauto_admin extends cauto_utils
                     }
                 }
             }
-
-
        
             foreach ($describe_text_set as $index => $describe_set) {
                 $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
             }
-     
 
             $flow_steps[] = [
                 'step_group'        => $step_group,
@@ -310,6 +315,99 @@ class cauto_admin extends cauto_utils
         }
 
         $this->get_view('flow/saved-steps', ['path' => 'admin', 'flow_steps' => $flow_steps]);
+
+    }
+
+    /**
+     * 
+     * 
+     * setup_run_flow
+     * @since 1.0.0
+     * 
+     * 
+     */
+    public function setup_run_flow()
+    {
+
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $flow_id = ($_POST['flow_id'])? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id = (int) $flow_id;
+
+        if (!$flow_id) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('No flow is found', 'codecorun-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $steps      = get_post_meta($flow_id, $this->flow_steps_key, true);
+        $target_url = '';
+
+        //get the first step and validate
+        if (isset($steps[0]['step'])) {
+            if ($steps[0]['step'] !== 'start') {
+                echo json_encode(
+                    [
+                        'status'    => 'failed',
+                        'message'   => __('No valid step to start', 'codecorun-test-automation')
+                    ]
+                );
+                exit();
+            }
+
+            $target_url = (isset($steps[0]['record'][0]['value']))? $steps[0]['record'][0]['value'] : null;
+
+            if (!$target_url) {
+                echo json_encode(
+                    [
+                        'status'    => 'failed',
+                        'message'   => __('No valid URL to start', 'codecorun-test-automation')
+                    ]
+                );
+                exit();
+            }
+        }
+
+
+        $runner     = new cauto_test_runners();
+        $runner->set_name(uniqid('runner-'));
+        $runner->set_flow_id($flow_id);
+        $runner->set_steps($steps);
+        $runner_id  = $runner->save();
+
+
+        if ($runner_id > 0) {
+            echo json_encode(
+                [
+                    'status'    => 'success',
+                    'message'   => '',
+                    'flow_id'   => $flow_id,
+                    'runner_id' => $runner_id,
+                    'url'       => $target_url
+                ]
+            );
+        } else {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Failed to save runner, contact developer', 'codecorun-test-automation')
+                ]
+            );
+        }
+
+        exit();
 
     }
 

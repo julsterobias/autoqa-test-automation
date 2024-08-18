@@ -15,7 +15,6 @@
 *
 *
 *
-*
 */
 
 
@@ -88,7 +87,7 @@ if (!function_exists('cauto_deactivate_plugin')) {
  * 
  * 
  */
-function cauto_init_depencies()
+function cauto_init_classes()
 {
     //load in priority
     include_once 'includes/class-utils.php';
@@ -134,8 +133,8 @@ function cauto_init_depencies()
  */
 add_action('plugins_loaded', 'cauto_plugin_loaded');
 function cauto_plugin_loaded(){
-    if (function_exists('cauto_init_depencies')) {
-        cauto_init_depencies();
+    if (function_exists('cauto_init_classes')) {
+        cauto_init_classes();
         new cauto\admin\includes\cauto_admin; 
     }
 }

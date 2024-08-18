@@ -12,6 +12,7 @@ const cauto_do_run_runner = (response = null, index = 0) =>
             action: 'cauto_execute_runner', 
             nonce: cauto_ajax.nonce,
             flow_id: cauto_ajax.cauto_flow_id,
+            runner_id: cauto_ajax.cauto_runner_id,
             response: JSON.stringify(response),
             index: index
         },

@@ -87,6 +87,48 @@ jQuery(document).ready(function(){
         cauto_do_save_step('flow_save');
     });
 
+    //run the flow
+    jQuery('#cauto-run-flow').on('click', function(){
+
+        let flow_id = jQuery(this).data('id');
+        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+
+        if (!flow_id) return;
+
+        jQuery.ajax( {
+            type : "post",  
+            url: cauto_ajax.ajaxurl,
+            data : {    
+                action: 'cauto_setup_run_flow', 
+                nonce: cauto_ajax.nonce,
+                flow_id: flow_id
+            },
+            success: function( data ) {
+                //response data
+                if (data) {
+                    data = JSON.parse(data);
+                    if (data.status === 'success') {
+
+                        let flow_id     = data.flow_id;
+                        let runner_id   = data.runner_id;
+                        let url         = data.url;
+
+                        if (flow_id > 0 && runner_id > 0 && url !== '') {
+                            window.open(url + '?flow=' + flow_id + '&runner=' + runner_id, "_blank");
+                        } else {
+                            console.error('CAUTO ERROR: Flow and Runner not found.');
+                        }
+
+                        jQuery('#cauto-run-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-controls-play');
+
+                    } else {
+                        console.error('CAUTO ERROR: '+ data.message);
+                    }
+                }
+            }
+        });
+    });
+
 });
 
 // save step on close

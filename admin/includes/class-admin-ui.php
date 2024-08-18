@@ -170,7 +170,8 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
-                    "title"     => __('Run Flow', 'condecorun-test-automation')
+                    "title"     => __('Run Flow', 'condecorun-test-automation'),
+                    'data-id'   => ($_GET['flow'])? sanitize_text_field($_GET['flow']) : 0
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-controls-play"></span>'

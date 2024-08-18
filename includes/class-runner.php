@@ -10,6 +10,7 @@
 
 namespace cauto\includes;
 use cauto\includes\cauto_utils;
+use cauto\includes\cauto_test_runners;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -26,7 +27,8 @@ if ( !function_exists( 'add_filter' ) ){
 class cauto_runner extends cauto_utils
 {
 
-    private $flow_id       = null;
+    private $flow_id        = 0;
+    private $runner_id      = 0;
     private $flow_steps     = null;
 
     public function __construct()
@@ -52,9 +54,10 @@ class cauto_runner extends cauto_utils
         wp_enqueue_style('cauto-runner-css', CAUTO_PLUGIN_URL.'assets/public.css' , [], null);
         wp_localize_script('cauto-runner-js', 'cauto_ajax', 
                     [
-                        'ajaxurl'       => admin_url( 'admin-ajax.php' ), 
-                        'nonce'         => wp_create_nonce( $this->nonce ),
-                        'cauto_flow_id' => $this->flow_id
+                        'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
+                        'nonce'             => wp_create_nonce( $this->nonce ),
+                        'cauto_flow_id'     => $this->flow_id,
+                        'cauto_runner_id'   => $this->runner_id
                     ]
         );
     }
@@ -62,17 +65,16 @@ class cauto_runner extends cauto_utils
     public function run_flow()
     {
         $this->flow_id       = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
-        $do_run              = (isset($_GET['run']))? sanitize_text_field($_GET['run']) : null;
+        $this->runner_id              = (isset($_GET['runner']))? sanitize_text_field($_GET['runner']) : null;
         $this->flow_steps     = get_post_meta($this->flow_id, $this->flow_steps_key, true);
 
-        if ($this->flow_id > 0 && $do_run > 0) {
+        if ($this->flow_id > 0 && $this->runner_id > 0) {
 
             if (is_admin()) {
                 add_action('admin_enqueue_scripts', [$this, 'load_assets']);
             } else {
                 add_action('wp_enqueue_scripts', [$this, 'load_assets']);
             }
-            
             $this->get_view('runner-bar',['flows' => $this->flow_steps]);
             
         }
@@ -91,7 +93,9 @@ class cauto_runner extends cauto_utils
             exit();
         }
 
-        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
+        
         if ($flow_id) {
                
             $steps_obj              = cauto_steps::steps();
@@ -103,6 +107,9 @@ class cauto_runner extends cauto_utils
            
             if ($runner_response) {
                 $runner_response = json_decode(stripslashes($runner_response));
+
+                //update_runner_steps
+                //$runner = new cauto_test_runners();
 
                 if (!$runner_response[0]->status && $stop_error) {
                     echo json_encode([

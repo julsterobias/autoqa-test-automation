@@ -23,7 +23,7 @@ if ( !function_exists( 'add_filter' ) ){
     exit();
 }
 
-class cauto_test_automation extends cauto_utils
+class cauto_test_runners extends cauto_utils
 {
 
     private string $runner_name         = '';
@@ -32,12 +32,24 @@ class cauto_test_automation extends cauto_utils
 
     private array $id                   = [];
 
+    private int $flow_id                = 0;
+
+    private array $flow_steps           = [];
+
+    private string $meta_flow_id_key    = '_flow_id';
+
+    private string $meta_flow_steps_key = '_flow_steps';
 
     public function __construct($id = [])
     {   
         if (!empty($id)) {
             $this->id = $id;
         }
+    }
+
+    public function set_flow_id($id)
+    {
+        $this->flow_id = $id;
     }
 
     public function set_name($name = null)
@@ -50,6 +62,11 @@ class cauto_test_automation extends cauto_utils
         $this->runner_status = $status;
     }
 
+    public function set_steps($steps = [])
+    {
+        $this->flow_steps = $steps;
+    }
+
     public function get_name()
     {
         return $this->runner_name;
@@ -60,24 +77,47 @@ class cauto_test_automation extends cauto_utils
         return $this->runner_status;
     }
 
-    public function save_flow()
+    public function get_flow_id()
+    {
+        return $this->flow_id;
+    }
+
+    public function get_steps()
+    {
+        return $this->flow_steps;
+    }
+
+    public function save()
     {
         //create flow
         $post_data = array(
             'post_title'    => $this->get_name(),
             'post_status'   => $this->get_status(),
-            'post_type'     => $this->slug
+            'post_type'     => $this->runner_slug
         );
+
+        $metas = [];
+
+        if ( $this->get_flow_id() > 0 ) {
+            $metas[$this->meta_flow_id_key] = $this->get_flow_id();
+        }
+
+        if ( !empty( $this->get_steps() ) ) {
+            $metas[$this->meta_flow_steps_key] = $this->get_steps();
+        }
+
+        if (!empty($metas)) {
+            $post_data['meta_input'] = $metas;
+        }   
 
         return wp_insert_post($post_data);
     }
 
-    public function get_flows($other_args = [])
+    public function get_runners($other_args = [])
     {
-
         $args = [
             'posts_per_page'    => -1,
-            'post_type'         => $this->slug,
+            'post_type'         => $this->runner_slug,
             'post_status'       => $this->get_status(),
             'order_by'          => 'date',
             'order'             => 'DESC'
@@ -93,5 +133,61 @@ class cauto_test_automation extends cauto_utils
 
         return get_posts($args);
         
+    }
+
+    public function get_runner_steps()
+    {
+        if ($this->get_flow_id() === 0) return;
+
+        $args = [
+            'posts_per_page'    => -1,
+            'post_type'         => $this->runner_slug,
+            'post_status'       => $this->get_status(),
+            'meta_key'          => [
+                [
+                    'key'       => $this->meta_flow_id_key,
+                    'value'     => $this->get_flow_id(),
+                    'compare'   => '='
+                ]
+            ],
+            'order_by'          => 'date',
+            'order'             => 'DESC'   
+        ];
+
+        $steps      = [];
+        $runners    = get_posts($args);
+
+        if (!empty($runners)) {
+            foreach ($runners as $runner) {
+                $run_steps = get_post_meta($runner->ID, $this->flow_steps_key, true);
+                $steps[] = [
+                    'ID'        => $runner->ID,
+                    'name'      => $runner->post_title,
+                    'date'      => get_the_date('', $runner->ID),
+                    'steps'     => $run_steps
+                ];
+            }
+        }
+
+        return $steps;
+
+    }
+
+    public function update_runner_steps($flow_id = 0, $index = null, $result = [])
+    {
+        if ($this->id > 0 && $index && $flow_id > 0 && !empty($result)) {
+
+            $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);
+            
+            if ($flow !== $flow_id) return;
+
+            $steps      = get_post_meta($this->id, $this->flow_steps_key, true);
+        
+            if (isset($steps[$index])) {
+                $steps[$index]['result'] = $result;
+                update_post_meta($this->id, $this->flow_steps_key, $steps);
+            }
+            
+        }
     }
 }
