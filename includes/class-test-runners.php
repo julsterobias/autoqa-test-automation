@@ -30,7 +30,7 @@ class cauto_test_runners extends cauto_utils
 
     private string $runner_status       = 'publish';
 
-    private array $id                   = [];
+    private mixed $id                   = null;
 
     private int $flow_id                = 0;
 
@@ -40,9 +40,9 @@ class cauto_test_runners extends cauto_utils
 
     private string $meta_flow_steps_key = '_flow_steps';
 
-    public function __construct($id = [])
+    public function __construct($id = null)
     {   
-        if (!empty($id)) {
+        if ($id) {
             $this->id = $id;
         }
     }
@@ -123,7 +123,7 @@ class cauto_test_runners extends cauto_utils
             'order'             => 'DESC'
         ];
 
-        if (!empty($this->id)) {
+        if (!empty($this->id) && is_array($this->id)) {
             $args['post__in']   = $this->id;
         }
 
@@ -173,20 +173,22 @@ class cauto_test_runners extends cauto_utils
 
     }
 
-    public function update_runner_steps($flow_id = 0, $index = null, $result = [])
+    public function update_runner_steps($index = null, $result = [])
     {
-        if ($this->id > 0 && $index && $flow_id > 0 && !empty($result)) {
+    
+        if ($this->id > 0 && $index >= 0 && $this->get_flow_id() > 0 && !empty($result)) {
 
             $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);
-            
-            if ($flow !== $flow_id) return;
 
-            $steps      = get_post_meta($this->id, $this->flow_steps_key, true);
-        
+            if ((int)$flow !== (int)$this->get_flow_id()) return;
+
+            $steps      = get_post_meta($this->id, $this->meta_flow_steps_key, true);
+
             if (isset($steps[$index])) {
                 $steps[$index]['result'] = $result;
-                update_post_meta($this->id, $this->flow_steps_key, $steps);
-            }
+                error_log($index);
+                update_post_meta($this->id, $this->meta_flow_steps_key, $steps);
+            } 
             
         }
     }

@@ -54,7 +54,7 @@ class cauto_admin extends cauto_utils
             }
 
             if (isset($_GET['debug'])) {
-                print_r(get_post_meta(18, '_flow_steps', true));
+                print_r(get_post_meta($_GET['post'], '_flow_steps', true));
                 die();
             }
         });
@@ -274,7 +274,7 @@ class cauto_admin extends cauto_utils
             $step_label         = (isset($data[$steps['step']]['label']))? $data[$steps['step']]['label'] : [];
 
     
-            $describe_text      = $step_indicator['describe_text'];
+            $describe_text      = (!empty($step_indicator['describe_text']))? $step_indicator['describe_text'] : null;
             $describe_text_set  = [];
 
             if (is_array($step_selectors)) { 
@@ -283,17 +283,23 @@ class cauto_admin extends cauto_utils
                     return substr($selector, 1);
                 },$step_selectors);
 
-                foreach ($steps['record'] as $record) {
-                    if (in_array($record['id'], $clean_selector)) {
-                        $describe_text_set['#'.$record['id']] = $record['value'];
+                if (!empty($steps['record'])) {
+                    foreach ($steps['record'] as $record) {
+                        if (in_array($record['id'], $clean_selector)) {
+                            $describe_text_set['#'.$record['id']] = $record['value'];
+                        }
                     }
                 }
+                
 
             } else {
                 $clean_selector = substr($step_selectors, 1);
-                foreach ($steps['record'] as $record) {
-                    if ($record['id'] === $clean_selector) {
-                        $describe_text_set['#'.$record['id']] = $record['value'];
+
+                if (!empty($steps['record'])) {
+                    foreach ($steps['record'] as $record) {
+                        if ($record['id'] === $clean_selector) {
+                            $describe_text_set['#'.$record['id']] = $record['value'];
+                        }
                     }
                 }
             }

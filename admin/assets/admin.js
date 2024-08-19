@@ -40,11 +40,16 @@ jQuery(document).ready(function(){
         let type    = jQuery(this).find('div').data('step');
         if (type) {
             cuato_active_selected_step = jQuery(this);
-            jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
-            //show popup
-            jQuery(cauto_step_popup_step).fadeIn(200, function(){
-                cauto_build_step_settings(type);
-            });
+            let get_saved_data  = jQuery(cuato_active_selected_step).find('input[type=hidden]').val();
+            if (!get_saved_data) {
+                //do nothing
+            } else {
+                jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
+                //show popup
+                jQuery(cauto_step_popup_step).fadeIn(200, function(){
+                    cauto_build_step_settings(type);
+                });
+            }
         }
 
     });

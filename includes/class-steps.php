@@ -141,7 +141,7 @@ class cauto_steps
                 ],
                 'callback'  => 'cauto_default_double_click_step'  
             ],
-            'set-text'           => [
+            'set-text'          => [
                 'label'         => __('Set Text', 'codecorun-test-automation'),
                 'settings'      => [
                     [
@@ -193,6 +193,13 @@ class cauto_steps
                 ],
                 'callback'  => 'cauto_default_set_text_step'  
             ],
+            'reload' => [
+                'label'     => __('Reload', 'codecorun-test-automation'),
+                'settings'      => [],
+                'icon'      => '<span class="dashicons dashicons-update"></span>',
+                'group'     => 'events',
+                'callback'  => 'cauto_default_reload_page'
+            ],
             'check_divider' => [
                 'divider'    => true,
                 'label'     => __('Check', 'codecorun-test-automation'), 
@@ -208,11 +215,11 @@ class cauto_steps
                         ],
                         'label'     => __('Condition', 'codecorun-test-automation'),
                         'options'   => [
-                            'equals to'     => __('Equals to', 'codecorun-test-automation'),
-                            'not equals to' => __('Not equals to', 'codecorun-test-automation'),
-                            'contains with'      => __('Contains with', 'codecorun-test-automation'),
-                            'start with'    => __('Start with', 'codecorun-test-automation'),
-                            'end with'      => __('End with', 'codecorun-test-automation')
+                            'equals to'         => __('Equals to', 'codecorun-test-automation'),
+                            'not equals to'     => __('Not equals to', 'codecorun-test-automation'),
+                            'contains with'     => __('Contains with', 'codecorun-test-automation'),
+                            'start with'        => __('Start with', 'codecorun-test-automation'),
+                            'end with'          => __('End with', 'codecorun-test-automation')
                         ]
                     ],
                     [

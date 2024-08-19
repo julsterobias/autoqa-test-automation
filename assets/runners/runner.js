@@ -1,7 +1,12 @@
+let cauto_abort_runner = false;
+
 jQuery(window).on('load',function(){
     setTimeout(cauto_do_run_runner, 2000);
 });
 
+jQuery(window).on('beforeunload', function(event) {
+    cauto_abort_runner = true;
+});
 
 const cauto_do_run_runner = (response = null, index = 0) =>
 {
@@ -22,8 +27,9 @@ const cauto_do_run_runner = (response = null, index = 0) =>
                 data = JSON.parse(data);
                 if (data.status === 'success') {
 
-                    if (data.message === 'EOP') {
-                        
+                    if (data.message === 'reload') {
+                        //do action for EOP
+                    } else if (data.message === 'EOP') {
                         //do action for EOP
                     } else {
                         let callback = data.payload.callback;
@@ -31,8 +37,11 @@ const cauto_do_run_runner = (response = null, index = 0) =>
                             let response = window[callback](data.payload.params);
                             let new_index = parseInt(data.payload.index);
                             new_index++;
-                            cauto_update_runner_indicator(response, new_index);
-                            cauto_do_run_runner(response, new_index);
+
+                            if (!cauto_abort_runner) {
+                                cauto_update_runner_indicator(response, new_index);
+                                cauto_do_run_runner(response, new_index);
+                            }
                             
                         } catch (error) {
                             console.error('Runner: '+error);

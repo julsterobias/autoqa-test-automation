@@ -93,23 +93,27 @@ class cauto_runner extends cauto_utils
             exit();
         }
 
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
-        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? (int) sanitize_text_field($_POST['flow_id']) : null;
+        $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field($_POST['runner_id']) : null;
         
-        if ($flow_id) {
+        if ($flow_id && $runner_id) {
                
             $steps_obj              = cauto_steps::steps();
             $steps                  = get_post_meta($flow_id, $this->flow_steps_key, true);
             $stop_error             = get_post_meta($flow_id, '_stop_on_error', true);
             $runner_response        = ($_POST['response'] !== 'null')? $_POST['response'] : null;
             $step_index             = (isset($_POST['index']))? (int) sanitize_text_field($_POST['index']) : null;
-
            
             if ($runner_response) {
                 $runner_response = json_decode(stripslashes($runner_response));
 
                 //update_runner_steps
-                //$runner = new cauto_test_runners();
+                //one step back index
+                $result_index = $step_index;
+                $result_index--;
+                $runner = new cauto_test_runners($runner_id);
+                $runner->set_flow_id($flow_id);
+                $runner->update_runner_steps($result_index, $runner_response);
 
                 if (!$runner_response[0]->status && $stop_error) {
                     echo json_encode([
@@ -118,6 +122,14 @@ class cauto_runner extends cauto_utils
                     ]);
                     exit();
                 } 
+
+                /*if (isset($runner_response[0]->abort)) {
+                    echo json_encode([
+                        'status'    => 'success',
+                        'message'    => 'reload'
+                    ]);
+                    exit();
+                }*/
             }
 
             $payload = [];
