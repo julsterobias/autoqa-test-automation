@@ -24,6 +24,7 @@ define('CAUTO_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('CAUTO_PLUGIN_VERSION','1.0.0');
 define('CAUTO_PLUGIN_VERSION_CODE','P');
 define('CAUTO_NAMESPACES', ['includes','admin/includes']);
+define('CAUTO_RUNNER_IS_RUNNING', false);
 
 
 /**

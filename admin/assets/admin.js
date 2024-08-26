@@ -113,13 +113,9 @@ jQuery(document).ready(function(){
                 if (data) {
                     data = JSON.parse(data);
                     if (data.status === 'success') {
-
-                        let flow_id     = data.flow_id;
-                        let runner_id   = data.runner_id;
-                        let url         = data.url;
-
-                        if (flow_id > 0 && runner_id > 0 && url !== '') {
-                            window.open(url + '?flow=' + flow_id + '&runner=' + runner_id, "_blank");
+                        let url = data.url;
+                        if (url !== '') {
+                            window.open(url, "_blank");
                         } else {
                             console.error('CAUTO ERROR: Flow and Runner not found.');
                         }

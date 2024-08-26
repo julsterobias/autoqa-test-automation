@@ -154,6 +154,10 @@ class cauto_test_runners extends cauto_utils
             'order'             => 'DESC'   
         ];
 
+        if (!empty($this->id) && is_array($this->id)) {
+            $args['post__in']   = $this->id;
+        }
+
         $steps      = [];
         $runners    = get_posts($args);
 
@@ -173,23 +177,42 @@ class cauto_test_runners extends cauto_utils
 
     }
 
+    public function check_flow()
+    {
+        $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);
+        if ((int)$flow !== (int)$this->get_flow_id()) {
+            return;
+        }
+        return true;
+    }
+
     public function update_runner_steps($index = null, $result = [])
     {
     
         if ($this->id > 0 && $index >= 0 && $this->get_flow_id() > 0 && !empty($result)) {
 
-            $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);
-
-            if ((int)$flow !== (int)$this->get_flow_id()) return;
-
+            $this->check_flow();
             $steps      = get_post_meta($this->id, $this->meta_flow_steps_key, true);
 
             if (isset($steps[$index])) {
                 $steps[$index]['result'] = $result;
-                error_log($index);
                 update_post_meta($this->id, $this->meta_flow_steps_key, $steps);
             } 
             
+        }
+    }
+
+
+    public function get_runner_flow_step()
+    {
+        $this->check_flow();
+        return get_post_meta($this->id, $this->meta_flow_steps_key, true);
+    }
+
+    public function update_runner_flow_step()
+    {
+        if (!empty($this->get_steps())) {
+            update_post_meta($this->id, $this->meta_flow_steps_key, $this->get_steps());
         }
     }
 }

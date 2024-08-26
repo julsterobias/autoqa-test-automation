@@ -107,8 +107,8 @@ class cauto_admin_init extends cauto_utils
     public function load_tool()
     {
         add_management_page(
-            __('Codecorun autoQA', 'codecorun-test-automation'),        
-            __('Codecorun autoQA', 'codecorun-test-automation'),        
+            __('autoQA', 'codecorun-test-automation'),        
+            __('autoQA', 'codecorun-test-automation'),        
             'manage_options',  
             $this->settings_page,   
             [$this, 'test_tools']      

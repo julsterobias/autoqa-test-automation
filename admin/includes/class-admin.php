@@ -48,13 +48,16 @@ class cauto_admin extends cauto_utils
         //setup and run the flow
         add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
 
-        add_action('admin_head', function(){
+        add_action('wp', function(){
             if (isset($_GET['reset'])) {
                 delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
             }
 
             if (isset($_GET['debug'])) {
-                print_r(get_post_meta($_GET['post'], '_flow_steps', true));
+                if ((int)$_GET['debug'] === 1) {
+                    print_r(get_post_meta($_GET['post']));
+                }
+                print_r(get_post_meta($_GET['post'], $_GET['debug'], true));
                 die();
             }
         });
@@ -386,21 +389,28 @@ class cauto_admin extends cauto_utils
             }
         }
 
-
         $runner     = new cauto_test_runners();
         $runner->set_name(uniqid('runner-'));
         $runner->set_flow_id($flow_id);
         $runner->set_steps($steps);
         $runner_id  = $runner->save();
 
+        $flow       = new cauto_test_automation($flow_id);
+        $flow->start($runner_id);
+
+
+        $params = [
+            'flow_id'   => $flow_id,
+            'runner_id' => $runner_id
+        ];
+        
+        $target_url = get_site_url().'?'.http_build_query($params);
 
         if ($runner_id > 0) {
             echo json_encode(
                 [
                     'status'    => 'success',
                     'message'   => '',
-                    'flow_id'   => $flow_id,
-                    'runner_id' => $runner_id,
                     'url'       => $target_url
                 ]
             );

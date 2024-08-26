@@ -1,15 +1,95 @@
-let cauto_abort_runner = false;
+jQuery(document).ready(function(){
+    if (cauto_is_running_flow) {
+        cauto_do_run_flow();
+    }
+});
+
+var cauto_do_run_flow = () => {
+    //load loader
+    jQuery('.cuato-runner-indicator').show();
+}
+
+
+/*jQuery('document').ready(function(){
+    jQuery('body').on('click','#cauto-stop-runner', function(){
+        cauto_stop_runner(this);
+    });
+});
 
 jQuery(window).on('load',function(){
-    setTimeout(cauto_do_run_runner, 2000);
+    //cauto_prepare_runner();
 });
 
 jQuery(window).on('beforeunload', function(event) {
-    cauto_abort_runner = true;
+    //cauto_abort_runner = true;
 });
+
+const cauto_stop_runner = (obj) => {
+
+    jQuery(obj).text('Stopping...');
+    jQuery(obj).prop('disabled', true);
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_do_stop_runner', 
+            nonce: cauto_ajax.nonce
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    //fill the bars if the runner started before
+                    location.reload();
+                } else {
+                    console.error(data.message);
+                } 
+            }
+        }
+    });
+}
+
+const cauto_prepare_runner = () => {
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_prepare_exe_runner', 
+            nonce: cauto_ajax.nonce,
+            runner_id: cauto_ajax.cauto_runner_id,
+            flow_id: cauto_ajax.cauto_flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    //fill the bars if the runner started before
+                    if (data.action === 'new') {
+                        cauto_do_run_runner();
+                    } else if (data.action === 'continue'){
+                        //get completed steps and fill the UI
+                        let con_index = parseInt(data.index);
+                        if (con_index >= 1) {
+                            cauto_do_run_runner(null, con_index);
+                        }
+                    } else {
+                        console.error('Runner: Encountered unknown error during initial runtime, contact developer');
+                    }
+                    
+                } else {
+                    console.error(data.message);
+                } 
+            }
+        }
+    });
+}
 
 const cauto_do_run_runner = (response = null, index = 0) =>
 {
+
     jQuery.ajax( {
         type : "post",  
         url: cauto_ajax.ajaxurl,
@@ -83,4 +163,4 @@ const cauto_update_runner_indicator = (result = null, index) => {
         console.error('Runner: '+error);
     }
     
-}
+}*/
