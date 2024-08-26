@@ -1,4 +1,5 @@
 jQuery(document).ready(function(){
+
     if (cauto_is_running_flow) {
         cauto_do_run_flow();
     }
@@ -6,85 +7,10 @@ jQuery(document).ready(function(){
 
 var cauto_do_run_flow = () => {
     //load loader
-    jQuery('.cuato-runner-indicator').show();
-}
-
-
-/*jQuery('document').ready(function(){
-    jQuery('body').on('click','#cauto-stop-runner', function(){
-        cauto_stop_runner(this);
-    });
-});
-
-jQuery(window).on('load',function(){
-    //cauto_prepare_runner();
-});
-
-jQuery(window).on('beforeunload', function(event) {
-    //cauto_abort_runner = true;
-});
-
-const cauto_stop_runner = (obj) => {
-
-    jQuery(obj).text('Stopping...');
-    jQuery(obj).prop('disabled', true);
-
-    jQuery.ajax( {
-        type : "post",  
-        url: cauto_ajax.ajaxurl,
-        data : {    
-            action: 'cauto_do_stop_runner', 
-            nonce: cauto_ajax.nonce
-        },
-        success: function( data ) {
-            //response data
-            if (data) {
-                data = JSON.parse(data);
-                if (data.status === 'success') {
-                    //fill the bars if the runner started before
-                    location.reload();
-                } else {
-                    console.error(data.message);
-                } 
-            }
-        }
-    });
-}
-
-const cauto_prepare_runner = () => {
-    jQuery.ajax( {
-        type : "post",  
-        url: cauto_ajax.ajaxurl,
-        data : {    
-            action: 'cauto_prepare_exe_runner', 
-            nonce: cauto_ajax.nonce,
-            runner_id: cauto_ajax.cauto_runner_id,
-            flow_id: cauto_ajax.cauto_flow_id
-        },
-        success: function( data ) {
-            //response data
-            if (data) {
-                data = JSON.parse(data);
-                if (data.status === 'success') {
-                    //fill the bars if the runner started before
-                    if (data.action === 'new') {
-                        cauto_do_run_runner();
-                    } else if (data.action === 'continue'){
-                        //get completed steps and fill the UI
-                        let con_index = parseInt(data.index);
-                        if (con_index >= 1) {
-                            cauto_do_run_runner(null, con_index);
-                        }
-                    } else {
-                        console.error('Runner: Encountered unknown error during initial runtime, contact developer');
-                    }
-                    
-                } else {
-                    console.error(data.message);
-                } 
-            }
-        }
-    });
+    if (JSON.stringify(cauto_running_flow_data) !== '{}') {
+        cauto_do_run_runner();
+        jQuery('.cuato-runner-indicator').show();
+    }
 }
 
 const cauto_do_run_runner = (response = null, index = 0) =>
@@ -96,8 +22,8 @@ const cauto_do_run_runner = (response = null, index = 0) =>
         data : {    
             action: 'cauto_execute_runner', 
             nonce: cauto_ajax.nonce,
-            flow_id: cauto_ajax.cauto_flow_id,
-            runner_id: cauto_ajax.cauto_runner_id,
+            flow_id: cauto_running_flow_data.flow_id,
+            runner_id: cauto_running_flow_data.runner_id,
             response: JSON.stringify(response),
             index: index
         },
@@ -111,6 +37,7 @@ const cauto_do_run_runner = (response = null, index = 0) =>
                         //do action for EOP
                     } else if (data.message === 'EOP') {
                         //do action for EOP
+                        cuato_completed_runner_indicator(data.results);
                     } else {
                         let callback = data.payload.callback;
                         try {
@@ -118,7 +45,7 @@ const cauto_do_run_runner = (response = null, index = 0) =>
                             let new_index = parseInt(data.payload.index);
                             new_index++;
 
-                            if (!cauto_abort_runner) {
+                            if (!data.payload.abort) {
                                 cauto_update_runner_indicator(response, new_index);
                                 cauto_do_run_runner(response, new_index);
                             }
@@ -127,7 +54,18 @@ const cauto_do_run_runner = (response = null, index = 0) =>
                             console.error('Runner: '+error);
                         }
                     }
+                } else if (data.status === 'continue') { 
+                    
+                    try {
+                        
+                        cuato_continue_runner_indicator(data.payload.index);
+                        let response = window[data.payload.callback](data.payload.params);
+                        cauto_do_run_runner(response, data.payload.index);
 
+                    } catch (error) {
+                        console.error('Runner: '+error);
+                    }
+                    
                 } else {
                     console.error(data.message);
                 } 
@@ -163,4 +101,32 @@ const cauto_update_runner_indicator = (result = null, index) => {
         console.error('Runner: '+error);
     }
     
-}*/
+}
+
+
+const cuato_continue_runner_indicator = (index = 0) => {
+    for (let x = 1; x <= index; x++) {
+        jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + x + ')').removeClass('cauto_bar_loader');
+        jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + x + ')').addClass('passed');
+    }
+    index++;
+    jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + index + ')').removeClass('passed');
+    jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + index + ')').removeClass('failed');
+    jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + index + ')').addClass('cauto_bar_loader');
+}
+
+
+const cuato_completed_runner_indicator = (results) => {
+    if (results.length === 0) return;
+
+    let i = 1;
+    for(let x in results) {
+        if (results[x][0].status) {
+            jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + i + ')').removeClass('cauto_bar_loader').removeClass('failed').addClass('passed');
+        } else {
+            jQuery('.cauto-runner-bars .cauto-bar:nth-child(' + i + ')').removeClass('cauto_bar_loader').removeClass('passed').addClass('failed');
+        }
+        i++;
+    }
+    
+}

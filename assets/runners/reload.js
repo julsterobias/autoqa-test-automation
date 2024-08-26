@@ -10,7 +10,7 @@ var cauto_default_reload_page = () => {
     return [
         {
             status: true,
-            message: '',
+            message: 'Page is reloaded',
             abort: true
         }
     ];

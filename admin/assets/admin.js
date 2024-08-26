@@ -41,15 +41,11 @@ jQuery(document).ready(function(){
         if (type) {
             cuato_active_selected_step = jQuery(this);
             let get_saved_data  = jQuery(cuato_active_selected_step).find('input[type=hidden]').val();
-            if (!get_saved_data) {
-                //do nothing
-            } else {
-                jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
+            jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
                 //show popup
-                jQuery(cauto_step_popup_step).fadeIn(200, function(){
-                    cauto_build_step_settings(type);
-                });
-            }
+            jQuery(cauto_step_popup_step).fadeIn(200, function(){
+                cauto_build_step_settings(type);
+            });
         }
 
     });
@@ -185,6 +181,8 @@ const cauto_describe_step_action = (describe = null) => {
     if (!describe) return;
 
     describe = JSON.parse(describe);
+
+    console.log(describe);
 
     let text = describe.describe_text;
 

@@ -340,6 +340,16 @@ class cauto_admin_ui extends cauto_utils
                 'icon'      => '<span class="dashicons dashicons-no"></span>'
             ],
         ];
+
+        //exclude save
+        //no settings
+        switch ($type) {
+            case 'reload':
+            case 'no-settings':
+                unset($right_buttons[0]);
+                break;
+        }
+
         $right_buttons = apply_filters('cauto_step_config_buttons', $right_buttons);
         $right_buttons = $this->prepare_attr($right_buttons);
 

@@ -48,7 +48,7 @@ class cauto_admin extends cauto_utils
         //setup and run the flow
         add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
 
-        add_action('wp', function(){
+        add_action('admin_init', function(){
             if (isset($_GET['reset'])) {
                 delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
             }
