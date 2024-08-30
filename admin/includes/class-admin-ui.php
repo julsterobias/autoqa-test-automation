@@ -284,7 +284,7 @@ class cauto_admin_ui extends cauto_utils
                 }
             }
 
-            $describe_text = (isset($this->steps[$type]['step_indicator']))? $this->steps[$type]['step_indicator'] : null;
+            $describe_text = (isset($this->steps[$type]['step_indicator']))? $this->steps[$type]['step_indicator'] : [];
 
             ob_start();
             $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps]);
@@ -340,15 +340,6 @@ class cauto_admin_ui extends cauto_utils
                 'icon'      => '<span class="dashicons dashicons-no"></span>'
             ],
         ];
-
-        //exclude save
-        //no settings
-        switch ($type) {
-            case 'reload':
-            case 'no-settings':
-                unset($right_buttons[0]);
-                break;
-        }
 
         $right_buttons = apply_filters('cauto_step_config_buttons', $right_buttons);
         $right_buttons = $this->prepare_attr($right_buttons);

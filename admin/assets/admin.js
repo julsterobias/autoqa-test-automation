@@ -35,12 +35,23 @@ jQuery(document).ready(function(){
         }
     });
 
+    jQuery('body').on('click','.cauto_steps_builder .cauto-steps-draggable, .cauto_steps_builder .cauto-steps-el-saved' ,function(){
+        jQuery('.cauto_steps_builder').find('li').removeClass('active');
+        jQuery(this).toggleClass('active');
+    });
+
     jQuery('body').on('dblclick','.cauto_steps_builder .cauto-steps-draggable, .cauto_steps_builder .cauto-steps-el-saved' ,function(){
 
         let type    = jQuery(this).find('div').data('step');
+        jQuery(this).removeClass('active');
         if (type) {
+
+            let no_settings = jQuery(this).find('div').data('no-settings');
+            if (no_settings) {
+                return;
+            }
+
             cuato_active_selected_step = jQuery(this);
-            let get_saved_data  = jQuery(cuato_active_selected_step).find('input[type=hidden]').val();
             jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
                 //show popup
             jQuery(cauto_step_popup_step).fadeIn(200, function(){
@@ -48,6 +59,12 @@ jQuery(document).ready(function(){
             });
         }
 
+    });
+
+    jQuery('html').keyup(function(e){
+        if(e.keyCode == 46) {
+            jQuery('.cauto_steps_builder').find('li.active').remove();
+        }
     });
 
     //save step changes
@@ -73,13 +90,11 @@ jQuery(document).ready(function(){
     });
 
     jQuery('body').on('click', '#cauto-delete-step-confirm', function(){
-        jQuery(cuato_active_selected_step).remove();
-        cuato_active_selected_step = null;
         //save changes here
         jQuery(this).prop('disabled', true);
         jQuery('.cauto-cancel').prop('disabled', true);
         jQuery('#cauto-save-step').prop('disabled', true);
-        cauto_do_save_step();
+        cauto_do_save_step('delete_flow');
     });
     
     jQuery('#cauto-save-flow').on('click', function(){
@@ -161,10 +176,13 @@ const cauto_do_save_step = (source = null) => {
                     if (source === 'flow_save') {
                         jQuery('#cauto-run-flow, #cauto-delete-flow').prop('disabled', false);
                         jQuery('#cauto-save-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-saved');
+                    } else if (source === 'delete_flow') {
+                        jQuery(cuato_active_selected_step).remove();
+                        cuato_active_selected_step = null;
                     } else {
                         cauto_describe_step_action(jQuery('#cauto_step_config_describe').val());
-                        jQuery(cauto_step_popup_step).fadeOut(200);
                     }
+                    jQuery(cauto_step_popup_step).fadeOut(200);
                     
                 } else {
                     console.error('CAUTO ERROR: unable to save step, please contact support');
@@ -182,13 +200,11 @@ const cauto_describe_step_action = (describe = null) => {
 
     describe = JSON.parse(describe);
 
-    console.log(describe);
-
-    let text = describe.describe_text;
-
     if (typeof describe.describe_text === "undefined" || !describe.describe_text || describe.describe_text === '') {
         return;
     }
+
+    let text = describe.describe_text;
 
     if (Array.isArray(describe.selector)) {
         for (let x in describe.selector) {

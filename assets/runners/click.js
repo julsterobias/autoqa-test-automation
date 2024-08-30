@@ -9,7 +9,7 @@
 var cauto_default_click_step = (params) => {
     return [
         {
-            status: true,
+            status: 'passed',
             message: "Test click"
         }
     ]

@@ -241,6 +241,7 @@ class cauto_admin extends cauto_utils
         if ($step_data && !empty($step_data) && $flow_id) {
 
             do_action('cauto_before_save_steps',$flow_id, $step_data);
+            //move to class
             update_post_meta($flow_id, $this->flow_steps_key, $step_data);
             do_action('cauto_after_save_steps',$flow_id, $step_data);
 
@@ -269,7 +270,6 @@ class cauto_admin extends cauto_utils
 
         foreach ($get_steps as $steps) {
         
-            //$step_type          = ($steps['step'] === 'start')? 'default' : $steps['step'];
             $step_group         = (isset($data[$steps['step']]['group']))? $data[$steps['step']]['group'] : []; 
             $step_indicator     = (isset($data[$steps['step']]['step_indicator']))? $data[$steps['step']]['step_indicator'] : [];
             $step_selectors     = (isset($step_indicator['selector']))? $step_indicator['selector'] : [];
@@ -277,7 +277,7 @@ class cauto_admin extends cauto_utils
             $step_label         = (isset($data[$steps['step']]['label']))? $data[$steps['step']]['label'] : [];
 
     
-            $describe_text      = (!empty($step_indicator['describe_text']))? $step_indicator['describe_text'] : null;
+            $describe_text      = (!empty($step_indicator['describe_text']))? $step_indicator['describe_text'] : [];
             $describe_text_set  = [];
 
             if (is_array($step_selectors)) { 
@@ -318,7 +318,8 @@ class cauto_admin extends cauto_utils
                 'record'            => $steps['record'],
                 'describe_label'    => $describe_text,
                 'icon'              => $icon,
-                'step_label'        => $step_label
+                'step_label'        => $step_label,
+                'no_settings'       => (isset($data[$steps['step']]['no_settings']))? 1 : null
             ]; 
 
         }

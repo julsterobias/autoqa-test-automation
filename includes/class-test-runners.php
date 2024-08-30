@@ -188,7 +188,6 @@ class cauto_test_runners extends cauto_utils
 
     public function update_runner_steps($index = null, $result = [])
     {
-    
         if ($this->id > 0 && $index >= 0 && $this->get_flow_id() > 0 && !empty($result)) {
 
             $this->check_flow();
@@ -202,7 +201,6 @@ class cauto_test_runners extends cauto_utils
         }
     }
 
-
     public function get_runner_flow_step()
     {
         $this->check_flow();
@@ -212,7 +210,8 @@ class cauto_test_runners extends cauto_utils
     public function update_runner_flow_step()
     {
         if (!empty($this->get_steps())) {
-            update_post_meta($this->id, $this->meta_flow_steps_key, $this->get_steps());
+            return update_post_meta($this->id, $this->meta_flow_steps_key, $this->get_steps());
         }
     }
+
 }

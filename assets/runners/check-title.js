@@ -22,14 +22,14 @@ var cauto_default_check_page_title_step = (param = null) => {
                 if (page_title === param[1].value) {
                     return [
                         {
-                            status: true,
+                            status: 'passed',
                             message: 'Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: false,
+                            status: 'failed',
                             message: 'Matched: 0' + response_part
                         }
                     ];
@@ -39,14 +39,14 @@ var cauto_default_check_page_title_step = (param = null) => {
                 if (page_title !== param[1].value) {
                     return [
                         {
-                            status: true,
+                            status: 'passed',
                             message: 'Matched: 0' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: false,
+                            status: 'failed',
                             message: 'Matched: 1' + response_part
                         }
                     ];
@@ -56,14 +56,14 @@ var cauto_default_check_page_title_step = (param = null) => {
                 if (page_title.search(param[1].value) >= 0) {
                     return [
                         {
-                            status: true,
+                            status: 'passed',
                             message: 'Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: false,
+                            status: 'failed',
                             message: 'Matched: 0' + response_part
                         }
                     ];
@@ -73,14 +73,14 @@ var cauto_default_check_page_title_step = (param = null) => {
                 if (page_title.search(param[1].value) === 0) {
                     return [
                         {
-                            status: true,
+                            status: 'passed',
                             message: 'Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: false,
+                            status: 'failed',
                             message: 'Matched: 0' + response_part
                         }
                     ];
@@ -92,14 +92,14 @@ var cauto_default_check_page_title_step = (param = null) => {
                 if (substrin === param[1].value) {
                     return [
                         {
-                            status: true,
+                            status: 'passed',
                             message: 'Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: false,
+                            status: 'false',
                             message: 'Matched: 0' + response_part
                         }
                     ];
@@ -110,11 +110,4 @@ var cauto_default_check_page_title_step = (param = null) => {
     } catch(error) {
         console.error('Check Title Runner: '+error);
     }
-    
-    return [
-        {
-            status: false,
-            message: 'Unexpected error, check your console for log.'
-        }
-    ];
 }

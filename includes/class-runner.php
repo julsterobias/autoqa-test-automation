@@ -43,8 +43,8 @@ class cauto_runner extends cauto_utils
         add_action('wp', [$this, 'run_flow']);
         add_action('admin_init', [$this, 'run_flow']);
 
-        add_action('wp_ajax_cauto_execute_runner', [$this, 'execute_runner']);
-        add_action('wp_ajax_nopriv_cauto_execute_runner', [$this, 'execute_runner']);
+        add_action('wp_ajax_execute_pre_run', [$this, 'pre_run']);
+        add_action('wp_ajax_nopriv_execute_pre_run', [$this, 'pre_run']);
 
         add_action('wp_ajax_cauto_do_stop_runner', [$this, 'stop_runner']);
         add_action('wp_ajax_nopriv_cauto_do_stop_runner', [$this, 'stop_runner']);
@@ -130,7 +130,8 @@ class cauto_runner extends cauto_utils
        
     }
 
-    public function prepare_runner()
+
+    public function pre_run()
     {
         if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
             echo json_encode(
@@ -142,7 +143,145 @@ class cauto_runner extends cauto_utils
             exit();
         }
 
+        $flow_id    = (isset($_POST['flow_id']))? (int) sanitize_text_field($_POST['flow_id']) : null;
+        $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field($_POST['runner_id']) : null;
+        $response   = (!empty($_POST['response']))? json_decode(stripslashes($_POST['response'])) : null;
+        $index      = (isset($_POST['index']))? (int)sanitize_text_field($_POST['index']) : null;
 
+        if ($flow_id && $runner_id) {
+            
+            $steps_obj          = cauto_steps::steps();
+            $step_index         = $index;
+            $runner             = new cauto_test_runners($runner_id);
+            $runner->set_flow_id($flow_id);
+
+            $runner_steps   = $runner->get_runner_flow_step();
+
+            if (empty($runner_steps)) {
+                echo json_encode([
+                    'status'       => 'failed',
+                    'payload'      => [],
+                    'message'      => __('Cannot run flow no steps found', 'codecorun-test-automation') 
+                ]);
+                exit();
+            }
+
+            //for completion
+            if ( $step_index >= count($runner_steps) ) {
+
+                $temp_index = $step_index;
+                $temp_index--;
+                $runner->update_runner_steps($temp_index, $response);
+
+                echo json_encode([
+                    'status'       => 'completed',
+                    'payload'      => [],
+                    'message'      => null 
+                ]);
+                exit();
+            }
+
+            if (isset($runner_steps[$step_index]['result']) && empty($response) && $step_index === 0) {
+
+                //let's check for continue
+                $started_steps = 0;
+                foreach ($runner_steps as $run_step) {
+                    if (isset($run_step['result'])) {
+                        $started_steps++;
+                    }
+                }
+
+                if ( $started_steps >= count($runner_steps) ) {
+                    echo json_encode([
+                        'status'       => 'completed',
+                        'payload'      => [],
+                        'message'      => null 
+                    ]);
+                    exit();
+                }
+
+                if ($started_steps > 0) {
+
+                    //update the postback step
+                    if (!isset($runner_steps[$started_steps]['result'])) {
+                        $postback_result = (object) ['status' => 'passed', 'message' => 'step validated and continued'];
+                        $runner->update_runner_steps($started_steps, [$postback_result]);
+                    }
+                    $started_steps++;
+
+                    if ($started_steps >= count($runner_steps)) {
+                        echo json_encode([
+                            'status'       => 'completed',
+                            'payload'      => [],
+                            'message'      => null 
+                        ]);
+                        exit();
+                    }
+
+                    //this is continue
+                    $payload = [
+                        'callback'      => $steps_obj[$runner_steps[$started_steps]['step']]['callback'],
+                        'index'         => $started_steps,
+                        'params'        => $runner_steps[$started_steps]['record']
+                    ];
+
+                    echo json_encode([
+                        'status'       => 'continue',
+                        'payload'      => $payload,
+                        'message'      => null 
+                    ]);
+
+                    exit();
+                }
+
+            }
+            
+
+
+            if (!isset($runner_steps[$step_index]['result']) && empty($response) && $step_index === 0) {
+
+                //prepare the first step
+                $payload = [
+                    'callback'      => $steps_obj[$runner_steps[$step_index]['step']]['callback'],
+                    'index'         => 0,
+                    'params'        => $runner_steps[$step_index]['record']
+                ];
+
+                echo json_encode([
+                    'status'       => 'success',
+                    'payload'      => $payload,
+                    'message'      => null 
+                ]);
+
+                exit();
+            }
+
+            $temp_index = $step_index;
+            $temp_index--;
+            
+            $runner->update_runner_steps($temp_index, $response);
+            $payload = [
+                'callback'      => $steps_obj[$runner_steps[$step_index]['step']]['callback'],
+                'index'         => $step_index,
+                'params'        => $runner_steps[$step_index]['record']
+            ];
+
+            echo json_encode([
+                'status'       => 'success',
+                'payload'      => $payload,
+                'message'      => null 
+            ]);
+            exit();
+
+
+        } else {
+            echo json_encode([
+                'status'       => 'failed',
+                'payload'      => [],
+                'message'      => __('No flow and runner were found', 'codecorun-test-automation') 
+            ]);
+        }
+        exit();
     }
 
 
@@ -171,6 +310,7 @@ class cauto_runner extends cauto_utils
 
             $runner = new cauto_test_runners($runner_id);
             $runner->set_flow_id($flow_id);
+
            
             if ($runner_response) {
                 $runner_response = json_decode(stripslashes($runner_response));
@@ -190,73 +330,6 @@ class cauto_runner extends cauto_utils
                     exit();
                 } 
             } 
-
-            if (!$runner_response && $step_index === 0) {
-
-                $runner_steps = $runner->get_runner_flow_step();
-                
-                $last_index     = 0;
-                $callback       = null; 
-                $params         = null;
-                $record_result  = [];
-
-                if (!empty($runner_steps)) {
-                    foreach ($runner_steps as $index => $step) {
-                        if (!isset($step['result'])) {
-                            $last_index = $index;
-                            $callback   = $steps_obj[$step['step']]['callback'];
-                            $params     = $step['record'];
-                            break;
-                        } else {
-                            $record_result[] = $step['result'];
-                        }
-                    }
-                }
-
-                if (!empty($record_result) && count($record_result) === count($runner_steps)) {
-                    echo json_encode([
-                        'status'       => 'success',
-                        'message'      => 'EOP',
-                        'results'      => $record_result
-                    ]);
-                    exit();
-                }
-                
-
-                if ($last_index > 0) {
-                    //this is continuation
-                    //pass the callback js
-                    $last_index++;
-                    $payload = [
-                        'callback'      => $callback,
-                        'index'         => $last_index,
-                        'params'        => $params,
-                        'abort'         => null
-                    ];
-
-                    echo json_encode([
-                        'status'        => 'continue',
-                        'message'       => '',
-                        'payload'       => $payload
-                    ]);
-                    exit();
-
-                }
-
-            }
-
-            $payload = [
-                'callback'      => $steps_obj[$steps[$step_index]['step']]['callback'],
-                'index'         => $step_index,
-                'params'        => $steps[$step_index]['record'],
-                'abort'         => (isset($runner_response[0]->abort))? $runner_response[0]->abort : null
-            ];
-
-            echo json_encode([
-                'status'       => 'success',
-                'payload'      => $payload,
-                'message'      => null 
-            ]);
             
         } else {
             echo json_encode([
@@ -286,6 +359,18 @@ class cauto_runner extends cauto_utils
         ]);
 
         exit();
+    }
+
+    public function check_last_step($current_step = 0, $steps = [])
+    {
+        if ( $current_step >= count($steps) ) {
+            echo json_encode([
+                'status'       => 'completed',
+                'payload'      => [],
+                'message'      => null 
+            ]);
+            exit();
+        }
     }
 
     

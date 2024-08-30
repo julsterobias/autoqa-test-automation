@@ -194,11 +194,12 @@ class cauto_steps
                 'callback'  => 'cauto_default_set_text_step'  
             ],
             'reload' => [
-                'label'     => __('Reload', 'codecorun-test-automation'),
+                'label'         => __('Reload', 'codecorun-test-automation'),
                 'settings'      => [],
-                'icon'      => '<span class="dashicons dashicons-update"></span>',
-                'group'     => 'events',
-                'callback'  => 'cauto_default_reload_page'
+                'icon'          => '<span class="dashicons dashicons-update"></span>',
+                'group'         => 'events',
+                'callback'      => 'cauto_default_reload_page',
+                'no_settings'   => true
             ],
             'check_divider' => [
                 'divider'    => true,

@@ -9,9 +9,8 @@ var cauto_default_reload_page = () => {
     window.location.reload();
     return [
         {
-            status: true,
-            message: 'Page is reloaded',
-            abort: true
+            status: 'pased',
+            message: ''
         }
     ];
 }

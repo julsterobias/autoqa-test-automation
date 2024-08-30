@@ -500,6 +500,10 @@ label.cauto-toggle-label:active:after {
     position: relative;
 }
 
+.cauto_steps_builder .cauto-steps-el.active .cauto-step-element {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .cauto_steps_builder .cauto-steps-el:active .cauto-step-element {
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
