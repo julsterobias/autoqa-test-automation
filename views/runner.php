@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow" />
 <meta name="googlebot" content="noindex">
-<title><?php esc_html_e('AutoQA - Flow 1', 'codecorun-test-automation'); ?></title>
+<title><?php echo esc_html('AutoQA - Flow 1'); ?></title>
 <style>
 body, html {
     margin: 0;
+    padding: 0;
+    overflow-y: hidden;
 }
 iframe.cauto-runner-area-frame {
     width: 100%;
-    height: calc(100vh - 7px);
+    height: 100vh;
     border: 0;
     background-color: #CCC;
 }

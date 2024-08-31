@@ -3,8 +3,8 @@
     z-index: 99999;
     width: 100%;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    height: 10px;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
     display: none;
 }
 

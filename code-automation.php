@@ -5,7 +5,7 @@
 *
 * Plugin Name: Codecorun autoQA
 * Description: A plugin that will automate the testing of your website without the need of coding.
-* Author:      Codecorun
+* Author:      Juls Terobias
 * Plugin Type: Test Tool
 * Author URI: 
 * Version: 1.0.0
@@ -80,7 +80,7 @@ if (!function_exists('cauto_deactivate_plugin')) {
 /**
  * 
  * 
- * load_dependencies
+ * autoloader
  * load required files
  * @since 1.0.0
  * @param

@@ -73,13 +73,22 @@ class cauto_runner extends cauto_utils
                 }
             }
         }
+
+        /*                        'cauto_flow_id'     => $this->flow_id,
+                        'cauto_runner_id'   => $this->runner_id */
+        
+        //get runner steps if available
+        $runner = new cauto_test_runners($this->runner_id);
+        $runner->set_flow_id($this->flow_id);
+        $available_runners = [
+            $this->runner_id => $runner->get_runner_flow_step()
+        ];
         wp_enqueue_style('cauto-runner-css', CAUTO_PLUGIN_URL.'assets/runner.css' , [], null);
         wp_localize_script('cauto-runner-js', 'cauto_ajax', 
                     [
                         'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                         'nonce'             => wp_create_nonce( $this->nonce ),
-                        'cauto_flow_id'     => $this->flow_id,
-                        'cauto_runner_id'   => $this->runner_id
+                        'runner_steps'      => $available_runners
                     ]
         );
 
@@ -112,7 +121,7 @@ class cauto_runner extends cauto_utils
         } else {
 
             $logged_user    = get_current_user_id();
-            $cauto_test     = new cauto_test_automation();
+            $cauto_test     = new cauto_test_automation(); //Can we support multiple flows?
             $running_flows  = $cauto_test->get_running_flow();
             if ( $logged_user && current_user_can('administrator') && !empty($running_flows) ) {
                 //load runner assets
@@ -173,11 +182,7 @@ class cauto_runner extends cauto_utils
                 $temp_index--;
                 $runner->update_runner_steps($temp_index, $response);
 
-                echo json_encode([
-                    'status'       => 'completed',
-                    'payload'      => [],
-                    'message'      => null 
-                ]);
+                $this->return_last_step();
                 exit();
             }
 
@@ -187,16 +192,12 @@ class cauto_runner extends cauto_utils
                 $started_steps = 0;
                 foreach ($runner_steps as $run_step) {
                     if (isset($run_step['result'])) {
-                        $started_steps++;
+                        $started_steps++; //uncomment this after the plotter is implemented
                     }
                 }
 
                 if ( $started_steps >= count($runner_steps) ) {
-                    echo json_encode([
-                        'status'       => 'completed',
-                        'payload'      => [],
-                        'message'      => null 
-                    ]);
+                    $this->return_last_step(); //uncomment this after the plotter is implemented
                     exit();
                 }
 
@@ -210,11 +211,7 @@ class cauto_runner extends cauto_utils
                     $started_steps++;
 
                     if ($started_steps >= count($runner_steps)) {
-                        echo json_encode([
-                            'status'       => 'completed',
-                            'payload'      => [],
-                            'message'      => null 
-                        ]);
+                        $this->return_last_step(); //uncomment this after the plotter is implemented
                         exit();
                     }
 
@@ -260,10 +257,14 @@ class cauto_runner extends cauto_utils
             $temp_index--;
             
             $runner->update_runner_steps($temp_index, $response);
+            //get the update steps to include the changes above
+            $runner_steps   = $runner->get_runner_flow_step();
+            $runner_steps_ = $this->extract_results($runner_steps);
             $payload = [
-                'callback'      => $steps_obj[$runner_steps[$step_index]['step']]['callback'],
+                'callback'      => $steps_obj[$runner_steps[$step_index]['step']]['callback'], //watch out here
                 'index'         => $step_index,
-                'params'        => $runner_steps[$step_index]['record']
+                'params'        => $runner_steps[$step_index]['record'],
+                'results'       => $runner_steps_
             ];
 
             echo json_encode([
@@ -284,7 +285,7 @@ class cauto_runner extends cauto_utils
         exit();
     }
 
-
+    //delete this method later
     public function execute_runner()
     {
         if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
@@ -361,16 +362,28 @@ class cauto_runner extends cauto_utils
         exit();
     }
 
-    public function check_last_step($current_step = 0, $steps = [])
+    public function return_last_step($payload = [])
     {
-        if ( $current_step >= count($steps) ) {
-            echo json_encode([
-                'status'       => 'completed',
-                'payload'      => [],
-                'message'      => null 
-            ]);
-            exit();
+        echo json_encode([
+            'status'       => 'completed',
+            'payload'      => $payload,
+            'message'      => null
+        ]);
+    }
+
+    public function extract_results($steps = []) 
+    {
+        if (empty($steps)) return;
+
+        $results = [];
+        foreach ($steps as $step) {
+            if (isset($step['result'])) {
+                $results[] = $step['result'];
+            }    
         }
+
+        return $results;
+
     }
 
     
