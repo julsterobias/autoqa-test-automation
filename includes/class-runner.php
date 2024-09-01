@@ -182,7 +182,8 @@ class cauto_runner extends cauto_utils
                 $temp_index--;
                 $runner->update_runner_steps($temp_index, $response);
 
-                $this->return_last_step();
+                $payload   = $runner->get_runner_flow_step();
+                $this->return_last_step($payload);
                 exit();
             }
 
@@ -197,7 +198,8 @@ class cauto_runner extends cauto_utils
                 }
 
                 if ( $started_steps >= count($runner_steps) ) {
-                    $this->return_last_step(); //uncomment this after the plotter is implemented
+                    $payload   = $runner->get_runner_flow_step();
+                    $this->return_last_step($payload); //uncomment this after the plotter is implemented
                     exit();
                 }
 
@@ -211,7 +213,8 @@ class cauto_runner extends cauto_utils
                     $started_steps++;
 
                     if ($started_steps >= count($runner_steps)) {
-                        $this->return_last_step(); //uncomment this after the plotter is implemented
+                        $payload   = $runner->get_runner_flow_step();
+                        $this->return_last_step($payload); //uncomment this after the plotter is implemented
                         exit();
                     }
 

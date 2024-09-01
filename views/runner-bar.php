@@ -10,5 +10,13 @@
             <div class="cauto-bar <?php echo esc_attr($current); ?>" style="<?php echo 'width:'.$width.'%;'; ?>"></div>
         <?php endforeach; ?>
     </div>
+
+    <div class="cauto-runner-completed">
+        <div class="cauto-completed-content">
+            <h3 class="status">--</h3>
+            <div class="result"><?php esc_html_e('No result found, contact developer', 'codecorun-test-automation'); ?></div>
+            <p><input type="button" value="<?php esc_attr_e('Close', 'codecorun-test-automation'); ?>"></p>
+        </div>
+    </div>
 </div>
 <?php endif; ?>

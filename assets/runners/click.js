@@ -12,6 +12,5 @@ var cauto_default_click_step = (params) => {
             status: 'passed',
             message: "Test click"
         }
-    ]
-
+    ];
 }

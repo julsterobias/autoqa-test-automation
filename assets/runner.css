@@ -12,11 +12,6 @@
     background-color: white;
     display: flex;
     flex-wrap: nowrap;
-    /*position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;*/
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -57,6 +52,119 @@
     background-size: 1000px 640px;
     position: relative;
     
+}
+
+
+.cauto-runner-completed {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    max-width: calc(95%);
+    height: calc(100vh - 100px);
+    display: none;
+}
+
+.cauto-runner-completed h3 {
+    font-size: 50px;
+    line-height: 50px;
+    margin: 0;
+    font-weight: bold;
+    font-family: inherit;
+}
+
+.cauto-runner-completed h3.passed {
+    color: green;
+}
+
+.cauto-runner-completed p {
+    margin: 25px 0 0 0;
+}
+
+.cauto-runner-completed p input {
+    display: inline-block;
+    margin-right: 5px;
+    text-decoration: none;
+    padding: 7px 15px;
+    border: 1px solid #f25405;
+    border-radius: 100px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #f25405;
+    background-color: white;
+    cursor: pointer;
+}
+.cauto-runner-completed p input:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.cauto-runner-completed p input:last-child {
+    margin-right: 0;
+}
+
+.cauto-runner-completed p input.primary {
+    background-color: #f25405;
+    color: white;
+}
+
+.cauto-completed-content .result {
+    text-align: left;
+}
+
+.cauto-completed-content .result ul {
+    margin: 0;
+}
+
+.cauto-completed-content .result ul li {
+    display: block;
+    border-radius: 100px;
+    background-color: #f2f2f2;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.cauto-completed-content .result ul li div.status {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    vertical-align: top;
+    position: relative;
+}
+
+.cauto-completed-content .result ul li div.meta {
+    display: inline-block;
+    vertical-align: top;
+    height: 50px;
+}
+
+.cauto-completed-content .result ul li div.status svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.cauto-completed-content .result ul li div.passed svg {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.cauto-completed-content .result ul li div.failed svg {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.cauto-completed-content .result ul li div.passed {
+    background-color: green;
+}
+
+.cauto-completed-content .result ul li div.failed {
+    background-color: red;
 }
 
 @keyframes cauto_placeHolderShimmer{
