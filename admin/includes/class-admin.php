@@ -137,7 +137,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -161,7 +161,7 @@ class cauto_admin extends cauto_utils
                 echo json_encode(
                     [
                         'status'        => 'success',
-                        'message'       => __('Flow is added', 'codecorun-test-automation'),
+                        'message'       => __('Flow is added', 'autoqa-test-automation'),
                         'flow_id'       => $post_id,
                         'redirect_to'   => admin_url().'tools.php?page=test-tools&flow='.$post_id
                     ]
@@ -171,7 +171,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Flow name is required', 'codecorun-test-automation')
+                    'message'   => __('Flow name is required', 'autoqa-test-automation')
                 ]
             );
         }
@@ -194,7 +194,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -343,7 +343,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -356,7 +356,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('No flow is found', 'codecorun-test-automation')
+                    'message'   => __('No flow is found', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -371,7 +371,7 @@ class cauto_admin extends cauto_utils
                 echo json_encode(
                     [
                         'status'    => 'failed',
-                        'message'   => __('No valid step to start', 'codecorun-test-automation')
+                        'message'   => __('No valid step to start', 'autoqa-test-automation')
                     ]
                 );
                 exit();
@@ -383,7 +383,7 @@ class cauto_admin extends cauto_utils
                 echo json_encode(
                     [
                         'status'    => 'failed',
-                        'message'   => __('No valid URL to start', 'codecorun-test-automation')
+                        'message'   => __('No valid URL to start', 'autoqa-test-automation')
                     ]
                 );
                 exit();
@@ -419,7 +419,7 @@ class cauto_admin extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Failed to save runner, contact developer', 'codecorun-test-automation')
+                    'message'   => __('Failed to save runner, contact developer', 'autoqa-test-automation')
                 ]
             );
         }

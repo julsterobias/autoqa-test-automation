@@ -3,13 +3,13 @@
 *
 *
 *
-* Plugin Name: Codecorun autoQA
+* Plugin Name: autoQA
 * Description: A plugin that will automate the testing of your website without the need of coding.
 * Author:      Juls Terobias
 * Plugin Type: Test Tool
 * Author URI: 
 * Version: 1.0.0
-* Text Domain: codecorun-automation
+* Text Domain: autoqa-test-automation
 * License:     GPLv3
 * License URI: https://www.gnu.org/licenses/gpl.html
 *
@@ -38,7 +38,7 @@ define('CAUTO_RUNNER_IS_RUNNING', false);
 add_action( 'init', 'cauto_load_text_domain' );
 
 function cauto_load_text_domain() {
-	load_plugin_textdomain( 'codecorun-test-automation', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'autoqa-test-automation', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 

@@ -73,9 +73,6 @@ class cauto_runner extends cauto_utils
                 }
             }
         }
-
-        /*                        'cauto_flow_id'     => $this->flow_id,
-                        'cauto_runner_id'   => $this->runner_id */
         
         //get runner steps if available
         $runner = new cauto_test_runners($this->runner_id);
@@ -88,7 +85,9 @@ class cauto_runner extends cauto_utils
                     [
                         'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                         'nonce'             => wp_create_nonce( $this->nonce ),
-                        'runner_steps'      => $available_runners
+                        'runner_steps'      => $available_runners,
+                        'status_passed'     => __('PASSED!', 'autoqa-test-automation'),
+                        'status_failed'     => __('FAILED!', 'autoqa-test-automation')
                     ]
         );
 
@@ -114,8 +113,15 @@ class cauto_runner extends cauto_utils
                     $target_url = $first_step['record'][0]['value'];
                 }
             }
+
+            $title = get_the_title($this->flow_id);
             
-            $this->get_view('runner', ['flows' => $this->flow_steps, 'flow_id' => $this->flow_id, 'runner_id' => $this->runner_id, 'url' => $target_url]);
+            $this->get_view('runner', [
+                'flows' => $this->flow_steps, 
+                'flow_id' => $this->flow_id, 
+                'runner_id' => $this->runner_id, 
+                'url' => $target_url, 
+                'title' => $title]);
             exit();
             
         } else {
@@ -146,7 +152,7 @@ class cauto_runner extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -156,6 +162,8 @@ class cauto_runner extends cauto_utils
         $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field($_POST['runner_id']) : null;
         $response   = (!empty($_POST['response']))? json_decode(stripslashes($_POST['response'])) : null;
         $index      = (isset($_POST['index']))? (int)sanitize_text_field($_POST['index']) : null;
+
+        $abort_on_error = false;
 
         if ($flow_id && $runner_id) {
             
@@ -170,7 +178,7 @@ class cauto_runner extends cauto_utils
                 echo json_encode([
                     'status'       => 'failed',
                     'payload'      => [],
-                    'message'      => __('Cannot run flow no steps found', 'codecorun-test-automation') 
+                    'message'      => __('Cannot run flow no steps found', 'autoqa-test-automation') 
                 ]);
                 exit();
             }
@@ -181,9 +189,7 @@ class cauto_runner extends cauto_utils
                 $temp_index = $step_index;
                 $temp_index--;
                 $runner->update_runner_steps($temp_index, $response);
-
-                $payload   = $runner->get_runner_flow_step();
-                $this->return_last_step($payload);
+                $this->return_last_step($runner->get_runner_flow_step());
                 exit();
             }
 
@@ -194,12 +200,19 @@ class cauto_runner extends cauto_utils
                 foreach ($runner_steps as $run_step) {
                     if (isset($run_step['result'])) {
                         $started_steps++; //uncomment this after the plotter is implemented
+                        if ($run_step['result'][0]->status === 'passed') {
+                            $abort_on_error = true;
+                        }
                     }
                 }
 
+                if ($abort_on_error) {
+                    $this->return_last_step($runner_steps);
+                    exit();
+                }
+
                 if ( $started_steps >= count($runner_steps) ) {
-                    $payload   = $runner->get_runner_flow_step();
-                    $this->return_last_step($payload); //uncomment this after the plotter is implemented
+                    $this->return_last_step($runner->get_runner_flow_step()); //uncomment this after the plotter is implemented
                     exit();
                 }
 
@@ -207,14 +220,13 @@ class cauto_runner extends cauto_utils
 
                     //update the postback step
                     if (!isset($runner_steps[$started_steps]['result'])) {
-                        $postback_result = (object) ['status' => 'passed', 'message' => 'step validated and continued'];
+                        $postback_result = (object) ['status' => 'passed', 'message' => __('step validated and continued', 'cauto-test-automation')];
                         $runner->update_runner_steps($started_steps, [$postback_result]);
                     }
                     $started_steps++;
 
                     if ($started_steps >= count($runner_steps)) {
-                        $payload   = $runner->get_runner_flow_step();
-                        $this->return_last_step($payload); //uncomment this after the plotter is implemented
+                        $this->return_last_step($runner->get_runner_flow_step()); //uncomment this after the plotter is implemented
                         exit();
                     }
 
@@ -262,6 +274,28 @@ class cauto_runner extends cauto_utils
             $runner->update_runner_steps($temp_index, $response);
             //get the update steps to include the changes above
             $runner_steps   = $runner->get_runner_flow_step();
+
+
+
+            $stop_error     = get_post_meta($flow_id, $this->flow_stop_on_error, true);
+            if ($stop_error && !empty($runner_steps)) {
+                $abort = false;
+                foreach ($runner_steps as $step) {
+                    if (isset($step['result'])) {
+                        if ( $step['result'][0]->status === 'failed' ) {
+                            $abort = true;
+                            break;
+                        }
+                    } 
+                }
+                if ($abort) {
+                    $this->return_last_step($runner_steps);
+                    exit();
+                }
+            }
+
+
+
             $runner_steps_ = $this->extract_results($runner_steps);
             $payload = [
                 'callback'      => $steps_obj[$runner_steps[$step_index]['step']]['callback'], //watch out here
@@ -269,7 +303,7 @@ class cauto_runner extends cauto_utils
                 'params'        => $runner_steps[$step_index]['record'],
                 'results'       => $runner_steps_
             ];
-
+            
             echo json_encode([
                 'status'       => 'success',
                 'payload'      => $payload,
@@ -282,66 +316,9 @@ class cauto_runner extends cauto_utils
             echo json_encode([
                 'status'       => 'failed',
                 'payload'      => [],
-                'message'      => __('No flow and runner were found', 'codecorun-test-automation') 
+                'message'      => __('No flow and runner were found', 'autoqa-test-automation') 
             ]);
         }
-        exit();
-    }
-
-    //delete this method later
-    public function execute_runner()
-    {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
-                [
-                    'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
-                ]
-            );
-            exit();
-        }
-
-        $flow_id    = (isset($_POST['flow_id']))? (int) sanitize_text_field($_POST['flow_id']) : null;
-        $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field($_POST['runner_id']) : null;
-        
-        if ($flow_id && $runner_id) {
-               
-            $steps_obj              = cauto_steps::steps();
-            $steps                  = get_post_meta($flow_id, $this->flow_steps_key, true);
-            $stop_error             = get_post_meta($flow_id, '_stop_on_error', true);
-            $runner_response        = ($_POST['response'] !== 'null')? $_POST['response'] : null;
-            $step_index             = (isset($_POST['index']))? (int) sanitize_text_field($_POST['index']) : 0;
-
-            $runner = new cauto_test_runners($runner_id);
-            $runner->set_flow_id($flow_id);
-
-           
-            if ($runner_response) {
-                $runner_response = json_decode(stripslashes($runner_response));
-
-                //update_runner_steps
-                //one step back index
-                $result_index = $step_index;
-                $result_index--;
-                
-                $runner->update_runner_steps($result_index, $runner_response);
-
-                if (!$runner_response[0]->status && $stop_error) {
-                    echo json_encode([
-                        'status'    => 'failed',
-                        'message'    => $runner_response[0]->message
-                    ]);
-                    exit();
-                } 
-            } 
-            
-        } else {
-            echo json_encode([
-                'status'    => 'failed',
-                'message'    => __('Runner: required data for step is not found, please contact developer.', 'codecorun-test-automation')
-            ]);   
-        }
-
         exit();
     }
 
@@ -351,7 +328,7 @@ class cauto_runner extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();

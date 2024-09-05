@@ -26,15 +26,17 @@ class cauto_utils
 {
 
 
-    public string $slug             = 'codecorun-automation';
+    public string $slug                 = 'autoqa-automation';
 
-    public string $runner_slug      = 'codecorun-runner';
+    public string $runner_slug          = 'autoqa-runner';
 
-    public string $nonce            = 'cauto-S3cR3t_KEY';
+    public string $nonce                = 'cauto-S3cR3t_KEY';
 
-    public string $settings_page    = 'test-tools';
+    public string $settings_page        = 'test-tools';
 
-    public string $flow_steps_key   = '_cauto_test_automation_steps';
+    public string $flow_steps_key       = '_cauto_test_automation_steps';
+
+    public string $flow_stop_on_error   = '_stop_on_error';
 
     /**
 	*

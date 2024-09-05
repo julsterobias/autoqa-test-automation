@@ -1,6 +1,6 @@
 /**
  * 
- * codecorun test automation
+ * autoQA test automation
  * @since 1.0.0
  * script to detect if flow is running or not.
  * 

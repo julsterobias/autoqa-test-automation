@@ -89,7 +89,7 @@ class cauto_admin_ui extends cauto_utils
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
                     "id"        => "cauto-new-case"
                 ],
-                'label' => __('New Test Flow', 'codecorun-test-automation'),
+                'label' => __('New Test Flow', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-insert"></span>'
             ],
             [
@@ -98,7 +98,7 @@ class cauto_admin_ui extends cauto_utils
                     "class" => "cauto-top-class cauto-button caut-ripple",
                     "id"    => "cauto-support"
                 ],
-                'label' =>  __('Help', 'codecorun-test-automation'),
+                'label' =>  __('Help', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-sos"></span>'
             ],
            
@@ -118,7 +118,7 @@ class cauto_admin_ui extends cauto_utils
                     'class' => 'cauto-field wide',
                     'type'  => 'text'
                 ],
-                'label'     => __('Flow Name', 'codecorun-test-automation'),
+                'label'     => __('Flow Name', 'autoqa-test-automation'),
                 'icon'      => null
             ],
             [
@@ -128,7 +128,7 @@ class cauto_admin_ui extends cauto_utils
                     'class' => 'cauto-toggle',
                     'type'  => 'checkbox'
                 ],
-                'label'     => __('Stop on error', 'codecorun-test-automation'),
+                'label'     => __('Stop on error', 'autoqa-test-automation'),
                 'icon'      => null
             ]
         ];
@@ -143,7 +143,7 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-save-new-flow',
                     'class' => 'cauto-top-class cauto-button primary caut-ripple'
                 ],
-                'label'     => __('Save Flow', 'codecorun-test-automation'),
+                'label'     => __('Save Flow', 'autoqa-test-automation'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -151,7 +151,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'  => [
                     "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
                 ],
-                'label' =>  __('Cancel', 'codecorun-test-automation'),
+                'label' =>  __('Cancel', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-no"></span>'
             ]
         ];
@@ -259,7 +259,7 @@ class cauto_admin_ui extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'codecorun-test-automation')
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
                 ]
             );
             exit();
@@ -301,7 +301,7 @@ class cauto_admin_ui extends cauto_utils
             echo json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Step type is not found', 'codecorun-test-automation')
+                    'message'   => __('Step type is not found', 'autoqa-test-automation')
                 ]
             );
         }

@@ -64,21 +64,26 @@
     border-radius: 5px;
     padding: 25px;
     text-align: center;
-    max-width: calc(95%);
+    max-width: 600px;
     height: calc(100vh - 100px);
     display: none;
 }
 
 .cauto-runner-completed h3 {
-    font-size: 50px;
-    line-height: 50px;
-    margin: 0;
+    font-size: 40px;
+    line-height: 40px;
+    margin-top: 0;
     font-weight: bold;
     font-family: inherit;
+    margin-bottom: 20px;
 }
 
 .cauto-runner-completed h3.passed {
     color: green;
+}
+
+.cauto-runner-completed h3.failed {
+    color: red;
 }
 
 .cauto-runner-completed p {
@@ -114,15 +119,19 @@
 
 .cauto-completed-content .result {
     text-align: left;
+    height: calc(100vh - 220px);
+    overflow-y: auto;
 }
 
 .cauto-completed-content .result ul {
     margin: 0;
+    padding: 0;
 }
 
 .cauto-completed-content .result ul li {
-    display: block;
-    border-radius: 100px;
+    display: flex;
+    flex-wrap: nowrap;
+    border-radius: 5px;
     background-color: #f2f2f2;
     overflow: hidden;
     margin-bottom: 15px;
@@ -130,23 +139,36 @@
 
 .cauto-completed-content .result ul li div.status {
     display: inline-block;
-    width: 50px;
-    height: 50px;
+    width: 5%;
     vertical-align: top;
     position: relative;
+    padding: 20px;
 }
 
 .cauto-completed-content .result ul li div.meta {
     display: inline-block;
     vertical-align: top;
-    height: 50px;
+    width: 95%;
+    padding: 15px;
+}
+
+.cauto-completed-content .result ul li div.meta span.message {
+    font-size: 13px;
+    color: #919191;
+}
+
+.cauto-completed-content .result ul li div.meta span.failed {
+    color: red;
+}
+
+.cauto-completed-content .result ul li div.meta span {
+    display: block;
 }
 
 .cauto-completed-content .result ul li div.status svg {
-    position: absolute;
+    position: relative;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
 }
 
 .cauto-completed-content .result ul li div.passed svg {
@@ -157,6 +179,15 @@
 .cauto-completed-content .result ul li div.failed svg {
     width: 35px !important;
     height: 35px !important;
+}
+
+.cauto-completed-content .result ul li div.no-status svg {
+    width: 35px !important;
+    height: 35px !important;
+}
+
+.cauto-completed-content .result ul li div.no-status {
+    background-color: #CCC;
 }
 
 .cauto-completed-content .result ul li div.passed {

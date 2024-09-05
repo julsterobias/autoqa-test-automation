@@ -29,7 +29,7 @@ class cauto_steps
     {
         $steps = [
             'start' => [
-                'label'     => __('Start', 'codecorun-test-automation'),
+                'label'     => __('Start', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'input',
@@ -38,23 +38,23 @@ class cauto_steps
                             'id'    => 'cauto_start_name',
                             'class' => 'cauto-step-nodes cauto-start-step cauto-field wide'
                         ],
-                        'label'         => __('Page URL', 'codecorun-test-automation')
+                        'label'         => __('Page URL', 'autoqa-test-automation')
                     ]
                 ],
                 'icon'              => '<span class="dashicons dashicons-laptop"></span>',
                 'group'             => 'default',
                 'step_indicator'    => [
                     'selector'      => '#cauto_start_name',
-                    'describe_text' => __(' to open {#cauto_start_name}', 'codecorun-test-automation')
+                    'describe_text' => __(' to open {#cauto_start_name}', 'autoqa-test-automation')
                 ],
                 'callback'          => 'cauto_default_do_start' 
             ],
             'events_divider'    => [
                 'divider'       => true,
-                'label'         => __('Input', 'codecorun-test-automation') 
+                'label'         => __('Input', 'autoqa-test-automation') 
             ],
             'click' => [
-                'label'         => __('Click', 'codecorun-test-automation'),
+                'label'         => __('Click', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -62,11 +62,11 @@ class cauto_steps
                             'id'    => 'cauto_step_selector_type',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
                         ],
-                        'label'     => __('Attribute', 'codecorun-test-automation'),
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
                         'options'   => [
-                            'class' => __('Class', 'codecorun-test-automation'),
-                            'id'    => __('ID', 'codecorun-test-automation'),
-                            'xpath' => __('Xpath', 'codecorun-test-automation')
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -76,7 +76,7 @@ class cauto_steps
                             'id'    => 'cauto_step_selector',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
-                        'label' => __('Selector', 'codecorun-test-automation')
+                        'label' => __('Selector', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',
@@ -84,21 +84,21 @@ class cauto_steps
                             'type'  => 'text',
                             'id'    => 'cauto_step_click_alias',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide',
-                            'placeholder'   => __('Element temporary name', 'codecorun-test-automation')
+                            'placeholder'   => __('Element temporary name', 'autoqa-test-automation')
                         ],
-                        'label'         => __('Field Name', 'codecorun-test-automation')
+                        'label'         => __('Field Name', 'autoqa-test-automation')
                     ]
                 ],
                 'icon'      => '<span class="cauto-icon cauto-icon-point-up"></span>',
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_click_alias',
-                    'describe_text' => __(' to {#cauto_step_click_alias}', 'codecorun-test-automation')
+                    'describe_text' => __(' to {#cauto_step_click_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_click_step' 
             ],
             'double-click' => [
-                'label'     => __('Double Click', 'codecorun-test-automation'),
+                'label'     => __('Double Click', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -106,11 +106,11 @@ class cauto_steps
                             'id'    => 'cauto_step_double_click_selector_type',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
                         ],
-                        'label'     => __('Attribute', 'codecorun-test-automation'),
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
                         'options'   => [
-                            'class' => __('Class', 'codecorun-test-automation'),
-                            'id'    => __('ID', 'codecorun-test-automation'),
-                            'xpath' => __('Xpath', 'codecorun-test-automation')
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -120,7 +120,7 @@ class cauto_steps
                             'id'    => 'cauto_step_double_click_selector',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
-                        'label' => __('Selector', 'codecorun-test-automation')
+                        'label' => __('Selector', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',
@@ -128,21 +128,21 @@ class cauto_steps
                             'type'  => 'text',
                             'id'    => 'cauto_step_double_click_alias',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide',
-                            'placeholder'   => __('Element temporary name', 'codecorun-test-automation')
+                            'placeholder'   => __('Element temporary name', 'autoqa-test-automation')
                         ],
-                        'label'         => __('Field Name', 'codecorun-test-automation')
+                        'label'         => __('Field Name', 'autoqa-test-automation')
                     ]
                 ],
                 'icon'      => '<span class="cauto-icon cauto-icon-point-up"></span>',
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_double_click_alias',
-                    'describe_text' => __(' to {#cauto_step_double_click_alias}', 'codecorun-test-automation')
+                    'describe_text' => __(' to {#cauto_step_double_click_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_double_click_step'  
             ],
             'set-text'          => [
-                'label'         => __('Set Text', 'codecorun-test-automation'),
+                'label'         => __('Set Text', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -150,11 +150,11 @@ class cauto_steps
                             'id'    => 'cauto_step_selector_type',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
                         ],
-                        'label'     => __('Attribute', 'codecorun-test-automation'),
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
                         'options'   => [
-                            'class' => __('Class', 'codecorun-test-automation'),
-                            'id'    => __('ID', 'codecorun-test-automation'),
-                            'xpath' => __('Xpath', 'codecorun-test-automation')
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -164,7 +164,7 @@ class cauto_steps
                             'type'  => 'text',
                             'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
                         ],
-                        'label'     => __('Selector', 'codecorun-test-automation')
+                        'label'     => __('Selector', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',
@@ -173,7 +173,7 @@ class cauto_steps
                             'type'  => 'text',
                             'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
                         ],
-                        'label'     => __('Field Name', 'codecorun-test-automation')
+                        'label'     => __('Field Name', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',
@@ -182,19 +182,19 @@ class cauto_steps
                             'type'  => 'text',
                             'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
                         ],
-                        'label'     => __('Text', 'codecorun-test-automation')
+                        'label'     => __('Text', 'autoqa-test-automation')
                     ]
                 ],
                 'group'     => 'events',
                 'icon'      => '<span class="cauto-icon cauto-icon-keyboard"></span>',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_set_text_selector_alias', '#cauto_step_set_text'],
-                    'describe_text' => __(' {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'codecorun-test-automation')
+                    'describe_text' => __(' {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_text_step'  
             ],
             'reload' => [
-                'label'         => __('Reload', 'codecorun-test-automation'),
+                'label'         => __('Reload', 'autoqa-test-automation'),
                 'settings'      => [],
                 'icon'          => '<span class="dashicons dashicons-update"></span>',
                 'group'         => 'events',
@@ -203,10 +203,10 @@ class cauto_steps
             ],
             'check_divider' => [
                 'divider'    => true,
-                'label'     => __('Check', 'codecorun-test-automation'), 
+                'label'     => __('Check', 'autoqa-test-automation'), 
             ],
             'check-title' => [
-                'label'     => __('Page Title', 'codecorun-test-automation'),
+                'label'     => __('Page Title', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -214,13 +214,13 @@ class cauto_steps
                             'id'    => 'cauto_field_check_title_condition',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide block'
                         ],
-                        'label'     => __('Condition', 'codecorun-test-automation'),
+                        'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
-                            'equals to'         => __('Equals to', 'codecorun-test-automation'),
-                            'not equals to'     => __('Not equals to', 'codecorun-test-automation'),
-                            'contains with'     => __('Contains with', 'codecorun-test-automation'),
-                            'start with'        => __('Start with', 'codecorun-test-automation'),
-                            'end with'          => __('End with', 'codecorun-test-automation')
+                            'equals to'         => __('Equals to', 'autoqa-test-automation'),
+                            'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
+                            'contains with'     => __('Contains with', 'autoqa-test-automation'),
+                            'start with'        => __('Start with', 'autoqa-test-automation'),
+                            'end with'          => __('End with', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -230,14 +230,14 @@ class cauto_steps
                             'id'    => 'cauto_field_check_title',
                             'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
-                        'label' => __('Title', 'codecorun-test-automation')
+                        'label' => __('Title', 'autoqa-test-automation')
                     ]
                 ],
                 'icon'      => '<span class="dashicons dashicons-admin-site"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_title_condition', '#cauto_field_check_title'],
-                    'describe_text' => __(' {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'codecorun-test-automation')
+                    'describe_text' => __(' {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_page_title_step'
             ],

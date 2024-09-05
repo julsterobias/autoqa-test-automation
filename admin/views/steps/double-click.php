@@ -1,6 +1,6 @@
 <div class="cauto-step-config">
     <div class="cauto-step-config-header">
-        <h3><?php esc_html_e('Double Click', 'codecorun-test-automation'); ?></h3>
+        <h3><?php esc_html_e('Double Click', 'autoqa-test-automation'); ?></h3>
     </div>
     <div class="cauto-fields auto-type-start">
         <?php if (!empty($data['config'])): 
