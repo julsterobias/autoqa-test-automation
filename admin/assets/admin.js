@@ -9,6 +9,9 @@ jQuery(document).ready(function(){
 
     jQuery('body').on('click', '.cauto-cancel', function(){
         let parent = jQuery(this).closest('.cauto-popup');
+        jQuery('#cauto-save-new-flow').removeAttr('data-edit');
+        jQuery('#cauto-new-flow-name').val('');
+        jQuery('#cauto-flow-stop-on-error').prop('checked', false);
         jQuery(parent).fadeOut(200);
     });
 
@@ -70,7 +73,6 @@ jQuery(document).ready(function(){
     //save step changes
     //save step configuration
     jQuery('body').on('click', '#cauto-save-step', function(){
-
         let parent = jQuery(this).closest('div#cauto-step-config-control-area');
         let fields = jQuery(parent).find('input[type=hidden]#cauto_step_config_field_ids').val();
         cauto_validate_set_step_config(fields);
@@ -80,7 +82,6 @@ jQuery(document).ready(function(){
         jQuery('#cauto-delete-step').hide();
         //now save the data
         cauto_do_save_step();
-        
     });
 
     jQuery('body').on('click', '#cauto-delete-step', function(){
@@ -105,40 +106,16 @@ jQuery(document).ready(function(){
 
     //run the flow
     jQuery('#cauto-run-flow').on('click', function(){
-
         let flow_id = jQuery(this).data('id');
         jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        cauto_run_flow(flow_id);
+    });
 
-        if (!flow_id) return;
-
-        jQuery.ajax( {
-            type : "post",  
-            url: cauto_ajax.ajaxurl,
-            data : {    
-                action: 'cauto_setup_run_flow', 
-                nonce: cauto_ajax.nonce,
-                flow_id: flow_id
-            },
-            success: function( data ) {
-                //response data
-                if (data) {
-                    data = JSON.parse(data);
-                    if (data.status === 'success') {
-                        let url = data.url;
-                        if (url !== '') {
-                            window.open(url, "_blank");
-                        } else {
-                            console.error('CAUTO ERROR: Flow and Runner not found.');
-                        }
-
-                        jQuery('#cauto-run-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-controls-play');
-
-                    } else {
-                        console.error('CAUTO ERROR: '+ data.message);
-                    }
-                }
-            }
-        });
+    jQuery('#cauto-edit-flow').on('click', function(){
+        jQuery('#cauto-popup-new-flow').fadeIn(200);
+        jQuery('#cauto-save-new-flow').attr('data-edit', cauto_ajax.flow_id);
+        //get flow details to fill the fields
+        cauto_get_flow_details();
     });
 
 });
@@ -328,6 +305,8 @@ const cauto_do_save_flow = (btn) => {
     jQuery('.cauto-cancel').prop('disabled', true);
     jQuery(btn).prop('disabled', true);
 
+    let to_edit = jQuery(btn).data('edit');
+
     jQuery.ajax( {
         type : "post",  
         url: cauto_ajax.ajaxurl,
@@ -335,7 +314,8 @@ const cauto_do_save_flow = (btn) => {
             action: 'cauto_new_flow', 
             nonce: cauto_ajax.nonce,
             name: flowname,
-            stop_on_error: stop_on_error
+            stop_on_error: stop_on_error,
+            is_edit: to_edit
         },
         success: function( data ) {
             //response data
@@ -349,4 +329,79 @@ const cauto_do_save_flow = (btn) => {
             }
         }
     });
+}
+
+
+const cauto_run_flow = (flow_id) => {
+
+    if (!flow_id) return;
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_setup_run_flow', 
+            nonce: cauto_ajax.nonce,
+            flow_id: flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    let url = data.url;
+                    if (url !== '') {
+                        window.open(url, "_blank");
+                    } else {
+                        console.error('CAUTO ERROR: Flow and Runner not found.');
+                    }
+
+                    jQuery('#cauto-run-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-controls-play');
+
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+        }
+    });
+
+}
+
+const cauto_get_flow_details = () => {
+
+    let flow_id = cauto_ajax.flow_id;
+
+    console.log(cauto_ajax);
+
+    if (!flow_id) return;
+
+    jQuery('#cauto-new-flow-name, #cauto-flow-stop-on-error, #cauto-save-new-flow, .cauto-cancel').prop('disabled', true);
+    
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_get_flow_details_to_edit', 
+            nonce: cauto_ajax.nonce,
+            flow_id: flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    jQuery('#cauto-new-flow-name').val(data.data.title);
+                   if (data.data.stop_on_error) {
+                        jQuery('#cauto-flow-stop-on-error').prop('checked', true);
+                   } else {
+                        jQuery('#cauto-flow-stop-on-error').prop('checked', false);
+                   }
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+            jQuery('#cauto-new-flow-name, #cauto-flow-stop-on-error, #cauto-save-new-flow, .cauto-cancel').prop('disabled', false);
+        }
+    });
+
 }

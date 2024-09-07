@@ -39,6 +39,8 @@ class cauto_test_automation extends cauto_utils
 
     private string $session_runner_name     = '_cauto_running_flows';
 
+    private string $stop_on_error_key       = '_stop_on_error';
+
 
     public function __construct($id = null)
     {   
@@ -79,6 +81,9 @@ class cauto_test_automation extends cauto_utils
 
     public function get_stop_on_error()
     {
+        if (false  === $this->stop_on_error && $this->id) {
+            return get_post_meta($this->id, $this->stop_on_error_key, true);
+        }
         return $this->stop_on_error;
     }
 
@@ -87,7 +92,7 @@ class cauto_test_automation extends cauto_utils
         return isset($_SESSION[$this->session_runner_name])? $_SESSION[$this->session_runner_name] : null;
     }
 
-    public function save_flow()
+    public function save_flow($flow_id = 0)
     {
         //create flow
         $post_data = array(
@@ -98,11 +103,25 @@ class cauto_test_automation extends cauto_utils
 
         if ($this->get_stop_on_error()) {
             $post_data['meta_input'] = [
-                '_stop_on_error' => $this->get_stop_on_error()
+                $this->stop_on_error_key => $this->get_stop_on_error()
             ];
+        } else {
+            $saved_stop_on_error = get_post_meta($flow_id, $this->stop_on_error_key, true);
+            if ($saved_stop_on_error) {
+                delete_post_meta($flow_id, $this->stop_on_error_key);
+            }
+        }
+        
+        if ($flow_id > 0) {
+            $post_data['ID'] = $flow_id;
+            $res = wp_update_post($post_data); // update
+            if ($res) {
+                return $flow_id;
+            }
+        } else {
+            return wp_insert_post($post_data); // insert
         }
 
-        return wp_insert_post($post_data);
     }
 
     public function get_flows($other_args = [])
@@ -132,6 +151,25 @@ class cauto_test_automation extends cauto_utils
         
     }
 
+
+    public function get_flow()
+    {
+        $flow_details = [];
+        if ($this->id) {
+            $flow = get_post($this->id);
+            if ($flow) {
+                $flow_details = [
+                    'flow_data'         => $flow,
+                    'stop_on_error'     => get_post_meta($this->id, $this->stop_on_error_key, true)
+                ];
+            }
+        }
+
+        return $flow_details;
+    }
+
+
+
     public function start($runner_id = 0)
     {
         $this->set_running_flow(
@@ -148,4 +186,5 @@ class cauto_test_automation extends cauto_utils
         $this->set_running_flow(null);
         return true;
     }
+
 }

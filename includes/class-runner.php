@@ -81,7 +81,7 @@ class cauto_runner extends cauto_utils
             $this->runner_id => $runner->get_runner_flow_step()
         ];
         wp_enqueue_style('cauto-runner-css', CAUTO_PLUGIN_URL.'assets/runner.css' , [], null);
-        wp_localize_script('cauto-runner-js', 'cauto_ajax', 
+        wp_localize_script('cauto-runner-js', 'cauto_runner', 
                     [
                         'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                         'nonce'             => wp_create_nonce( $this->nonce ),
@@ -163,7 +163,7 @@ class cauto_runner extends cauto_utils
         $response   = (!empty($_POST['response']))? json_decode(stripslashes($_POST['response'])) : null;
         $index      = (isset($_POST['index']))? (int)sanitize_text_field($_POST['index']) : null;
 
-        $abort_on_error = false;
+        $has_failed = false;
 
         if ($flow_id && $runner_id) {
             
@@ -200,15 +200,19 @@ class cauto_runner extends cauto_utils
                 foreach ($runner_steps as $run_step) {
                     if (isset($run_step['result'])) {
                         $started_steps++; //uncomment this after the plotter is implemented
-                        if ($run_step['result'][0]->status === 'passed') {
-                            $abort_on_error = true;
+                        if ($run_step['result'][0]->status === 'failed') {
+                            $has_failed = true;
                         }
                     }
                 }
 
-                if ($abort_on_error) {
-                    $this->return_last_step($runner_steps);
-                    exit();
+                if ($has_failed) {
+                    $flow_class = new cauto_test_automation($flow_id);
+                    $on_error   = $flow_class->get_stop_on_error();
+                    if ($on_error) {
+                        $this->return_last_step($runner_steps);
+                        exit();
+                    }
                 }
 
                 if ( $started_steps >= count($runner_steps) ) {
@@ -274,7 +278,6 @@ class cauto_runner extends cauto_utils
             $runner->update_runner_steps($temp_index, $response);
             //get the update steps to include the changes above
             $runner_steps   = $runner->get_runner_flow_step();
-
 
 
             $stop_error     = get_post_meta($flow_id, $this->flow_stop_on_error, true);

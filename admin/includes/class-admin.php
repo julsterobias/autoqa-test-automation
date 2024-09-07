@@ -38,7 +38,7 @@ class cauto_admin extends cauto_utils
         //admin UIs
         $this->admin_ui = new cauto_admin_ui();
         //save new flow
-        add_action('wp_ajax_cauto_new_flow', [$this, 'new_flow']);
+        add_action('wp_ajax_cauto_new_flow', [$this, 'update_flow']);
         add_action('cauto_flow_builder', [$this, 'load_builder'], 10);
         add_action('cauto_render_flows', [$this, 'load_flows']);
         //save flow
@@ -47,6 +47,9 @@ class cauto_admin extends cauto_utils
         add_action('cauto_load_saved_steps', [$this, 'load_saved_steps']);
         //setup and run the flow
         add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
+
+        //get flow details to edit
+        add_action('wp_ajax_cauto_get_flow_details_to_edit', [$this, 'flow_details']);
 
         add_action('admin_init', function(){
             if (isset($_GET['reset'])) {
@@ -74,20 +77,32 @@ class cauto_admin extends cauto_utils
      */
     public function load_assets()
     {
+
+        if (!isset($_GET['page'])) return; //do not load assets to non autoqa pages
+        if ($_GET['page'] !== $this->settings_page) return; //do not load assets to non autoqa pages
+
         wp_register_script('cauto-admin-js', CAUTO_PLUGIN_URL.'admin/assets/admin.js', ['jquery'], null );
         wp_enqueue_script('cauto-admin-js');
         wp_enqueue_style('cauto-admin-css', CAUTO_PLUGIN_URL.'admin/assets/admin.css' , [], null);
         wp_enqueue_style('cauto-admin-icons', CAUTO_PLUGIN_URL.'admin/assets/icons/style.css' , [], null);
         wp_enqueue_style('cauto-admin-grid-css', CAUTO_PLUGIN_URL.'admin/assets/admin-grid.css' , [], null);
-        wp_localize_script('cauto-admin-js', 'cauto_ajax', ['ajaxurl' => admin_url( 'admin-ajax.php' ), 'nonce' => wp_create_nonce( $this->nonce )]);
+
+        $cauto_variables = [
+            'ajaxurl' => admin_url( 'admin-ajax.php' ), 
+            'nonce' => wp_create_nonce( $this->nonce )
+        ];
+
+        //pass the variable to inline js variable for editing
+        if (!empty($_GET['flow'])) {
+            $cauto_variables['flow_id'] = $_GET['flow'];
+        }
+
+        wp_localize_script('cauto-admin-js', 'cauto_ajax', $cauto_variables);
 
         //jquery libraries
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script('jquery-ui-draggable');
-
-        // Optionally enqueue the jQuery UI CSS for styling (If needed)
-        //wp_enqueue_style('jquery-ui-css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
     }
 
 
@@ -131,8 +146,9 @@ class cauto_admin extends cauto_utils
      * 
      * 
      */
-    public function new_flow()
+    public function update_flow()
     {
+    
         if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
             echo json_encode(
                 [
@@ -143,17 +159,25 @@ class cauto_admin extends cauto_utils
             exit();
         }
 
+
         $flowname       = (isset($_POST['name']))? sanitize_text_field($_POST['name']) : null;
-        $stop_on_error  = (isset($_POST['stop_on_error']))? true : false;
+        $stop_on_error  = ($_POST['stop_on_error'] === "true")? true : false;
+        $is_edit        = (isset($_POST['is_edit']))? sanitize_text_field($_POST['is_edit']) : null;
+
+        $flow_id        = 0;
+        if ($is_edit) {
+            $flow_id = (int) $is_edit;
+        }
+
 
         if ($flowname) {
             
             do_action('cauto_before_update_flow', ['flow_name' => $flowname, 'stop_on_error' => $stop_on_error]);
-
+            
             $cflows = new cauto_test_automation();
             $cflows->set_name($flowname);
             $cflows->set_stop_on_error($stop_on_error);
-            $post_id = $cflows->save_flow();
+            $post_id = $cflows->save_flow($flow_id);
 
             do_action('cauto_after_update_flow', $post_id, ['flow_name' => $flowname, 'stop_on_error' => $stop_on_error]);
 
@@ -163,7 +187,7 @@ class cauto_admin extends cauto_utils
                         'status'        => 'success',
                         'message'       => __('Flow is added', 'autoqa-test-automation'),
                         'flow_id'       => $post_id,
-                        'redirect_to'   => admin_url().'tools.php?page=test-tools&flow='.$post_id
+                        'redirect_to'   => admin_url().'tools.php?page='.$this->settings_page.'&flow='.$post_id
                     ]
                 );
             }
@@ -306,10 +330,15 @@ class cauto_admin extends cauto_utils
                     }
                 }
             }
-       
-            foreach ($describe_text_set as $index => $describe_set) {
-                $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
+
+            if (!empty($describe_text_set)) {
+                foreach ($describe_text_set as $index => $describe_set) {
+                    $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
+                }
+            } else {
+                $describe_text = null;
             }
+            
 
             $flow_steps[] = [
                 'step_group'        => $step_group,
@@ -426,6 +455,53 @@ class cauto_admin extends cauto_utils
 
         exit();
 
+    }
+
+    /**
+     * 
+     * 
+     * flow_details
+     * 
+     */
+    public function flow_details()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+
+        if (!$flow_id) return;
+
+        $flow       = new cauto_test_automation($flow_id);
+        $details    = $flow->get_flow(); 
+        
+        if ($details) {
+            echo json_encode(
+                [
+                    'status'        => 'success',
+                    'data'          => [
+                        'title'            => $details['flow_data']->post_title,
+                        'stop_on_error'    => ($details['stop_on_error'])? true : false
+                    ]
+                ]
+            );
+        } else {
+            echo json_encode(
+                [
+                    'status'        => 'failed',
+                    'message'       => __('No flow is found, please contact developer', 'autoqa-test-automation') 
+                ]
+            );
+        }
+
+        exit();
     }
 
     

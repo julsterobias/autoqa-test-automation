@@ -119,7 +119,7 @@
 
 .cauto-completed-content .result {
     text-align: left;
-    height: calc(100vh - 220px);
+    height: calc(100vh - 160px);
     overflow-y: auto;
 }
 

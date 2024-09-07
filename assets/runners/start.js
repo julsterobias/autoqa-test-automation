@@ -13,8 +13,6 @@ var cauto_default_do_start = (params = null) => {
     current_url         = current_url[0];
     let part_message    = ', Expected: ' + params[0].value + ', Received: ' + current_url;
 
- 
-
     try {
         if (params[0].value === current_url) {
             return [

@@ -317,6 +317,18 @@ label.cauto-toggle-label:active:after {
 .cauto-builder-area .builder-header {
     padding-bottom: 15px;
     border-bottom: 1px solid #f2f2f2;
+}
+
+.cauto-builder-area .builder-header {
+    display: flex;
+}
+
+.cauto-builder-area .builder-header-meta,
+.cauto-builder-area .builder-header-controls {
+    width: 50%;
+}
+
+.cauto-builder-area .builder-header-controls {
     text-align: right;
 }
 
@@ -553,4 +565,17 @@ label.cauto-toggle-label:active:after {
 
 .cauto_step_set_wide {
     width: auto !important;
+}
+
+#cauto-edit-flow {
+    display: inline;
+    vertical-align: bottom;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 100px;
+}
+
+#cauto-edit-flow:hover {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    background-color: white;
 }

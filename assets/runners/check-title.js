@@ -9,8 +9,6 @@
  * 
  */
 var cauto_default_check_page_title_step = (param = null) => {
-    
-    if (!param) return;
 
     let page_title      = document.title;
     let response_part   = ', Expected: '+ param[1].value + ', Received: ' + page_title;

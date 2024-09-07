@@ -6,7 +6,8 @@
  * 
  */
 
-var cauto_default_click_step = (params) => {
+var cauto_default_click_step = (params = null) => {
+
     return [
         {
             status: 'passed',

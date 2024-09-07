@@ -36,6 +36,8 @@ class cauto_admin_ui extends cauto_utils
 
         //prepare UI
         add_action('cauto_top_control', [$this, 'load_top_controls']);
+        //builder meta
+        add_action('cauto_load_builder_meta', [$this, 'load_top_meta']);
         //load new flow
         add_action('cauto_load_new_flow', [$this, 'load_new_flow']);
         //load ui
@@ -104,6 +106,26 @@ class cauto_admin_ui extends cauto_utils
            
         ];
         $controls = apply_filters('cauto_top_controls', $controls);
+        $controls = $this->prepare_attr($controls);
+        $this->render_ui(['buttons' => $controls], 'buttons', []);
+    }
+
+    public function load_top_meta()
+    {
+        $controls = [
+            [
+                'field'  => 'button',
+                'attr'  => [
+                    "class"     => "cauto-top-class cauto-button primary caut-ripple",
+                    "id"        => "cauto-new-case"
+                ],
+                'label' => __('View Results', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-menu-alt2"></span>'
+            ]
+           
+        ];
+
+        $controls = apply_filters('cauto_top_meta_controls', $controls);
         $controls = $this->prepare_attr($controls);
         $this->render_ui(['buttons' => $controls], 'buttons', []);
     }

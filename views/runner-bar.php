@@ -13,7 +13,6 @@
 
     <div class="cauto-runner-completed">
         <div class="cauto-completed-content">
-            <h3 class="status_title">--</h3>
             <div class="result"><?php esc_html_e('No result found, contact developer', 'autoqa-test-automation'); ?></div>
             <p><input type="button" id="cauto-close-runner-modal-result" value="<?php esc_attr_e('Close', 'autoqa-test-automation'); ?>"></p>
         </div>

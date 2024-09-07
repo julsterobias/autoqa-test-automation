@@ -14,8 +14,9 @@ jQuery(window).on('load',function(){
     }
 
     jQuery('#cauto-close-runner-modal-result').click(function(){
-        window.close('','_parent','');
+        window.parent.close();
     });
+
 });
 
 const cauto_do_run_runner = (response = [], index = 0, status = null) =>
@@ -23,10 +24,10 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
     cauto_plot_runner_status(response, index, status);
     jQuery.ajax( {
         type : "post",  
-        url: cauto_ajax.ajaxurl,
+        url: cauto_runner.ajaxurl,
         data : {    
             action: 'execute_pre_run', 
-            nonce: cauto_ajax.nonce,
+            nonce: cauto_runner.nonce,
             flow_id: cauto_running_flow_data.flow_id,
             runner_id: cauto_running_flow_data.runner_id,
             response: JSON.stringify(response),
@@ -90,7 +91,7 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
 
 const cauto_plot_runner_status = (results = [], index, is_continue = false) => {
 
-    let runner_steps  = cauto_ajax.runner_steps[cauto_running_flow_data.runner_id];
+    let runner_steps  = cauto_runner.runner_steps[cauto_running_flow_data.runner_id];
     
     if (results.length > 0) {
         let htmlclass = (results[0].status === 'passed')? 'passed' : 'failed';
@@ -170,12 +171,6 @@ const cauto_render_test_results = (payload = []) => {
         //update the plots
         jQuery('.cauto-runner-bars div.cauto-bar:nth-child(' + temp_index + ')').removeClass('cauto_bar_loader').addClass(staus_class);
 
-    }
-
-    if (has_failed) {
-        jQuery('.cauto-completed-content h3.status_title').text(cauto_ajax.status_failed).removeClass('passed').addClass('failed');
-    } else {
-        jQuery('.cauto-completed-content h3.status_title').text(cauto_ajax.status_passed).removeClass('failed').addClass('passed');
     }
 
 }

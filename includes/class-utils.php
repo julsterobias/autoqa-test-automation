@@ -32,7 +32,7 @@ class cauto_utils
 
     public string $nonce                = 'cauto-S3cR3t_KEY';
 
-    public string $settings_page        = 'test-tools';
+    public string $settings_page        = 'cauto-test-tools';
 
     public string $flow_steps_key       = '_cauto_test_automation_steps';
 
