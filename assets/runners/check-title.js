@@ -3,21 +3,30 @@
  * 
  * 
  * start
- * @param object
+ * @params object
  * 
  * 
  * 
  */
-var cauto_default_check_page_title_step = (param = null) => {
+var cauto_default_check_page_title_step = (params = null) => {
+
+    if (!params) {
+        return [
+            {
+                status: 'failed',
+                message: 'Error:' + cauto_runner.unconfigured_msg
+            }
+        ];
+    }
 
     let page_title      = document.title;
-    let response_part   = ', Expected: '+ param[1].value + ', Received: ' + page_title;
+    let response_part   = ', Expected: '+ params[1].value + ', Received: ' + page_title;
 
     try {
         
-        switch(param[0].value) {
+        switch(params[0].value) {
             case 'equals to':
-                if (page_title === param[1].value) {
+                if (page_title === params[1].value) {
                     return [
                         {
                             status: 'passed',
@@ -34,7 +43,7 @@ var cauto_default_check_page_title_step = (param = null) => {
                 }
                 break;
             case 'not equals to':
-                if (page_title !== param[1].value) {
+                if (page_title !== params[1].value) {
                     return [
                         {
                             status: 'passed',
@@ -51,7 +60,7 @@ var cauto_default_check_page_title_step = (param = null) => {
                 }
                 break;
             case 'contains with':
-                if (page_title.search(param[1].value) >= 0) {
+                if (page_title.search(params[1].value) >= 0) {
                     return [
                         {
                             status: 'passed',
@@ -68,7 +77,7 @@ var cauto_default_check_page_title_step = (param = null) => {
                 }
                 break;
             case 'start with':
-                if (page_title.search(param[1].value) === 0) {
+                if (page_title.search(params[1].value) === 0) {
                     return [
                         {
                             status: 'passed',

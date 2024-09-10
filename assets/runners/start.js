@@ -8,6 +8,15 @@
  */
 var cauto_default_do_start = (params = null) => {
 
+    if (!params) {
+        return [
+            {
+                status: 'failed',
+                message: 'Error:' + cauto_runner.unconfigured_msg
+            }
+        ];
+    }
+
     let current_url     = String(window.location.href);
     current_url         = current_url.split("?flow");
     current_url         = current_url[0];

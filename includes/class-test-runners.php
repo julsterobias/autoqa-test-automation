@@ -113,7 +113,7 @@ class cauto_test_runners extends cauto_utils
         return wp_insert_post($post_data);
     }
 
-    public function get_runners($other_args = [])
+    public function get_runners_draft($other_args = [])
     {
         $args = [
             'posts_per_page'    => -1,
@@ -135,7 +135,7 @@ class cauto_test_runners extends cauto_utils
         
     }
 
-    public function get_runner_steps()
+    public function get_runners($other_args = [])
     {
         if ($this->get_flow_id() === 0) return;
 
@@ -143,7 +143,7 @@ class cauto_test_runners extends cauto_utils
             'posts_per_page'    => -1,
             'post_type'         => $this->runner_slug,
             'post_status'       => $this->get_status(),
-            'meta_key'          => [
+            'meta_query'          => [
                 [
                     'key'       => $this->meta_flow_id_key,
                     'value'     => $this->get_flow_id(),
@@ -158,16 +158,20 @@ class cauto_test_runners extends cauto_utils
             $args['post__in']   = $this->id;
         }
 
+        if (!empty($other_args)) {
+            $args = array_replace($args, $other_args);
+        }
+
         $steps      = [];
         $runners    = get_posts($args);
 
         if (!empty($runners)) {
             foreach ($runners as $runner) {
-                $run_steps = get_post_meta($runner->ID, $this->flow_steps_key, true);
+                $run_steps = get_post_meta($runner->ID, $this->meta_flow_steps_key, true);
                 $steps[] = [
                     'ID'        => $runner->ID,
                     'name'      => $runner->post_title,
-                    'date'      => get_the_date('', $runner->ID),
+                    'date'      => get_the_date('M d, Y h:i A', $runner->ID),
                     'steps'     => $run_steps
                 ];
             }

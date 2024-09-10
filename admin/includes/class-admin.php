@@ -51,6 +51,9 @@ class cauto_admin extends cauto_utils
         //get flow details to edit
         add_action('wp_ajax_cauto_get_flow_details_to_edit', [$this, 'flow_details']);
 
+        //get runner results
+        add_action('wp_ajax_cauto_load_runner_results', [$this, 'runner_results']);
+
         add_action('admin_init', function(){
             if (isset($_GET['reset'])) {
                 delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
@@ -134,7 +137,22 @@ class cauto_admin extends cauto_utils
         if (empty($data)) {
             return;
         }
-        $this->get_view('builder/part-builder-tools', ['path' => 'admin' , 'details' => $data]);
+
+        $get_runners = [];
+        $is_result  = (isset($_GET['result']))? sanitize_text_field($_GET['result']) : null;
+        $flow_id    = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
+        if ($is_result && $flow_id) {
+            $runners = new cauto_test_runners();
+            $runners->set_flow_id($flow_id);
+            $get_runners = $runners->get_runners(
+                [
+                    'posts_per_page'    => 1,
+                    'offset'            => 0 
+                ]
+            );
+        }
+        
+        $this->get_view('builder/part-builder-tools', ['path' => 'admin' , 'details' => $data, 'results' => $get_runners]);
     }
 
 
@@ -420,7 +438,7 @@ class cauto_admin extends cauto_utils
         }
 
         $runner     = new cauto_test_runners();
-        $runner->set_name(uniqid('runner-'));
+        $runner->set_name($this->generate_runner_name());
         $runner->set_flow_id($flow_id);
         $runner->set_steps($steps);
         $runner_id  = $runner->save();
@@ -502,6 +520,33 @@ class cauto_admin extends cauto_utils
         }
 
         exit();
+    }
+
+    /**
+     * 
+     * runner_results
+     * load runner results
+     * 
+     */
+    public function runner_results()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $runner_id = (isset($_GET['runner_id']))? sanitize_text_field($_GET['runner_id']) : null;
+
+        if ($runner_id) {
+            $runner     = new cauto_test_runners();
+
+        }
+
     }
 
     

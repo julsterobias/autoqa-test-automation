@@ -86,8 +86,7 @@ class cauto_runner extends cauto_utils
                         'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                         'nonce'             => wp_create_nonce( $this->nonce ),
                         'runner_steps'      => $available_runners,
-                        'status_passed'     => __('PASSED!', 'autoqa-test-automation'),
-                        'status_failed'     => __('FAILED!', 'autoqa-test-automation')
+                        'unconfigured_msg'  => __('The step is not configured','autoqa-test-automation')
                     ]
         );
 
@@ -131,6 +130,11 @@ class cauto_runner extends cauto_utils
             $running_flows  = $cauto_test->get_running_flow();
             if ( $logged_user && current_user_can('administrator') && !empty($running_flows) ) {
                 //load runner assets
+                /**
+                 * 
+                 * Come back here. Currently, I can only run one flow let's aim to run multiple and not loading all js steps
+                 * 
+                 */
                 $this->flow_id      = $running_flows['flow_id'];
                 $this->runner_id    = $running_flows['runner_id'];
                 $this->flow_steps   = get_post_meta($this->flow_id, $this->flow_steps_key, true);

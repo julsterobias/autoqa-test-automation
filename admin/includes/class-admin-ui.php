@@ -62,6 +62,9 @@ class cauto_admin_ui extends cauto_utils
         //load flow hidden field
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
 
+        //load saved runners
+        add_action('cauto_load_runners', [$this, 'load_runners']);
+
     }
 
     public function render_ui($data = [], $type = '', $value = [])
@@ -112,12 +115,24 @@ class cauto_admin_ui extends cauto_utils
 
     public function load_top_meta()
     {
+        $flow_id = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
+
+        if (!$flow_id) return;
+
+        $params = [
+            'page'     => $this->settings_page,
+            'flow'     => $flow_id,
+            'result'   => 1
+        ];
+        $params = http_build_query($params);
+        $url = admin_url().'tools.php?'.$params;
         $controls = [
             [
-                'field'  => 'button',
+                'field'  => 'a',
                 'attr'  => [
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
-                    "id"        => "cauto-new-case"
+                    "id"        => "cauto-new-case",
+                    "href"      => $url
                 ],
                 'label' => __('View Results', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-menu-alt2"></span>'
@@ -366,7 +381,6 @@ class cauto_admin_ui extends cauto_utils
         $right_buttons = apply_filters('cauto_step_config_buttons', $right_buttons);
         $right_buttons = $this->prepare_attr($right_buttons);
 
-
         $left_control = [
             [
                 'field'     => 'button',
@@ -418,5 +432,29 @@ class cauto_admin_ui extends cauto_utils
         $this->render_ui(['fields' => $fields], 'fields', []);
     }
 
+    public function load_runners($results = [])
+    {
+        if (empty($results)) return;
+
+        $runner_count = wp_count_posts($this->runner_slug);
+        $count = $runner_count->publish;
+
+        foreach ($results as $i => $result) {
+            $is_failed = 0;
+            if (!empty($result['steps'])) {
+                foreach ($result['steps'] as $y => $step) {
+                    if ($step['result'][0]->status === 'failed') {
+                        $is_failed++;
+                    }
+                }
+            }
+            if ($is_failed > 0) {
+                $results[$i]['flow_status'] = 'failed';
+            }
+        }
+
+        $results = apply_filters('autoqa-results-list', $results);
+        $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $count]);
+    }
 
 }

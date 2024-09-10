@@ -118,6 +118,15 @@ jQuery(document).ready(function(){
         cauto_get_flow_details();
     });
 
+    jQuery('#cauto-results-list li').on('click', function(){
+        let runner_id = jQuery(this).data('runner-id');
+        cauto_load_runner_results(runner_id);
+    });
+
+    jQuery('.cauto-see-other-runners span').on('click', function(){
+        cauto_load_more_runners();
+    });
+
 });
 
 // save step on close
@@ -371,8 +380,6 @@ const cauto_get_flow_details = () => {
 
     let flow_id = cauto_ajax.flow_id;
 
-    console.log(cauto_ajax);
-
     if (!flow_id) return;
 
     jQuery('#cauto-new-flow-name, #cauto-flow-stop-on-error, #cauto-save-new-flow, .cauto-cancel').prop('disabled', true);
@@ -404,4 +411,37 @@ const cauto_get_flow_details = () => {
         }
     });
 
+}
+
+
+const cauto_load_runner_results = (runner_id = 0) => {
+    
+    if (runner_id === 0) return;
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_load_runner_results', 
+            nonce: cauto_ajax.nonce,
+            runner_id: runner_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+            
+        }
+    });
+
+}
+
+const cauto_load_more_runners = () => {
+    
 }

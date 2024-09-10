@@ -161,5 +161,88 @@ class cauto_utils
         return $url;
 
      }
+
+
+    /**
+     * 
+     * generate_runner_name
+     * 
+     */
+    public function generate_runner_name()
+    {
+        $adjectives = [
+            __("Agile", 'autoqa-test-automation'),
+            __("Brave", 'autoqa-test-automation'),
+            __("Calm", 'autoqa-test-automation'),
+            __("Diligent", 'autoqa-test-automation'),
+            __("Eager", 'autoqa-test-automation'),
+            __("Fearless", 'autoqa-test-automation'),
+            __("Gentle", 'autoqa-test-automation'),
+            __("Humble", 'autoqa-test-automation'),
+            __("Inquisitive", 'autoqa-test-automation'),
+            __("Jovial", 'autoqa-test-automation'),
+            __("Keen", 'autoqa-test-automation'),
+            __("Luminous", 'autoqa-test-automation'),
+            __("Meticulous", 'autoqa-test-automation'),
+            __("Noble", 'autoqa-test-automation'),
+            __("Optimistic", 'autoqa-test-automation'),
+            __("Prudent", 'autoqa-test-automation'),
+            __("Radiant", 'autoqa-test-automation'),
+            __("Sincere", 'autoqa-test-automation'),
+            __("Tenacious", 'autoqa-test-automation'),
+            __("Vibrant", 'autoqa-test-automation')
+        ];
+        $adjectives_index = rand(0, 19);
+
+        $person_nouns = [
+            __("Runner", 'autoqa-test-automation'),
+            __("Diver", 'autoqa-test-automation'),
+            __("Killer", 'autoqa-test-automation'),
+            __("Driver", 'autoqa-test-automation'),
+            __("Builder", 'autoqa-test-automation'),
+            __("Teacher", 'autoqa-test-automation'),
+            __("Leader", 'autoqa-test-automation'),
+            __("Designer", 'autoqa-test-automation'),
+            __("Writer", 'autoqa-test-automation'),
+            __("Speaker", 'autoqa-test-automation'),
+            __("Painter", 'autoqa-test-automation'),
+            __("Actor", 'autoqa-test-automation'),
+            __("Manager", 'autoqa-test-automation'),
+            __("Coder", 'autoqa-test-automation'),
+            __("Helper", 'autoqa-test-automation'),
+            __("Player", 'autoqa-test-automation'),
+            __("Researcher", 'autoqa-test-automation'),
+            __("Inventor", 'autoqa-test-automation'),
+            __("Explorer", 'autoqa-test-automation'),
+            __("Fighter", 'autoqa-test-automation')
+        ];
+        $person_nouns_index = rand(0, 19);
+
+        $human_animal_nouns = [
+            __("Dog", 'autoqa-test-automation'),
+            __("Man", 'autoqa-test-automation'),
+            __("Astronaut", 'autoqa-test-automation'),
+            __("Cat", 'autoqa-test-automation'),
+            __("Woman", 'autoqa-test-automation'),
+            __("Lion", 'autoqa-test-automation'),
+            __("Elephant", 'autoqa-test-automation'),
+            __("Tiger", 'autoqa-test-automation'),
+            __("Soldier", 'autoqa-test-automation'),
+            __("Scientist", 'autoqa-test-automation'),
+            __("Giraffe", 'autoqa-test-automation'),
+            __("Engineer", 'autoqa-test-automation'),
+            __("Shark", 'autoqa-test-automation'),
+            __("Bird", 'autoqa-test-automation'),
+            __("Human", 'autoqa-test-automation'),
+            __("Pilot", 'autoqa-test-automation'),
+            __("Bear", 'autoqa-test-automation'),
+            __("Dolphin", 'autoqa-test-automation'),
+            __("Monkey", 'autoqa-test-automation'),
+            __("Cowboy", 'autoqa-test-automation')
+        ];
+        $human_animal_nouns_index = rand(0, 19);
+
+        return $adjectives[$adjectives_index].' '.$person_nouns[$person_nouns_index].' '.$human_animal_nouns[$human_animal_nouns_index];
+    }
 }
 ?>

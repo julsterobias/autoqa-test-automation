@@ -1,3 +1,21 @@
+<?php if (!empty($data['results'])): ?>
+
+<div class="builder-wrapper">
+    <div class="wrapper">
+        <div class="col-30">
+            <div class="cauto-builder-steps cauto-runner-col" id="cauto-stepss">
+                <?php do_action('cauto_load_runners', $data['results']); ?>
+            </div>
+        </div>
+        <div class="col-70">
+            <div class="cauto-builder-area" id="cauto-result-steps">
+                <span class="cauto-result-opening-messsage"><?php esc_html_e('Select runner to display the steps results'); ?></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php else: ?>    
 <div class="builder-wrapper">
     <div class="wrapper">
         <div class="col-20">
@@ -22,3 +40,6 @@
         </div>
     </div>
 </div>
+<?php 
+endif;
+?>
