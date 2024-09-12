@@ -29,7 +29,9 @@ if ( !function_exists( 'add_filter' ) ){
 class cauto_admin extends cauto_utils
 {
 
-    private $admin_ui = null;
+    private int $see_more_max   = 10; 
+
+    private $admin_ui           = null;
 
     public function __construct()
     {
@@ -47,12 +49,16 @@ class cauto_admin extends cauto_utils
         add_action('cauto_load_saved_steps', [$this, 'load_saved_steps']);
         //setup and run the flow
         add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
-
+        
+        //load UI from ajax
+        add_action('wp_ajax_cauto_steps_ui', [$this, 'load_step_ui']);
         //get flow details to edit
         add_action('wp_ajax_cauto_get_flow_details_to_edit', [$this, 'flow_details']);
-
         //get runner results
-        add_action('wp_ajax_cauto_load_runner_results', [$this, 'runner_results']);
+        add_action('wp_ajax_cauto_load_more_runner_results', [$this, 'load_more_runner']);
+        //get runner steps results
+        add_action('wp_ajax_cauto_load_runner_results', [$this, 'load_runner_steps']);
+
 
         add_action('admin_init', function(){
             if (isset($_GET['reset'])) {
@@ -119,9 +125,57 @@ class cauto_admin extends cauto_utils
      */
     public function load_flows()
     {
-        $cflows = new cauto_test_automation();
-        $flows  = $cflows->get_flows();
-        $this->get_view('part-flows', ['path' => 'admin', 'flows' => $flows, 'ui' => $this->admin_ui]);
+        $cflows     = new cauto_test_automation();
+        $flows      = $cflows->get_flows();
+
+        $data_flows = [];
+        if (!empty($flows)) {
+            foreach ($flows as $flow) {
+
+                $runner_class = new cauto_test_runners();
+                $runner_class->set_flow_id($flow->ID);
+                $runners = $runner_class->get_runners(
+                    [
+                        'posts_per_page' => 1 // we only need one data and should be the latest
+                    ]
+                );
+
+                $temp_flow = [
+                    'ID'            => $flow->ID,
+                    'name'          => $flow->post_title,
+                    'status'        => 'passed',
+                    'last_run'      => (isset($runners[0]['date']))? $runners[0]['date'] : '--'
+                ];
+
+                $is_failed      = false;
+                $number_steps   = 0;
+                if (isset($runners[0]['steps'])) {
+                    foreach ($runners[0]['steps']  as $step) {
+                        if (isset($step['result'])) {
+                            if ($step['result'][0]->status === 'failed') {
+                                $is_failed = true;
+                                break;
+                            }
+                        }
+                    }
+                    $number_steps = count($runners[0]['steps']);
+                }
+
+                if ($is_failed) {
+                    $temp_flow['status'] = 'failed';
+                }
+
+                if ($number_steps === 0) {
+                    $temp_flow['status'] = 'no-run';
+                }
+
+                $temp_flow['steps_number'] = $number_steps;
+                $data_flows[] = $temp_flow;
+
+            }
+        }
+
+        $this->get_view('part-flows', ['path' => 'admin', 'flows' => $data_flows, 'ui' => $this->admin_ui]);
     }
 
     /**
@@ -141,18 +195,32 @@ class cauto_admin extends cauto_utils
         $get_runners = [];
         $is_result  = (isset($_GET['result']))? sanitize_text_field($_GET['result']) : null;
         $flow_id    = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
-        if ($is_result && $flow_id) {
+        if ($flow_id) {
             $runners = new cauto_test_runners();
             $runners->set_flow_id($flow_id);
             $get_runners = $runners->get_runners(
                 [
-                    'posts_per_page'    => 1,
+                    'posts_per_page'    => $this->see_more_max,
                     'offset'            => 0 
                 ]
             );
         }
+
+        if (isset($get_runners[0]['date'])) {
+            $last_run = __($get_runners[0]['date'], 'autoqa-test-automation');
+        } else {
+            $last_run = __('No history', 'autoqa-test-automation');
+        }
         
-        $this->get_view('builder/part-builder-tools', ['path' => 'admin' , 'details' => $data, 'results' => $get_runners]);
+        $this->get_view('builder/part-builder-tools', [
+            'path'          => 'admin' , 
+            'details'       => $data, 
+            'results'       => $get_runners, 
+            'flow_id'       => $flow_id, 
+            'last_run'      => $last_run,
+            'is_results'    => $is_result
+        ]);
+
     }
 
 
@@ -181,6 +249,7 @@ class cauto_admin extends cauto_utils
         $flowname       = (isset($_POST['name']))? sanitize_text_field($_POST['name']) : null;
         $stop_on_error  = ($_POST['stop_on_error'] === "true")? true : false;
         $is_edit        = (isset($_POST['is_edit']))? sanitize_text_field($_POST['is_edit']) : null;
+        $redirect_to    = (isset($_POST['redirect_to']))? sanitize_text_field($_POST['redirect_to']) : null;
 
         $flow_id        = 0;
         if ($is_edit) {
@@ -200,12 +269,18 @@ class cauto_admin extends cauto_utils
             do_action('cauto_after_update_flow', $post_id, ['flow_name' => $flowname, 'stop_on_error' => $stop_on_error]);
 
             if ($post_id) {
+
+                $redirect_url = admin_url('tools.php?page='.$this->settings_page.'&flow='.$post_id);
+                if (strlen($redirect_to) > 0) {
+                    $redirect_url = admin_url('tools.php?page=cauto-test-tools');
+                }
+
                 echo json_encode(
                     [
                         'status'        => 'success',
                         'message'       => __('Flow is added', 'autoqa-test-automation'),
                         'flow_id'       => $post_id,
-                        'redirect_to'   => admin_url().'tools.php?page='.$this->settings_page.'&flow='.$post_id
+                        'redirect_to'   => $redirect_url
                     ]
                 );
             }
@@ -528,7 +603,7 @@ class cauto_admin extends cauto_utils
      * load runner results
      * 
      */
-    public function runner_results()
+    public function load_more_runner()
     {
         if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
             echo json_encode(
@@ -540,12 +615,102 @@ class cauto_admin extends cauto_utils
             exit();
         }
 
-        $runner_id = (isset($_GET['runner_id']))? sanitize_text_field($_GET['runner_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $offset     = (isset($_POST['offset']))?  sanitize_text_field($_POST['offset']) : 0;
 
-        if ($runner_id) {
-            $runner     = new cauto_test_runners();
+        if ($flow_id) {
+            $runner_class   = new cauto_test_runners();
+            $runner_class->set_flow_id($flow_id);
+            $runners        = $runner_class->get_runners(
+                [
+                    'posts_per_page'    => $this->see_more_max,
+                    'offset'            => $offset
+                ]
+            );
+
+            $to_display_runners = [];
+            foreach ($runners as $result) {
+                
+                $is_failed = 0;
+                if (!empty($result['steps'])) {
+                    foreach ($result['steps'] as $y => $step) {
+                        if ($step['result'][0]->status === 'failed') {
+                            $is_failed++;
+                        }
+                    }
+                }
+
+                $temp_result = [
+                    'ID'        => $result['ID'],
+                    'name'      => $result['name'],
+                    'date'      => $result['date'],
+                ];
+                if ($is_failed > 0) {
+                    $temp_result['flow_status'] = 'failed';
+                }
+                $to_display_runners[] = $temp_result;
+            }
+
+            if (!empty($to_display_runners)) {
+
+                ob_start();
+                $this->get_view('flow/part-results', ['path' => 'admin','runners' => $to_display_runners]);
+                $reponse = ob_get_clean();
+
+                echo json_encode(
+                    [
+                        'status'    => 'success',
+                        'content'   => $reponse
+                    ]
+                );
+            }
 
         }
+        exit();
+
+    }
+
+
+    public function load_runner_steps()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+
+        if ($runner_id && $flow_id) {
+            $runner_class = new cauto_test_runners($runner_id);
+            $runner_class->set_flow_id($flow_id);
+            $runner_steps = $runner_class->get_runner_flow_step();
+            if (!empty($runner_steps)) {
+                ob_start();
+                $this->get_view('flow/part-steps-results', ['path' => 'admin', 'steps' => $runner_steps]);
+                $reponse = ob_get_clean();
+                echo json_encode(
+                    [
+                        'status'    => 'success',
+                        'content'   => $reponse
+                    ]
+                );
+            }
+        } else {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('AutoQA Error: No runner ID or Flow ID found, please contact the developer.', 'autoqa-test-automation')
+                ]
+            );
+        }
+
+        exit();
 
     }
 

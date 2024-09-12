@@ -28,7 +28,7 @@
 }
 
 .cauto-runner-bars .cauto-bar.failed {
-    background-color: red;
+    background-color: #f25405;
 }
 
 #cauto-stop-runner {
@@ -158,7 +158,7 @@
 }
 
 .cauto-completed-content .result ul li div.meta span.failed {
-    color: red;
+    color: #f25405;
 }
 
 .cauto-completed-content .result ul li div.meta span {
@@ -195,7 +195,7 @@
 }
 
 .cauto-completed-content .result ul li div.failed {
-    background-color: red;
+    background-color: #f25405;
 }
 
 @keyframes cauto_placeHolderShimmer{

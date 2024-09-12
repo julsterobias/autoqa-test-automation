@@ -48,22 +48,16 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_load_builder_steps', [$this,'load_steps']);
         //add run button to saved flows
         add_action('cauto_flow_run_button', [$this, 'load_run_button']);
-        //add flow meta
-        add_action('cauto_flow_meta_details', [$this, 'load_flow_meta']);
-
-        
         //load UI from ajax
         add_action('wp_ajax_cauto_steps_ui', [$this, 'load_step_ui']);
         //load start popup
         add_action('cauto_load_step_config', [$this, 'load_step_popup']);
         //load step controls
         add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 3);
-
         //load flow hidden field
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
-
         //load saved runners
-        add_action('cauto_load_runners', [$this, 'load_runners']);
+        add_action('cauto_load_runners', [$this, 'load_runners'], 10, 2);
 
     }
 
@@ -125,7 +119,7 @@ class cauto_admin_ui extends cauto_utils
             'result'   => 1
         ];
         $params = http_build_query($params);
-        $url = admin_url().'tools.php?'.$params;
+        $url = admin_url('tools.php?'.$params);
         $controls = [
             [
                 'field'  => 'a',
@@ -255,38 +249,37 @@ class cauto_admin_ui extends cauto_utils
             [
                 'field'     => 'button',
                 'attr'      => [
-                    "class"     => "cauto-button-icon primary cauto-run-saved-flow",
-                    "id"        => uniqid(),
-                    "title"     => __('Run Flow', 'condecorun-test-automation'),
-                    "data-flow" => $flow->ID
+                    "class"         => "cauto-button-icon primary cauto-flow-edit-flow",
+                    "title"         => __('Run Flow', 'condecorun-test-automation'),
+                    "data-flow-id"  => $flow['ID']
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-controls-play"></span>'
+            ],
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"         => "cauto-button-icon cauto-flow-edit-flow",
+                    "title"         => __('Edit', 'condecorun-test-automation'),
+                    "data-flow-id"  => $flow['ID']
+                ],
+                'label'     => null,
+                'icon'      => '<span class="dashicons dashicons-edit"></span>'
+            ],
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"         => "cauto-button-icon cauto-flow-delete-flow",
+                    "title"         => __('Delete', 'condecorun-test-automation'),
+                    "data-flow-id"  => $flow['ID']
+                ],
+                'label'     => null,
+                'icon'      => '<span class="dashicons dashicons-trash"></span>'
             ],
         ];
         $run_button = $this->prepare_attr($run_button);
         $this->render_ui(['buttons' => $run_button], 'buttons', []);
 
-    }
-
-    
-    public function load_flow_meta($flow)
-    {
-        $flow = apply_filters('cauto_before_load_meta', $flow);
-        //get flow meta
-
-        $last_run   = get_post_meta($flow->ID, '_cauto_last_run', true);
-        $steps      = get_post_meta($flow->ID, '_cauto_flow_steps', true);
-        $status     = get_post_meta($flow->ID, '_cauto_flow_status', true);
-
-        $metas = [
-            'last_run'  => ($last_run)? $last_run : '--',
-            'steps'     => ($steps)? $steps : 0,
-            'status'    => ($status)? $status : '--'
-        ];
-
-        $metas = apply_filters('cauto_flow_metas', $metas);
-        $this->get_view('flow/meta', ['path' => 'admin', 'flow' => $flow, 'metas' => $metas]);
     }
 
 
@@ -432,9 +425,9 @@ class cauto_admin_ui extends cauto_utils
         $this->render_ui(['fields' => $fields], 'fields', []);
     }
 
-    public function load_runners($results = [])
+    public function load_runners($results = [], $flow_id = 0)
     {
-        if (empty($results)) return;
+        if (empty($results) || $flow_id === 0) return;
 
         $runner_count = wp_count_posts($this->runner_slug);
         $count = $runner_count->publish;
@@ -442,9 +435,11 @@ class cauto_admin_ui extends cauto_utils
         foreach ($results as $i => $result) {
             $is_failed = 0;
             if (!empty($result['steps'])) {
-                foreach ($result['steps'] as $y => $step) {
-                    if ($step['result'][0]->status === 'failed') {
-                        $is_failed++;
+                foreach ($result['steps'] as $step) {
+                    if (!empty($step['result'])) {
+                        if ($step['result'][0]->status === 'failed') {
+                            $is_failed++;
+                        }
                     }
                 }
             }
@@ -454,7 +449,7 @@ class cauto_admin_ui extends cauto_utils
         }
 
         $results = apply_filters('autoqa-results-list', $results);
-        $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $count]);
+        $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $count, 'flow_id' => $flow_id]);
     }
 
 }

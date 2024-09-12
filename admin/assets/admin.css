@@ -347,7 +347,9 @@ label.cauto-toggle-label:active:after {
     padding: 15px;
     border-radius: 5px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    overflow: hidden;
+    overflow-y: auto;
+    max-width: 100%;
+    overflow-x: hidden;
     position: -webkit-sticky;
     position: -moz-sticky;
     position: -ms-sticky;
@@ -355,6 +357,20 @@ label.cauto-toggle-label:active:after {
     position: sticky;
     bottom: auto;
     top: 50px;
+    max-height: calc(100vh - 140px);
+}
+
+.cauto-builder-steps::-webkit-scrollbar {
+    width: 0.5em;
+}
+ 
+.cauto-builder-steps::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+ 
+.cauto-builder-steps::-webkit-scrollbar-thumb {
+  background-color: #f25405;
+  outline: 0px solid slategrey;
 }
 
 .cauto-builder-steps ul {
@@ -413,7 +429,7 @@ label.cauto-toggle-label:active:after {
     background-color: white;
     margin-bottom: 10px;
     padding: 15px;
-    border-radius: 100px;
+    border-radius: 5px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
 
@@ -600,13 +616,26 @@ label.cauto-toggle-label:active:after {
 
 #cauto-results-list li {
     cursor: pointer;
-    padding: 10px 0;
     margin-bottom: 0;
     padding: 15px;
 }
 
+#cauto-results-list li.active {
+    border-left: 5px solid #f25405;
+    padding-left: 10px;
+}
+
 #cauto-results-list li:hover {
     background-color: #f2f2f2;   
+}
+
+#cauto-results-list li.active {
+    background-color: #f2f2f2;   
+    
+}
+
+#cauto-results-list li.active .cauto-result-meta-name {
+    font-weight: bold;
 }
 
 #cauto-results-list li:hover .cauto-result-meta-name {
@@ -637,7 +666,7 @@ label.cauto-toggle-label:active:after {
 }
 
 #cauto-results-list li .cauto-result-m-status span.dashicons.dashicons-no {
-    background-color: red;
+    background-color: #f25405;
 }
 
 #cauto-results-list li .cauto-result-m-status span.dashicons {
@@ -674,4 +703,91 @@ label.cauto-toggle-label:active:after {
 
 .cauto-see-other-runners span:hover {
     background-color: #f2f2f2;
+}
+
+.cauto-see-other-runners span.loading {
+    opacity: 0.4;
+    cursor: progress;
+}
+
+#cauto-result-steps.loading {
+    position: relative;
+}
+#cauto-result-steps.loading:before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.cauto-runner-step-item {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f2f2f2;
+}
+
+.cauto-runner-step-item:last-child {
+    margin-bottom: 0;
+}
+
+.cauto-runner-step-item div:first-child {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    background-color: #CCC;
+}
+
+.cauto-runner-step-item .item-status-failed {
+    background-color: #f25405 !important;
+}
+
+.cauto-runner-step-item .item-status-passed {
+    background-color: green !important;
+}
+
+
+.cauto-runner-step-item div:first-child span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.cauto-runner-step-item div:last-child {
+    padding: 10px;
+}
+
+.cauto-runner-step-item div:last-child span {
+    display: block;
+}
+
+.cauto-runner-step-item div:last-child span:first-child {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.cauto-runner-step-item div:last-child span:last-child {
+    opacity: 0.7;
+}
+
+.notice { display: none; }
+
+.cuato-flow-status.passed {
+    background-color: green;
+}
+
+.cuato-flow-status.failed {
+    background-color: #f25405;
 }

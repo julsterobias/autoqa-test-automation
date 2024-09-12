@@ -16,7 +16,8 @@ jQuery(document).ready(function(){
     });
 
     jQuery('#cauto-save-new-flow').on('click', function(){
-        cauto_do_save_flow(this);
+        let redirect_to = jQuery(this).data('redirect-to');
+        cauto_do_save_flow(this, redirect_to);
     });
 
     //initialize sortable builder
@@ -118,14 +119,40 @@ jQuery(document).ready(function(){
         cauto_get_flow_details();
     });
 
-    jQuery('#cauto-results-list li').on('click', function(){
-        let runner_id = jQuery(this).data('runner-id');
-        cauto_load_runner_results(runner_id);
+    jQuery('.cauto-flow-edit-flow').on('click', function(){
+        let flow_id = jQuery(this).data('flow-id');
+        jQuery('#cauto-popup-new-flow').fadeIn(200);
+        jQuery('#cauto-save-new-flow').attr('data-edit', flow_id);
+        jQuery('#cauto-save-new-flow').attr('data-redirect-to', 'main');
+        cauto_get_flow_details(flow_id);
     });
+
+    jQuery('#cauto-results-list li').on('click', function(){
+        jQuery('#cauto-results-list li').removeClass('active');
+        jQuery(this).addClass('active');
+        let runner_id = jQuery(this).data('runner-id');
+        let flow_id   = jQuery('#cauto-results-list').data('flow-id');
+        cauto_load_runner_results(runner_id, flow_id);
+    });
+
+    cuato_load_more_link();
 
     jQuery('.cauto-see-other-runners span').on('click', function(){
         cauto_load_more_runners();
     });
+
+    //preload first runner
+    let cauto_first_runner_res = jQuery('#cauto-results-list li:nth-child(1)');
+    if (cauto_first_runner_res.length > 0) {
+        let runner_id_ = jQuery(cauto_first_runner_res).data('runner-id');
+        let flow_id_   = jQuery('#cauto-results-list').data('flow-id');
+        if (runner_id_ && flow_id_) {
+            jQuery(cauto_first_runner_res).addClass('active');
+            cauto_load_runner_results(runner_id_, flow_id_);
+        }
+        
+    }
+    
 
 });
 
@@ -300,7 +327,7 @@ const cauto_build_step_settings = (type) => {
 }
 
 
-const cauto_do_save_flow = (btn) => {
+const cauto_do_save_flow = (btn, redirect_to = '') => {
 
     let flowname = jQuery('#cauto-new-flow-name').val();
     if (!flowname) {
@@ -324,7 +351,8 @@ const cauto_do_save_flow = (btn) => {
             nonce: cauto_ajax.nonce,
             name: flowname,
             stop_on_error: stop_on_error,
-            is_edit: to_edit
+            is_edit: to_edit,
+            redirect_to: redirect_to
         },
         success: function( data ) {
             //response data
@@ -376,9 +404,9 @@ const cauto_run_flow = (flow_id) => {
 
 }
 
-const cauto_get_flow_details = () => {
+const cauto_get_flow_details = (flow_id = 0) => {
 
-    let flow_id = cauto_ajax.flow_id;
+    flow_id = (flow_id > 0)? flow_id : cauto_ajax.flow_id;
 
     if (!flow_id) return;
 
@@ -414,9 +442,13 @@ const cauto_get_flow_details = () => {
 }
 
 
-const cauto_load_runner_results = (runner_id = 0) => {
+const cauto_load_runner_results = (runner_id = 0, flow_id = 0) => {
     
-    if (runner_id === 0) return;
+    if (runner_id === 0 || flow_id === 0) return;
+
+    if (jQuery('#cauto-result-steps').hasClass('loading')) return;
+
+    jQuery('#cauto-result-steps').addClass('loading');
 
     jQuery.ajax( {
         type : "post",  
@@ -424,17 +456,20 @@ const cauto_load_runner_results = (runner_id = 0) => {
         data : {    
             action: 'cauto_load_runner_results', 
             nonce: cauto_ajax.nonce,
-            runner_id: runner_id
+            runner_id: runner_id,
+            flow_id: flow_id
         },
         success: function( data ) {
             //response data
             if (data) {
                 data = JSON.parse(data);
                 if (data.status === 'success') {
-                    
+                    jQuery('#cauto-result-steps').html(data.content);
                 } else {
                     console.error('CAUTO ERROR: '+ data.message);
                 }
+
+                jQuery('#cauto-result-steps').removeClass('loading');
             }
             
         }
@@ -442,6 +477,55 @@ const cauto_load_runner_results = (runner_id = 0) => {
 
 }
 
+const cuato_load_more_link = () => {
+    let total_runners       = jQuery('#cauto-results-list').data('rucnt');
+    let current_currents    = jQuery('#cauto-results-list li').length;
+    if (total_runners === current_currents) {
+        jQuery('.cauto-see-other-runners').remove();
+    }
+}
+
 const cauto_load_more_runners = () => {
+
+    if (jQuery('.cauto-see-other-runners span').hasClass('loading')) {
+        return;
+    }
+
+    jQuery('.cauto-see-other-runners span').addClass('loading');
     
+    let runner_count    = jQuery('#cauto-results-list li').length;
+    let flow_id         = jQuery('#cauto-results-list').data('flow-id');
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_load_more_runner_results', 
+            nonce: cauto_ajax.nonce,
+            flow_id: flow_id,
+            offset: runner_count
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+
+                if (data.status === 'success') {
+                    if (typeof data.content !== 'undefined') {
+                        jQuery('#cauto-results-list').append(data.content);
+                    }
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+            let total_runners   = jQuery('#cauto-results-list').data('rucnt');
+            let runner_count    = jQuery('#cauto-results-list li').length;
+            if (runner_count >= total_runners ) {
+                jQuery('.cauto-see-other-runners').remove();
+            }
+            jQuery('.cauto-see-other-runners span').removeClass('loading');
+            
+        }
+    });
+
 }

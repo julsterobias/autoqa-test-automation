@@ -1,10 +1,10 @@
-<?php if (!empty($data['results'])): ?>
+<?php if (!empty($data['is_results'])): ?>
 
 <div class="builder-wrapper">
     <div class="wrapper">
         <div class="col-30">
             <div class="cauto-builder-steps cauto-runner-col" id="cauto-stepss">
-                <?php do_action('cauto_load_runners', $data['results']); ?>
+                <?php do_action('cauto_load_runners', $data['results'], $data['flow_id']); ?>
             </div>
         </div>
         <div class="col-70">
@@ -27,7 +27,7 @@
             <div class="cauto-builder-area">
                 <div class="builder-header">
                     <div class="builder-header-meta">
-                        <?php do_action('cauto_load_builder_meta', $data['details']); ?>
+                        <?php do_action('cauto_load_builder_meta', $data['details']); ?> <?php echo esc_html($data['last_run']); ?>
                     </div>
                     <div class="builder-header-controls">
                         <?php do_action('cauto_load_builder_control', $data['details']); ?>

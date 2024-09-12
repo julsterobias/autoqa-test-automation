@@ -2,7 +2,7 @@
 add_action('autoqa-results-before-list', $data['results']);    
 ?>
 
-<ul id="cauto-results-list" data-rucnt="<?php echo $data['runner_count']; ?>">
+<ul id="cauto-results-list" data-rucnt="<?php echo $data['runner_count']; ?>" data-flow-id="<?php echo $data['flow_id']; ?>">
     <?php foreach ($data['results'] as $result): ?>
         <li data-runner-id="<?php echo esc_attr($result['ID']); ?>">
             <div class="wrapper">

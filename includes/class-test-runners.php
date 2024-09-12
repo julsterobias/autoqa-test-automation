@@ -113,28 +113,6 @@ class cauto_test_runners extends cauto_utils
         return wp_insert_post($post_data);
     }
 
-    public function get_runners_draft($other_args = [])
-    {
-        $args = [
-            'posts_per_page'    => -1,
-            'post_type'         => $this->runner_slug,
-            'post_status'       => $this->get_status(),
-            'order_by'          => 'date',
-            'order'             => 'DESC'
-        ];
-
-        if (!empty($this->id) && is_array($this->id)) {
-            $args['post__in']   = $this->id;
-        }
-
-        if (!empty($other_args)) {
-            $args = array_merge($args, $other_args);
-        }
-
-        return get_posts($args);
-        
-    }
-
     public function get_runners($other_args = [])
     {
         if ($this->get_flow_id() === 0) return;
@@ -150,7 +128,7 @@ class cauto_test_runners extends cauto_utils
                     'compare'   => '='
                 ]
             ],
-            'order_by'          => 'date',
+            'orderby'          => 'date',
             'order'             => 'DESC'   
         ];
 
@@ -181,6 +159,8 @@ class cauto_test_runners extends cauto_utils
 
     }
 
+    //This is questionable
+    //why I am doing this?
     public function check_flow()
     {
         $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);

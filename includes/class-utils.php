@@ -242,7 +242,7 @@ class cauto_utils
         ];
         $human_animal_nouns_index = rand(0, 19);
 
-        return $adjectives[$adjectives_index].' '.$person_nouns[$person_nouns_index].' '.$human_animal_nouns[$human_animal_nouns_index];
+        return $adjectives[$adjectives_index].' '.$human_animal_nouns[$human_animal_nouns_index].' '.$person_nouns[$person_nouns_index];
     }
 }
 ?>
