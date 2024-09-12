@@ -131,8 +131,8 @@ class cauto_test_automation extends cauto_utils
             'posts_per_page'    => -1,
             'post_type'         => $this->slug,
             'post_status'       => $this->get_status(),
-            'order_by'          => 'date',
-            'order'             => 'DESC'
+            'orderby'           => 'post_title',
+            'order'             => 'ASC'
         ];
 
         if (!empty($this->id)) {

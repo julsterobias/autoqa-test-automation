@@ -480,6 +480,7 @@ const cauto_load_runner_results = (runner_id = 0, flow_id = 0) => {
 const cuato_load_more_link = () => {
     let total_runners       = jQuery('#cauto-results-list').data('rucnt');
     let current_currents    = jQuery('#cauto-results-list li').length;
+    console.log(total_runners, current_currents);
     if (total_runners === current_currents) {
         jQuery('.cauto-see-other-runners').remove();
     }

@@ -56,8 +56,6 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 3);
         //load flow hidden field
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
-        //load saved runners
-        add_action('cauto_load_runners', [$this, 'load_runners'], 10, 2);
 
     }
 
@@ -423,33 +421,6 @@ class cauto_admin_ui extends cauto_utils
         ];
         $fields = $this->prepare_attr($fields);
         $this->render_ui(['fields' => $fields], 'fields', []);
-    }
-
-    public function load_runners($results = [], $flow_id = 0)
-    {
-        if (empty($results) || $flow_id === 0) return;
-
-        $runner_count = wp_count_posts($this->runner_slug);
-        $count = $runner_count->publish;
-
-        foreach ($results as $i => $result) {
-            $is_failed = 0;
-            if (!empty($result['steps'])) {
-                foreach ($result['steps'] as $step) {
-                    if (!empty($step['result'])) {
-                        if ($step['result'][0]->status === 'failed') {
-                            $is_failed++;
-                        }
-                    }
-                }
-            }
-            if ($is_failed > 0) {
-                $results[$i]['flow_status'] = 'failed';
-            }
-        }
-
-        $results = apply_filters('autoqa-results-list', $results);
-        $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $count, 'flow_id' => $flow_id]);
     }
 
 }

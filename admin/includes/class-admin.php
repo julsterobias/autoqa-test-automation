@@ -58,6 +58,8 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_load_more_runner_results', [$this, 'load_more_runner']);
         //get runner steps results
         add_action('wp_ajax_cauto_load_runner_results', [$this, 'load_runner_steps']);
+        //load saved runners
+        add_action('cauto_load_runners', [$this, 'load_runners'], 10, 3);
 
 
         add_action('admin_init', function(){
@@ -204,6 +206,14 @@ class cauto_admin extends cauto_utils
                     'offset'            => 0 
                 ]
             );
+
+            $get_runners_all = $runners->get_runners(
+                [
+                    'posts_per_page'    => -1
+                ]
+            );
+            $runner_total_count = count($get_runners_all);
+
         }
 
         if (isset($get_runners[0]['date'])) {
@@ -218,7 +228,8 @@ class cauto_admin extends cauto_utils
             'results'       => $get_runners, 
             'flow_id'       => $flow_id, 
             'last_run'      => $last_run,
-            'is_results'    => $is_result
+            'is_results'    => (!empty($get_runners))? $is_result : null,
+            'total'         => $runner_total_count
         ]);
 
     }
@@ -712,6 +723,30 @@ class cauto_admin extends cauto_utils
 
         exit();
 
+    }
+
+    public function load_runners($results = [], $flow_id = 0, $total = 0)
+    {
+        if (empty($results) || $flow_id === 0) return;
+
+        foreach ($results as $i => $result) {
+            $is_failed = 0;
+            if (!empty($result['steps'])) {
+                foreach ($result['steps'] as $step) {
+                    if (!empty($step['result'])) {
+                        if ($step['result'][0]->status === 'failed') {
+                            $is_failed++;
+                        }
+                    }
+                }
+            }
+            if ($is_failed > 0) {
+                $results[$i]['flow_status'] = 'failed';
+            }
+        }
+
+        $results = apply_filters('autoqa-results-list', $results);
+        $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $total, 'flow_id' => $flow_id]);
     }
 
     

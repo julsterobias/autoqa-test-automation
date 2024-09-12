@@ -4,7 +4,7 @@
     <div class="wrapper">
         <div class="col-30">
             <div class="cauto-builder-steps cauto-runner-col" id="cauto-stepss">
-                <?php do_action('cauto_load_runners', $data['results'], $data['flow_id']); ?>
+                <?php do_action('cauto_load_runners', $data['results'], $data['flow_id'], $data['total']); ?>
             </div>
         </div>
         <div class="col-70">
