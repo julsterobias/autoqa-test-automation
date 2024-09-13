@@ -70,10 +70,21 @@ class cauto_admin extends cauto_utils
             if (isset($_GET['debug'])) {
                 if ((int)$_GET['debug'] === 1) {
                     print_r(get_post_meta($_GET['post']));
+                    print_r(get_post_meta($_GET['post'], $_GET['debug'], true));
                 }
-                print_r(get_post_meta($_GET['post'], $_GET['debug'], true));
+                
+
+                if ($_GET['debug'] === 'running') {
+                    print_r(get_transient('_cauto_running_flows'));
+                }
+
+                if (isset($_GET['reset'])) {
+                    delete_transient('_cauto_running_flows');
+                }
+
                 die();
             }
+
         });
         
     }
@@ -498,8 +509,18 @@ class cauto_admin extends cauto_utils
         $steps      = get_post_meta($flow_id, $this->flow_steps_key, true);
         $target_url = '';
 
+        if (empty($steps)) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('No available steps to run', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
         //get the first step and validate
-        if (isset($steps[0]['step'])) {
+        if (!empty($steps)) {
             if ($steps[0]['step'] !== 'start') {
                 echo json_encode(
                     [
@@ -523,15 +544,11 @@ class cauto_admin extends cauto_utils
             }
         }
 
-        $runner     = new cauto_test_runners();
+        $runner = new cauto_test_runners();
         $runner->set_name($this->generate_runner_name());
         $runner->set_flow_id($flow_id);
         $runner->set_steps($steps);
-        $runner_id  = $runner->save();
-
-        $flow       = new cauto_test_automation($flow_id);
-        $flow->start($runner_id);
-
+        $runner_id = $runner->save();
 
         $params = [
             'flow_id'   => $flow_id,
@@ -581,12 +598,20 @@ class cauto_admin extends cauto_utils
 
         $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
 
-        if (!$flow_id) return;
+        if (!$flow_id) {
+            echo json_encode(
+                [
+                    'status'        => 'failed',
+                    'message'       => __('No flow is found, please contact developer', 'autoqa-test-automation') 
+                ]
+            );
+            exit();
+        };
 
         $flow       = new cauto_test_automation($flow_id);
         $details    = $flow->get_flow(); 
         
-        if ($details) {
+        if (!empty($details)) {
             echo json_encode(
                 [
                     'status'        => 'success',

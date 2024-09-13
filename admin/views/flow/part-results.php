@@ -6,14 +6,11 @@ if (!empty($data['runners'])):
     <div class="wrapper">
         <div class="cauto-result-m-status col-10">
             <?php 
-            if (isset($result['flow_status'])):
-                if ($result['flow_status'] === 'failed'): ?>
+            if (isset($result['flow_status'])): ?>
                 <span class="dashicons dashicons-no"></span>
             <?php else: ?>
                 <span class="dashicons dashicons-saved"></span>
-            <?php endif; 
-            endif;
-            ?>                    
+            <?php endif; ?>                    
         </div>
             <div class="cauto-result-m-details col-80">
                 <span class="cauto-result-meta-name"><?php echo esc_html($result['name']); ?></span>

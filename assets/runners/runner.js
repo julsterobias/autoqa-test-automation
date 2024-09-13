@@ -8,7 +8,7 @@ jQuery(window).on('load',function(){
     if (cauto_is_running_flow) {
         if (JSON.stringify(cauto_running_flow_data) !== '{}') {
             console.log('%cautoQA NOTICE: %cRunner is in action','color: yellow; font-weight: bold;','color: #00ff33; font-size: 14px');
-            cauto_do_run_runner();
+            cauto_prepare_the_runner();
             jQuery('.cuato-runner-indicator').show();
         }
     }
@@ -19,6 +19,37 @@ jQuery(window).on('load',function(){
 
 });
 
+
+const cauto_prepare_the_runner = () => {
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_runner.ajaxurl,
+        data : {    
+            action: 'cauto_prepare_runner', 
+            nonce: cauto_runner.nonce,
+            flow_id: cauto_running_flow_data.flow_id,
+            runner_id: cauto_running_flow_data.runner_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    cauto_runner['runner_steps'] = data.runner_steps;
+                    setTimeout(function(){
+                        jQuery('.cauto-runner-bars').addClass('cauto-runner-bars-'+cauto_running_flow_data.runner_id)
+                        jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id).html(data.bars);
+                        cauto_do_run_runner();
+                        jQuery('.cauto-warming-up').remove();
+                    },2000);
+                } else {
+                    console.error(data.message);
+                }
+            }
+        }
+    });
+}
+
 const cauto_do_run_runner = (response = [], index = 0, status = null) =>
 {
     cauto_plot_runner_status(response, index, status);
@@ -26,7 +57,7 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
         type : "post",  
         url: cauto_runner.ajaxurl,
         data : {    
-            action: 'execute_pre_run', 
+            action: 'cauto_execute_pre_run', 
             nonce: cauto_runner.nonce,
             flow_id: cauto_running_flow_data.flow_id,
             runner_id: cauto_running_flow_data.runner_id,
@@ -94,27 +125,29 @@ const cauto_plot_runner_status = (results = [], index, is_continue = false) => {
     let runner_steps  = cauto_runner.runner_steps[cauto_running_flow_data.runner_id];
     
     if (results.length > 0) {
+
         let htmlclass = (results[0].status === 'passed')? 'passed' : 'failed';
-        jQuery('.cauto-runner-bars div.cauto-bar:nth-child(' + index + ')').removeClass('cauto_bar_loader').addClass(htmlclass);
+        jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id+' div.cauto-bar:nth-child(' + index + ')').removeClass('cauto_bar_loader').addClass(htmlclass);
         let next_index = index;
         next_index++;
-        jQuery('.cauto-runner-bars div.cauto-bar:nth-child(' + next_index + ')').addClass('cauto_bar_loader');
+        jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id+' div.cauto-bar:nth-child(' + next_index + ')').addClass('cauto_bar_loader');
 
     } else if (results.length === 0 && runner_steps.length > 0) {
+
         let temp_x = 0;
         for (let x in runner_steps) {
             if ( typeof runner_steps[x].result != 'undefined' ) {
                 let htmlclass = (runner_steps[x].result[0].status === 'passed')? 'passed' : 'failed';
                 temp_x = x;
                 temp_x++;
-                jQuery('.cauto-runner-bars div.cauto-bar:nth-child(' + temp_x + ')').removeClass('cauto_bar_loader').addClass(htmlclass);
+                jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id+' div.cauto-bar:nth-child(' + temp_x + ')').removeClass('cauto_bar_loader').addClass(htmlclass);
             } 
         } 
 
     } 
     if (is_continue) {
         index--;
-        jQuery('.cauto-runner-bars div.cauto-bar:nth-child(' + index + ')').removeClass('cauto_bar_loader').addClass('passed');
+        jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id+' div.cauto-bar:nth-child(' + index + ')').removeClass('cauto_bar_loader').addClass('passed');
     }
     
 }

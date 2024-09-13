@@ -357,7 +357,7 @@ label.cauto-toggle-label:active:after {
     position: sticky;
     bottom: auto;
     top: 50px;
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - 190px);
 }
 
 .cauto-builder-steps::-webkit-scrollbar {

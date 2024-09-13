@@ -31,12 +31,14 @@ jQuery(document).ready(function(){
         connectToSortable: ".cauto_steps_builder",
         helper: 'clone',
         revert: "invalid",
+        scroll: false,
         stop: function(event, ui){
             ui.helper.addClass('cauto-added-step');
             ui.helper.append('<input type="hidden">');
             let title_div = ui.helper.find('div');
             jQuery(title_div).append('<span class="cauto_describe_step_label"></span>');
         }
+        
     });
 
     jQuery('body').on('click','.cauto_steps_builder .cauto-steps-draggable, .cauto_steps_builder .cauto-steps-el-saved' ,function(){
@@ -106,7 +108,7 @@ jQuery(document).ready(function(){
     });
 
     //run the flow
-    jQuery('#cauto-run-flow').on('click', function(){
+    jQuery('#cauto-run-flow, .cauto-flow-run-flow').on('click', function(){
         let flow_id = jQuery(this).data('id');
         jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
         cauto_run_flow(flow_id);
@@ -127,7 +129,7 @@ jQuery(document).ready(function(){
         cauto_get_flow_details(flow_id);
     });
 
-    jQuery('#cauto-results-list li').on('click', function(){
+    jQuery('body').on('click', '#cauto-results-list li',function(){
         jQuery('#cauto-results-list li').removeClass('active');
         jQuery(this).addClass('active');
         let runner_id = jQuery(this).data('runner-id');
@@ -399,6 +401,8 @@ const cauto_run_flow = (flow_id) => {
                     console.error('CAUTO ERROR: '+ data.message);
                 }
             }
+            jQuery('#cauto-run-flow span.cauto-loader, .cauto-flow-run-flow span.cauto-loader').attr('class', 'dashicons dashicons-controls-play');
+            
         }
     });
 
@@ -480,7 +484,6 @@ const cauto_load_runner_results = (runner_id = 0, flow_id = 0) => {
 const cuato_load_more_link = () => {
     let total_runners       = jQuery('#cauto-results-list').data('rucnt');
     let current_currents    = jQuery('#cauto-results-list li').length;
-    console.log(total_runners, current_currents);
     if (total_runners === current_currents) {
         jQuery('.cauto-see-other-runners').remove();
     }

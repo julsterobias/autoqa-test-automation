@@ -66,7 +66,19 @@ class cauto_test_automation extends cauto_utils
 
     public function set_running_flow($running_flow = null)
     {
+        //store multiple running flows
+        //clean them after the runner completed
+
         $_SESSION[$this->session_runner_name] = $running_flow;
+
+        if (!empty(get_transient($this->session_runner_name))) {
+            $temp_running_flows = get_transient($this->session_runner_name);
+            $temp_running_flows[$running_flow['flow_id']] = $running_flow['runner_id'];
+            set_transient( $this->session_runner_name, $temp_running_flows );
+        } else {
+            set_transient( $this->session_runner_name, [$running_flow['flow_id'] => $running_flow['runner_id']]);
+        }   
+        
     }
 
     public function get_name()
@@ -87,9 +99,13 @@ class cauto_test_automation extends cauto_utils
         return $this->stop_on_error;
     }
 
-    public function get_running_flow()
+    public function get_running_flow($transient = null)
     {
-        return isset($_SESSION[$this->session_runner_name])? $_SESSION[$this->session_runner_name] : null;
+        if ($transient) {
+            return (get_transient($this->session_runner_name))? get_transient($this->session_runner_name) : null;
+        } else {
+            return isset($_SESSION[$this->session_runner_name])? $_SESSION[$this->session_runner_name] : null;
+        }
     }
 
     public function save_flow($flow_id = 0)

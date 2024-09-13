@@ -1,4 +1,4 @@
-<ul>
+<ul class="cauto-steps-drag-container">
     <?php 
         if (!empty($data['data'])):
             foreach ($data['data'] as $type => $step):

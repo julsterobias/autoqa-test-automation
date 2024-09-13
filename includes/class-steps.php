@@ -24,7 +24,6 @@ if ( !function_exists( 'add_filter' ) ){
 
 class cauto_steps
 {
-
     public static function steps()
     {
         $steps = [
