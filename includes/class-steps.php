@@ -69,6 +69,18 @@ class cauto_steps
                         ]
                     ],
                     [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_click_type_opt',
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Click Type', 'autoqa-test-automation'),
+                        'options'   => [
+                            'single'    => __('Single', 'autoqa-test-automation'),
+                            'double'    => __('Double', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
                         'field' => 'input',
                         'attr'  => [
                             'type'  => 'text',
@@ -95,50 +107,6 @@ class cauto_steps
                     'describe_text' => __(' to {#cauto_step_click_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_click_step' 
-            ],
-            'double-click' => [
-                'label'     => __('Double Click', 'autoqa-test-automation'),
-                'settings'      => [
-                    [
-                        'field' => 'select',
-                        'attr'  => [
-                            'id'    => 'cauto_step_double_click_selector_type',
-                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field'
-                        ],
-                        'label'     => __('Attribute', 'autoqa-test-automation'),
-                        'options'   => [
-                            'class' => __('Class', 'autoqa-test-automation'),
-                            'id'    => __('ID', 'autoqa-test-automation'),
-                            'xpath' => __('Xpath', 'autoqa-test-automation')
-                        ]
-                    ],
-                    [
-                        'field' => 'input',
-                        'attr'  => [
-                            'type'  => 'text',
-                            'id'    => 'cauto_step_double_click_selector',
-                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
-                        ],
-                        'label' => __('Selector', 'autoqa-test-automation')
-                    ],
-                    [
-                        'field' => 'input',
-                        'attr'  => [
-                            'type'  => 'text',
-                            'id'    => 'cauto_step_double_click_alias',
-                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide',
-                            'placeholder'   => __('Element temporary name', 'autoqa-test-automation')
-                        ],
-                        'label'         => __('Field Name', 'autoqa-test-automation')
-                    ]
-                ],
-                'icon'      => '<span class="cauto-icon cauto-icon-point-up"></span>',
-                'group'     => 'events',
-                'step_indicator'    => [
-                    'selector'      => '#cauto_step_double_click_alias',
-                    'describe_text' => __(' to {#cauto_step_double_click_alias}', 'autoqa-test-automation')
-                ],
-                'callback'  => 'cauto_default_double_click_step'  
             ],
             'set-text'          => [
                 'label'         => __('Set Text', 'autoqa-test-automation'),
@@ -172,7 +140,7 @@ class cauto_steps
                             'type'  => 'text',
                             'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
                         ],
-                        'label'     => __('Field Name', 'autoqa-test-automation')
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',

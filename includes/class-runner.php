@@ -178,7 +178,7 @@ class cauto_runner extends cauto_utils
 
             $logged_user    = get_current_user_id();
             $cauto_test     = new cauto_test_automation();
-            $running_flows  = $cauto_test->get_running_flow();
+            $running_flows  = $cauto_test->get_running_flow(); //clean this up. I don't think we still need this?????
 
             if ( $logged_user && current_user_can('administrator') && !empty($running_flows)) {
 

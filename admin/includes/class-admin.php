@@ -343,6 +343,7 @@ class cauto_admin extends cauto_utils
         $step_data  = (isset($_POST['step']))? $_POST['step'] : null;
         $flow_id    = (is_numeric($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
 
+
         if ($step_data) {
 
             $step_data = json_decode(stripslashes($step_data));

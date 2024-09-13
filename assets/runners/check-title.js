@@ -47,14 +47,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Matched: 0' + response_part
+                            message: 'Not equals to ' + params[1].value + ' - Matched: 0' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Matched: 1' + response_part
+                            message: 'Not equals to ' + params[1].value + ' - Matched: 1' + response_part
                         }
                     ];
                 }
@@ -64,14 +64,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Matched: 1' + response_part
+                            message: 'Contains with ' + params[1].value + ' - Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Matched: 0' + response_part
+                            message: 'Contains with ' + params[1].value + ' - Matched: 0' + response_part
                         }
                     ];
                 }
@@ -81,33 +81,33 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Matched: 1' + response_part
+                            message: 'Start with ' + params[1].value + ' - Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Matched: 0' + response_part
+                            message: 'Start with ' + params[1].value + ' - Matched: 0' + response_part
                         }
                     ];
                 }
                 break;
             case 'end with':
-                let search_start    = page_title.search(param[1].value);
-                let substrin        = test.substring(search_start, page_title.length);
-                if (substrin === param[1].value) {
+                let search_start    = page_title.search(params[1].value);
+                let substrin        = page_title.substring(search_start, page_title.length);
+                if (substrin === params[1].value) {
                     return [
                         {
                             status: 'passed',
-                            message: 'Matched: 1' + response_part
+                            message: 'End with ' + params[1].value + ' - Matched: 1' + response_part
                         }
                     ];
                 } else {
                     return [
                         {
-                            status: 'false',
-                            message: 'Matched: 0' + response_part
+                            status: 'failed',
+                            message: 'End with ' + params[1].value + ' - Matched: 0' + response_part
                         }
                     ];
                 }

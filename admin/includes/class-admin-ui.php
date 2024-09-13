@@ -296,6 +296,8 @@ class cauto_admin_ui extends cauto_utils
         $type           = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
         $saved_steps    = (isset($_POST['saved_data']))? json_decode(stripslashes($_POST['saved_data'])) : null;
 
+        $title_type     = str_replace('-',' ',$type);
+
         if (isset($this->steps[$type])) {
 
             $setting_ui = $this->prepare_attr($this->steps[$type]['settings']);
@@ -315,7 +317,7 @@ class cauto_admin_ui extends cauto_utils
             $describe_text = (isset($this->steps[$type]['step_indicator']))? $this->steps[$type]['step_indicator'] : [];
 
             ob_start();
-            $this->get_view('steps/'.$type, ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps]);
+            $this->get_view('steps/step-settings.php', ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps, 'title' => $title_type]);
             $reponse = ob_get_clean();
 
             echo json_encode(
@@ -343,7 +345,7 @@ class cauto_admin_ui extends cauto_utils
         $this->get_view('popups/step-config', ['path' => 'admin']);
     }
 
-    public function load_step_controls($type = null, $field_ids = [], $step_indicator = [])
+    public function load_step_controls( $field_ids = [], $step_indicator = [])
     {
 
         $right_buttons = [

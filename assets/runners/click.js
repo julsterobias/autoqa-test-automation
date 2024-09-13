@@ -24,3 +24,11 @@ var cauto_default_click_step = (params = null) => {
         }
     ];
 }
+
+const cauto_get_element_coordinates = (el) => {
+
+}
+
+const cauto_emulate_click_to_position = (x, y) => {
+    
+}
