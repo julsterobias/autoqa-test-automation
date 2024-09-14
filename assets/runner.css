@@ -3,7 +3,6 @@
     z-index: 99999;
     width: 100%;
     bottom: 0;
-    top: 0;
     background: rgba(0, 0, 0, 0.3);
     display: none;
 }
@@ -38,9 +37,17 @@
     z-index: 99999;
 }
 
+.cauto-marker-on-event {
+    position: absolute;
+    background-color: #f25405;
+    height: 30px;
+    width: 30px;
+    border-radius: 100px;
+    z-index: 9999;
+    opacity: 0.5;
+}
 
 /* gradient loader */
-
 .cauto_bar_loader {
     animation-duration: 1.8s;
     animation-fill-mode: forwards;
@@ -51,9 +58,7 @@
     background: linear-gradient(to right, #fa9866 8%, #f25405 38%, #fa9866 54%);
     background-size: 1000px 640px;
     position: relative;
-    
 }
-
 
 .cauto-runner-completed {
     position: relative;

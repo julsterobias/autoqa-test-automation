@@ -53,6 +53,7 @@ const cauto_prepare_the_runner = () => {
 const cauto_do_run_runner = (response = [], index = 0, status = null) =>
 {
     cauto_plot_runner_status(response, index, status);
+
     jQuery.ajax( {
         type : "post",  
         url: cauto_runner.ajaxurl,
@@ -77,16 +78,17 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
 
                         if (response && !cauto_iam_leaving) {
                             index++;
-                            
+                        
                             setTimeout(function(){
                                 cauto_do_run_runner(response, index);
                             }, 3000);
                             
                         } else {
+                            console.error('AutoQA error: no response is found');
                             return;
                         }
                     } catch (error) {
-                        console.error(error);
+                        console.error('AutoQA error: '+error);
                     }
 
                 } else if (data.status === 'continue') {
@@ -108,7 +110,7 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
                             return;
                         }
                     } catch (error) {
-                        console.error(error);
+                        console.error('AutoQA error: '+error);
                     }
 
                 } else if (data.status === 'completed') {
@@ -206,4 +208,64 @@ const cauto_render_test_results = (payload = []) => {
 
     }
 
+}
+
+/**
+ * 
+ * 
+ * create element
+ * @param object
+ * @returns object
+ * https://github.com/julsterobias/simple-js-element-builder
+ * 
+ * 
+ */
+const js_el_generator = (args = new Object) => {
+    
+    if(Object.keys(args).length == 0)
+        return;
+    
+    var element = document.createElement(args.type);
+    var text = (args.text)? document.createTextNode(args.text) : document.createTextNode('');
+    if(args.attributes){
+        for(var x in args.attributes){
+            element.setAttribute(args.attributes[x].attr, args.attributes[x].value);
+        }
+    }
+    element.appendChild(text);
+    if(args.type == 'select'){
+        //create options
+        if(args.options){
+            for(var y in args.options){
+                var option = document.createElement('option');
+                option.value = args.options[y].value;
+                option.text = args.options[y].text;
+                
+                var check_value = Array.isArray(args.value);
+                if(check_value){
+                    for(var b in args.value){
+                        if(args.value[b] == args.options[y].value){
+                            option.defaultSelected = true;
+                        }
+                    }
+                }else{
+                    if(args.value == args.options[y].value){
+                        option.defaultSelected = true;
+                    }
+                }
+                element.appendChild(option);
+            }
+        }
+    }
+    return element;
+}
+
+
+const cauto_get_element_by_xpath = (xpath = '') => {
+
+    if (xpath === '') return;
+
+    var result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+    return result.singleNodeValue;
+    
 }
