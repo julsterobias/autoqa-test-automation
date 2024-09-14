@@ -12,7 +12,7 @@ var cauto_default_do_start = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: 'Error:' + cauto_runner.unconfigured_msg
+                message: cauto_step_text.unconfigured_msg
             }
         ];
     }

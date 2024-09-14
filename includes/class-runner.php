@@ -57,6 +57,14 @@ class cauto_runner extends cauto_utils
         }
     }
 
+
+    /**
+     * 
+     * 
+     * remember to unload these once no flow is running
+     * 
+     * 
+     */
     public function load_assets()
     {
         wp_register_script('cauto-runner-js', CAUTO_PLUGIN_URL.'assets/runners/runner.js', ['jquery'], null );
@@ -81,10 +89,18 @@ class cauto_runner extends cauto_utils
         wp_localize_script('cauto-runner-js', 'cauto_runner', 
             [
                 'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
-                'nonce'             => wp_create_nonce( $this->nonce ),
-                'unconfigured_msg'  => __('The step is not configured','autoqa-test-automation')
+                'nonce'             => wp_create_nonce( $this->nonce )
             ]
         );
+
+        $cauto_steps_text = [
+            'element_not_found' => __('Matched 0: The element cannot be found.', 'autoqa-test-automation'),
+            'multiple_element'  => __('Matched > 1: Multiple elements were found, but the specific event cannot be dispatched.', 'autoqa-test-automation'),
+            'element_not_found_dispatch'    => __('Matched 0: The element cannot be found after dispatch.', 'autoqa-test-automation'),
+            'event_validated'   => __('Matched 1: Event is validated.', 'autoqa-test-automation'),
+            'unconfigured_msg'  => __('The step is not configured','autoqa-test-automation')
+        ];
+        wp_localize_script('cauto-runner-js', 'cauto_step_text', $cauto_steps_text);
 
         $footer_position = (is_admin())? 'admin_footer' : 'wp_footer';
         add_action($footer_position, function(){

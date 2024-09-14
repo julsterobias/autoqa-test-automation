@@ -3,7 +3,8 @@
         <h3><?php esc_html_e($data['title'], 'autoqa-test-automation'); ?></h3>
     </div>
     <div class="cauto-fields auto-type-start">
-        <?php if (!empty($data['config'])): 
+        <?php 
+        if (!empty($data['config'])): 
             do_action('cauto_load_ui', ['fields' => $data['config']], 'fields', $data['saved_steps']);
         endif; 
         ?>

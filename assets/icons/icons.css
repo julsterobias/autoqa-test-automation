@@ -1,0 +1,31 @@
+.cauto-icon {
+    height: 20px;
+    width: 20px;
+}
+.cauto-icon-start:after {
+    content: url('start.svg');
+}
+.cauto-icon-click:after {
+    content: url('click.svg');
+}
+.cauto-icon-text:after {
+    content: url('set-text.svg');
+}
+.cauto-icon-select:after {
+    content: url('select.svg');
+}
+.cauto-icon-reload:after {
+    content: url('reload.svg');
+}
+.cauto-icon-page-title:after {
+    content: url('page-title.svg');
+}
+.cauto-icon-check-text:after {
+    content: url('check-text.svg');
+}
+.cauto-icon-check-attribute:after {
+    content: url('check-attribute.svg');
+}
+.cauto-icon-check-visibility:after {
+    content: url('check-visibilty.svg');
+}

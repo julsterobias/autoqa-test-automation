@@ -7,6 +7,10 @@
     display: none;
 }
 
+.cuato-runner-indicator.ended {
+    top: 0;
+}
+
 .cuato-runner-indicator .cauto-runner-bars {
     background-color: white;
     display: flex;

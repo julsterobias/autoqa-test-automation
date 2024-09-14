@@ -208,6 +208,8 @@ const cauto_render_test_results = (payload = []) => {
 
     }
 
+    jQuery('.cuato-runner-indicator').addClass('ended');
+
 }
 
 /**
@@ -268,4 +270,127 @@ const cauto_get_element_by_xpath = (xpath = '') => {
     var result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
     return result.singleNodeValue;
     
+}
+
+const cauto_event_manager = (selector, field_attr, event_type, extra_payload = []) => {
+
+    let selector_string = '#cauto-element-not-found';
+    let element = jQuery(selector_string);
+
+
+    switch(field_attr) {
+        case 'id': 
+            let id_ind = selector.substring(0, 1);
+            if (id_ind === '#') {
+                selector_string = selector;
+            } else {
+                selector_string = '#' + selector;
+            }
+            element = jQuery(selector_string);
+            break
+        case 'class':
+            let class_ind = selector.substring(0, 1);
+            if (class_ind === '.') {
+                selector_string = selector;
+            } else {
+                selector_string = '.' + selector;
+            }
+            element = jQuery(selector_string);
+            break;
+        case 'xpath':
+            element = cauto_get_element_by_xpath(selector);
+            element = jQuery(element);
+            break;
+    }
+
+    if (element.length === 0) {
+        return [
+            {
+                status: 'failed',
+                message: cauto_step_text.element_not_found
+            }
+        ];
+    }
+
+    if (element.length > 1) {
+        return [
+            {
+                status: 'failed',
+                message: cauto_step_text.multiple_element
+            }
+        ];
+    }
+
+    let position = element.offset();
+    let width = element.outerWidth();
+    let height = element.outerHeight();
+    let middleX = position.left + (width / 2);
+    let middleY = position.top + (height / 2);
+
+    var event = new MouseEvent(event_type, {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+        clientX: middleX,
+        clientY: middleY 
+    });
+    let toelement = document.elementFromPoint(middleX, middleY);
+
+    if (toelement) {
+        toelement.dispatchEvent(event);
+    }else {
+        return [
+            {
+                status: 'failed',
+                message: cauto_step_text.element_not_found_dispatch
+            }
+        ];
+    }
+
+    //create marker
+    let marker = js_el_generator(
+        {
+            type: 'span',
+            text: '',
+            attributes: [
+                {
+                    attr: 'class',
+                    value: 'cauto-marker-on-event'
+                }
+            ]
+        }
+    );
+    //set markers
+    let markerx = middleX - (30 / 2);
+    let markery = middleY - (30 / 2);
+    jQuery(marker).css('left', markerx);
+    jQuery(marker).css('top', markery);
+    jQuery('body').append(marker);
+
+    setTimeout(function(){
+        jQuery(marker).remove();
+    },300);
+
+    //other events
+    if (extra_payload.length > 0) {
+        switch(extra_payload[0].event) {
+            case 'set-text':
+                jQuery(toelement).val(extra_payload[0].value);
+                return [
+                    {
+                        status: 'passed',
+                        message: '"' + extra_payload[0].value+ '" is set to ' + selector_string
+                    }
+                ];
+            break;
+        }
+    }
+
+    return [
+        {
+            status: 'passed',
+            message: cauto_step_text.event_validated
+        }
+    ];
+
 }

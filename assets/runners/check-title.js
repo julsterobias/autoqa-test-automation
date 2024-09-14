@@ -14,7 +14,7 @@ var cauto_default_check_page_title_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: 'Error:' + cauto_runner.unconfigured_msg
+                message: cauto_step_text.unconfigured_msg
             }
         ];
     }

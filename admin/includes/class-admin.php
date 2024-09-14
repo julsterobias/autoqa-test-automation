@@ -106,7 +106,7 @@ class cauto_admin extends cauto_utils
         wp_register_script('cauto-admin-js', CAUTO_PLUGIN_URL.'admin/assets/admin.js', ['jquery'], null );
         wp_enqueue_script('cauto-admin-js');
         wp_enqueue_style('cauto-admin-css', CAUTO_PLUGIN_URL.'admin/assets/admin.css' , [], null);
-        wp_enqueue_style('cauto-admin-icons', CAUTO_PLUGIN_URL.'admin/assets/icons/style.css' , [], null);
+        wp_enqueue_style('cauto-admin-icons', CAUTO_PLUGIN_URL.'assets/icons/icons.css' , [], null);
         wp_enqueue_style('cauto-admin-grid-css', CAUTO_PLUGIN_URL.'admin/assets/admin-grid.css' , [], null);
 
         $cauto_variables = [

@@ -58,7 +58,7 @@ jQuery(document).ready(function(){
             }
 
             cuato_active_selected_step = jQuery(this);
-            jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="cauto-icon-spinner5 cauto-popup-loader cauto-loader"></span></div>');
+            jQuery('#cauto-popup-content-step').html('<div class="cauto-popup-loader"><span class="dashicons dashicons-update cauto-popup-loader cauto-loader"></span></div>');
                 //show popup
             jQuery(cauto_step_popup_step).fadeIn(200, function(){
                 cauto_build_step_settings(type);
