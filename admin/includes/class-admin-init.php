@@ -36,11 +36,11 @@ class cauto_admin_init extends cauto_utils
         $custom_posts = [
             [
                 'slug'      => $this->slug,
-                'label'     => "autoQA Test Automation"
+                'label'     => "AutoQA Test Automation"
             ],
             [
                 'slug'      => $this->runner_slug,
-                'label'     => "autoQA Runners"
+                'label'     => "AutoQA Runners"
             ]
         ];
         foreach ($custom_posts as $post) {
@@ -107,8 +107,8 @@ class cauto_admin_init extends cauto_utils
     public function load_tool()
     {
         add_management_page(
-            __('autoQA', 'autoqa-test-automation'),        
-            __('autoQA', 'autoqa-test-automation'),        
+            __('AutoQA', 'autoqa-test-automation'),        
+            __('AutoQA', 'autoqa-test-automation'),        
             'manage_options',  
             $this->settings_page,   
             [$this, 'test_tools']      

@@ -584,6 +584,10 @@ label.cauto-toggle-label:active:after {
     background-color: #b8c0ff;
 }
 
+.cauto-step-group_delay .cauto-step-element {
+    background-color: #f0b9ed;
+}
+
 .cauto_step_set_wide {
     width: auto !important;
 }

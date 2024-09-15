@@ -3,7 +3,7 @@
 *
 *
 *
-* Plugin Name: autoQA
+* Plugin Name: AutoQA
 * Description: A plugin that will automate the testing of your website without the need of coding.
 * Author:      Juls Terobias
 * Plugin Type: Test Tool
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die( 'No access area' );
 define('CAUTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 define('CAUTO_PLUGIN_URL', plugin_dir_url( __FILE__ ));
 define('CAUTO_PLUGIN_VERSION','1.0.0');
-define('CAUTO_PLUGIN_VERSION_CODE','P');
+define('CAUTO_PLUGIN_VERSION_CODE','Prototype');
 define('CAUTO_NAMESPACES', ['includes','admin/includes']);
 define('CAUTO_RUNNER_IS_RUNNING', false);
 

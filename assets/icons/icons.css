@@ -29,3 +29,9 @@
 .cauto-icon-check-visibility:after {
     content: url('check-visibilty.svg');
 }
+.cauto-icon-check-value:after {
+    content: url('check-value.svg');
+}
+.cauto-icon-delay:after {
+    content: url('delay.svg');
+}
