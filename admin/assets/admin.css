@@ -542,8 +542,10 @@ label.cauto-toggle-label:active:after {
 }
 
 .cauto-popup-loader span {
-    font-size: 30px;
     color: #f25405;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
 }
 
 .cauto-popup-loader{
@@ -586,6 +588,10 @@ label.cauto-toggle-label:active:after {
 
 .cauto-step-group_delay .cauto-step-element {
     background-color: #f0b9ed;
+}
+
+.cauto-step-group_data .cauto-step-element {
+    background-color: #fffcad;
 }
 
 .cauto_step_set_wide {

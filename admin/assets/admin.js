@@ -80,7 +80,7 @@ jQuery(document).ready(function(){
         let fields = jQuery(parent).find('input[type=hidden]#cauto_step_config_field_ids').val();
         cauto_validate_set_step_config(fields);
         jQuery(this).prop('disabled', true);
-        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        jQuery(this).find('span.dashicons').attr('class', 'dashicons dashicons-update cauto-icon cauto-loader');
         jQuery('.cauto-cancel').prop('disabled', true);
         jQuery('#cauto-delete-step').hide();
         //now save the data
@@ -103,14 +103,14 @@ jQuery(document).ready(function(){
     
     jQuery('#cauto-save-flow').on('click', function(){
         jQuery('#cauto-run-flow, #cauto-delete-flow').prop('disabled', true);
-        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        jQuery(this).find('span.dashicons').attr('class', 'dashicons dashicons-update cauto-icon cauto-loader');
         cauto_do_save_step('flow_save');
     });
 
     //run the flow
     jQuery('#cauto-run-flow, .cauto-flow-run-flow').on('click', function(){
         let flow_id = jQuery(this).data('id');
-        jQuery(this).find('span.dashicons').attr('class', 'cauto-icon-spinner5 cauto-icon cauto-loader');
+        jQuery(this).find('span.dashicons').attr('class', 'dashicons dashicons-update cauto-icon cauto-loader');
         cauto_run_flow(flow_id);
     });
 
@@ -339,7 +339,7 @@ const cauto_do_save_flow = (btn, redirect_to = '') => {
     let stop_on_error = jQuery('#cauto-flow-stop-on-error').is(':checked');
 
     jQuery(btn).find('span.cauto_button_text').text('Saving...');
-    jQuery(btn).find('span.dashicons').removeClass('dashicons-saved').addClass('cauto-icon-spinner5 cauto-loader');
+    jQuery(btn).find('span.dashicons').removeClass('dashicons-saved').addClass('dashicons-update cauto-loader');
     jQuery('.cauto-cancel').prop('disabled', true);
     jQuery(btn).prop('disabled', true);
 

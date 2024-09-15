@@ -305,7 +305,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_page_title_step'
             ],
             'check-text' => [
-                'label'     => __('Check Text', 'autoqa-test-automation'),
+                'label'     => __('Text', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -363,7 +363,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_text_step'
             ],
             'check-value' => [
-                'label'     => __('Check Value', 'autoqa-test-automation'),
+                'label'     => __('Value', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -421,7 +421,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_value_step'
             ],
             'check-attribute' => [
-                'label'     => __('Check Attribute', 'autoqa-test-automation'),
+                'label'     => __('Attribute', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -488,7 +488,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_attribute_step'
             ],
             'check-visibility' => [
-                'label'     => __('Check Visibility', 'autoqa-test-automation'),
+                'label'     => __('Visibility', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -535,6 +535,51 @@ class cauto_steps
                 ],
                 'callback'  => 'cauto_default_check_visibilty_step'
             ],
+            'check-data' => [
+                'label'     => __('Data', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_data_selector',
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide'
+                        ],
+                        'label' => __('Data Name', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_data_condition',
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'equals to'         => __('Equals to', 'autoqa-test-automation'),
+                            'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
+                            'contains with'     => __('Contains with', 'autoqa-test-automation'),
+                            'start with'        => __('Start with', 'autoqa-test-automation'),
+                            'end with'          => __('End with', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_data_value',
+                            'class' => 'cauto-step-nodes cauto-check-data-value-step cauto-field wide'
+                        ],
+                        'label' => __('Value', 'autoqa-test-automation')
+                    ],
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-check-data"></span>',
+                'group'     => 'check',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
+                    'describe_text' => __(' {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_check_visibilty_step'
+            ],
             'delay_divider' => [
                 'divider'    => true,
                 'label'     => __('Delay', 'autoqa-test-automation'), 
@@ -561,6 +606,143 @@ class cauto_steps
                     'describe_text' => __(' Delay runner for {#cauto_field_delay_runner_for}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_delay_runner_for'
+            ],
+            'wait-for' => [
+                'label'     => __('Wait for', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_wait_for_selector_type',
+                            'class' => 'cauto-step-nodes cauto-wait-for-step cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_wait_for_selector',
+                            'class' => 'cauto-step-nodes cauto-wait-for-step cauto-field wide'
+                        ],
+                        'label' => __('Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_wait_for_selector_action',
+                            'class' => 'cauto-step-nodes cauto-wait-for-step cauto-field wide'
+                        ],
+                        'label'     => __('Action', 'autoqa-test-automation'),
+                        'options'   => [
+                            'to display'            => __('To Display', 'autoqa-test-automation'),
+                            'to not display'        => __('To Not Display', 'autoqa-test-automation'),
+                            'to have value'         => __('To Have Value', 'autoqa-test-automation'),
+                            'to clickable'          => __('To Clickable', 'autoqa-test-automation'),
+                            'to not clickable'      => __('To Not Clickable', 'autoqa-test-automation')
+                        ]
+                    ]
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-wait-for"></span>',
+                'group'     => 'delay',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_wait_for_selector', '#cauto_step_wait_for_selector_action'],
+                    'describe_text' => __(' Wait for {#cauto_field_wait_for_selector} {#cauto_step_wait_for_selector_action}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_wait_for_selector'
+            ],
+            'data_divider' => [
+                'divider'    => true,
+                'label'     => __('Data', 'autoqa-test-automation'), 
+            ],
+            'store-element-data' => [
+                'label'     => __('Element Data', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_store_data_from_variable_name_selector',
+                            'class' => 'cauto-step-nodes cauto-store-data-from-variable-name-step cauto-field wide'
+                        ],
+                        'label' => __('Name', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_store_data_from_selector_type',
+                            'class' => 'cauto-step-nodes cauto-store-data-from-step cauto-field wide'
+                        ],
+                        'label'     => __('Identifier', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_store_data_from_selector',
+                            'class' => 'cauto-step-nodes cauto-store-data-from-step cauto-field wide'
+                        ],
+                        'label' => __('Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_store_data_from_attribute_selector',
+                            'class' => 'cauto-step-nodes cauto-store-data-from-attribute-step cauto-field wide'
+                        ],
+                        'label' => __('Attribute', 'autoqa-test-automation')
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-store-element-data"></span>',
+                'group'     => 'data',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_store_data_from_attribute_selector, #cauto_field_store_data_from_selector', '#cauto_field_store_data_from_variable_name_selector'],
+                    'describe_text' => __(' Store the {#cauto_field_store_data_from_attribute_selector} of {#cauto_field_store_data_from_selector} to variable {#cauto_field_store_data_from_variable_name_selector}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_store_element_data'
+            ],
+            'store-data' => [
+                'label'     => __('Store Data', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_store_data_name_selector',
+                            'class' => 'cauto-step-nodes cauto-store-data-variable-name-step cauto-field wide'
+                        ],
+                        'label' => __('Name', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_store_data_value_selector',
+                            'class' => 'cauto-step-nodes cauto-store-data-value-step cauto-field wide'
+                        ],
+                        'label' => __('Value', 'autoqa-test-automation')
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-store-data"></span>',
+                'group'     => 'data',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_store_data_value_selector', '#cauto_field_store_data_name_selector'],
+                    'describe_text' => __(' Store the {#cauto_field_store_data_value_selector} to {#cauto_field_store_data_name_selector}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_store_data'
             ],
             
         ];

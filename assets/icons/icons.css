@@ -35,3 +35,15 @@
 .cauto-icon-delay:after {
     content: url('delay.svg');
 }
+.cauto-icon-wait-for:after {
+    content: url('wait-for.svg');
+}
+.cauto-icon-check-data:after {
+    content: url('check-data.svg');
+}
+.cauto-icon-store-element-data:after {
+    content: url('store-element-data.svg');
+}
+.cauto-icon-store-data:after {
+    content: url('store-data.svg');
+}
