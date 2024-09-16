@@ -153,12 +153,12 @@ class cauto_steps
                 'callback'  => 'cauto_default_hover_step' 
             ],
             'set-text'          => [
-                'label'         => __('Set Text', 'autoqa-test-automation'),
+                'label'         => __('Set Value', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
                         'attr'  => [
-                            'id'    => 'cauto_step_selector_type',
+                            'id'    => 'cauto_step_set_text_selector_type',
                             'class' => 'cauto-step-nodes cauto-set-text-step cauto-field'
                         ],
                         'label'     => __('Attribute', 'autoqa-test-automation'),
@@ -251,8 +251,8 @@ class cauto_steps
                 'group'     => 'events',
                 'icon'      => '<span class="cauto-icon cauto-icon-select"></span>',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_step_set_select_selector_alias', '#cauto_step_set_text'],
-                    'describe_text' => __(' {#cauto_step_set_select_selector_alias} to {#cauto_step_set_text}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_step_set_select_selector_alias', '#cauto_step_set_select'],
+                    'describe_text' => __(' {#cauto_step_set_select_selector_alias} to {#cauto_step_set_select}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_select_step'  
             ],
@@ -266,10 +266,10 @@ class cauto_steps
             ],
             'check_divider' => [
                 'divider'    => true,
-                'label'     => __('Check', 'autoqa-test-automation'), 
+                'label'     => __('Check', 'autoqa-test-automation'),
             ],
             'check-title' => [
-                'label'     => __('Page Title', 'autoqa-test-automation'),
+                'label'     => __('Check Page Title', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -305,7 +305,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_page_title_step'
             ],
             'check-text' => [
-                'label'     => __('Text', 'autoqa-test-automation'),
+                'label'     => __('Check Text', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -325,7 +325,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_check_text_selector',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
+                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
                         ],
                         'label'     => __('Selector', 'autoqa-test-automation')
                     ],
@@ -333,7 +333,7 @@ class cauto_steps
                         'field' => 'select',
                         'attr'  => [
                             'id'    => 'cauto_field_check_text_condition',
-                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide block'
+                            'class' => 'cauto-step-nodes cauto-check-text-condition-step cauto-field wide block'
                         ],
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
@@ -348,8 +348,8 @@ class cauto_steps
                         'field' => 'input',
                         'attr'  => [
                             'type'  => 'text',
-                            'id'    => 'cauto_field_check_text',
-                            'class' => 'cauto-step-nodes cauto-check-text-step cauto-field wide'
+                            'id'    => 'cauto_field_check_text_value',
+                            'class' => 'cauto-step-nodes cauto-check-text-value-step cauto-field wide'
                         ],
                         'label' => __('Text', 'autoqa-test-automation')
                     ]
@@ -357,13 +357,13 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-check-text"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_text_condition', '#cauto_field_check_text'],
-                    'describe_text' => __(' {#cauto_field_check_text_condition} {#cauto_field_check_text}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_field_check_text_condition', '#cauto_field_check_text_value'],
+                    'describe_text' => __(' {#cauto_field_check_text_condition} {#cauto_field_check_text_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_text_step'
             ],
             'check-value' => [
-                'label'     => __('Value', 'autoqa-test-automation'),
+                'label'     => __('Check Value', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -421,7 +421,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_value_step'
             ],
             'check-attribute' => [
-                'label'     => __('Attribute', 'autoqa-test-automation'),
+                'label'     => __('Check Attribute', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -488,7 +488,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_attribute_step'
             ],
             'check-visibility' => [
-                'label'     => __('Visibility', 'autoqa-test-automation'),
+                'label'     => __('Check Visibility', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
@@ -536,7 +536,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_check_visibilty_step'
             ],
             'check-data' => [
-                'label'     => __('Data', 'autoqa-test-automation'),
+                'label'     => __('Check Data', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'input',

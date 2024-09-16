@@ -272,7 +272,7 @@ const cauto_get_element_by_xpath = (xpath = '') => {
     
 }
 
-const cauto_event_manager = (selector, field_attr, event_type, extra_payload = []) => {
+const cauto_event_manager = (selector, field_attr, event_type, alias = '', other_events = false) => {
 
     let selector_string = '#cauto-element-not-found';
     let element = jQuery(selector_string);
@@ -336,15 +336,17 @@ const cauto_event_manager = (selector, field_attr, event_type, extra_payload = [
     });
     let toelement = document.elementFromPoint(middleX, middleY);
 
-    if (toelement) {
-        toelement.dispatchEvent(event);
-    }else {
-        return [
-            {
-                status: 'failed',
-                message: cauto_step_text.element_not_found_dispatch
-            }
-        ];
+    if (event_type) {
+        if (toelement) {
+            toelement.dispatchEvent(event);
+        }else {
+            return [
+                {
+                    status: 'failed',
+                    message: cauto_step_text.element_not_found_dispatch
+                }
+            ];
+        }
     }
 
     //create marker
@@ -372,24 +374,14 @@ const cauto_event_manager = (selector, field_attr, event_type, extra_payload = [
     },300);
 
     //other events
-    if (extra_payload.length > 0) {
-        switch(extra_payload[0].event) {
-            case 'set-text':
-                jQuery(toelement).val(extra_payload[0].value);
-                return [
-                    {
-                        status: 'passed',
-                        message: '"' + extra_payload[0].value+ '" is set to ' + selector_string
-                    }
-                ];
-            break;
-        }
+    if (other_events) {
+        return toelement;
     }
 
     return [
         {
             status: 'passed',
-            message: cauto_step_text.event_validated
+            message: 'Action Passed: '+ alias +' is ' + event_type + 'ed'
         }
     ];
 

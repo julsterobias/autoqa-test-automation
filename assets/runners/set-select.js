@@ -1,12 +1,12 @@
 /**
  * 
  * 
- * cauto_default_set_text_step
+ * cauto_default_set_select_step
  * @since 1.0.0
  * 
  * 
  */
-cauto_default_set_text_step = (params = null) => {
+var cauto_default_set_select_step = (params = null) => {
 
     if (!params) {
         return [
@@ -19,7 +19,7 @@ cauto_default_set_text_step = (params = null) => {
 
     let field_attr  = null;
     let selector    = null;
-    let text        = null;
+    let value        = null;
     
     if ( Array.isArray(params) ) {
         field_attr = (params[0].value)? params[0].value : null;
@@ -32,7 +32,7 @@ cauto_default_set_text_step = (params = null) => {
             return;
         }
 
-        text = (params[3].value)? params[3].value : null;
+        value = (params[3].value)? params[3].value : null;
     }
     
     //manage event and validate element existing
@@ -41,23 +41,33 @@ cauto_default_set_text_step = (params = null) => {
 
     if (!Array.isArray(element)) {
         if (jQuery(element).length > 0) {
-            jQuery(element).val(text);
 
-            if (jQuery(element).val() === text) {
+            let seleted_text = '';
+            //let's check first if the value is belongs to text or not and auto assign them if found either.
+            jQuery(element).find('option').each(function(){
+                if (jQuery(this).val() === value || jQuery(this).text() === value) {
+                    jQuery(this).prop('selected', true);
+                    seleted_text = jQuery(this).text();
+                }
+            });
+
+
+            if ( jQuery(element).val() === value || seleted_text === value) {
                 return [
                     {
                         status: 'passed',
-                        message: '"' + text + '" is set to ' + params[2].value
+                        message: '"' + value + '" is set to ' + params[2].value
                     }
                 ];
             } else {
                 return [
                     {
                         status: 'failed',
-                        message: 'Action failed: Runner cannot set "' + text + '" to ' + params[2].value
+                        message: 'Action Failed: Runner cannot find "' + value + '" in the field ' + params[2].value
                     }
                 ];
             }
+            
             
         } else {
             //redundant fail safe
@@ -69,8 +79,8 @@ cauto_default_set_text_step = (params = null) => {
             ];
         }
     } else {
-        console.log('22222');
         return element;
     }
 
+ 
 }

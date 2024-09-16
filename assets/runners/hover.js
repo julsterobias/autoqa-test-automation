@@ -18,6 +18,7 @@ cauto_default_hover_step = (params = null) => {
 
     let field_attr  = null;
     let selector    = null;
+    let field_alias = '';
     
     if ( Array.isArray(params) ) {
 
@@ -30,8 +31,11 @@ cauto_default_hover_step = (params = null) => {
         if (!selector) {
             return;
         }
+
+        field_alias = (params[2].value)? params[2].value : '';
+        
     }
 
-    return cauto_event_manager(selector, field_attr, 'mouseover');
+    return cauto_event_manager(selector, field_attr, 'mouseover', field_alias);
 
 }

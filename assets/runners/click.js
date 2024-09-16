@@ -20,6 +20,7 @@ var cauto_default_click_step = (params = null) => {
     let field_attr  = null;
     let click_type  = null;
     let selector    = null;
+    let field_alias = '';
     
     if ( Array.isArray(params) ) {
 
@@ -43,8 +44,10 @@ var cauto_default_click_step = (params = null) => {
         if (!selector) {
             return;
         }
+
+        field_alias = (params[3].value)? params[3].value : '';
     }
 
-    return cauto_event_manager(selector, field_attr, click_type);
+    return cauto_event_manager(selector, field_attr, click_type, field_alias);
 
 }
