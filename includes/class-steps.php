@@ -330,6 +330,15 @@ class cauto_steps
                         'label'     => __('Selector', 'autoqa-test-automation')
                     ],
                     [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_check_text_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-check-text-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
+                    ],
+                    [
                         'field' => 'select',
                         'attr'  => [
                             'id'    => 'cauto_field_check_text_condition',
@@ -357,8 +366,8 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-check-text"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_text_condition', '#cauto_field_check_text_value'],
-                    'describe_text' => __(' {#cauto_field_check_text_condition} {#cauto_field_check_text_value}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_step_check_text_alias_selector', '#cauto_field_check_text_condition', '#cauto_field_check_text_value'],
+                    'describe_text' => __(' {#cauto_step_check_text_alias_selector} {#cauto_field_check_text_condition} {#cauto_field_check_text_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_text_step'
             ],
@@ -388,6 +397,15 @@ class cauto_steps
                         'label'     => __('Selector', 'autoqa-test-automation')
                     ],
                     [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_check_value_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-set-value-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
+                    ],
+                    [
                         'field' => 'select',
                         'attr'  => [
                             'id'    => 'cauto_field_check_value_condition',
@@ -395,11 +413,15 @@ class cauto_steps
                         ],
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
-                            'equals to'         => __('Equals to', 'autoqa-test-automation'),
-                            'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
-                            'contains with'     => __('Contains with', 'autoqa-test-automation'),
-                            'start with'        => __('Start with', 'autoqa-test-automation'),
-                            'end with'          => __('End with', 'autoqa-test-automation')
+                            'is equals to'         => __('Equals to', 'autoqa-test-automation'),
+                            'is not equals to'     => __('Not equals to', 'autoqa-test-automation'),
+                            'is contains with'     => __('Contains with', 'autoqa-test-automation'),
+                            'is start with'        => __('Start with', 'autoqa-test-automation'),
+                            'is end with'          => __('End with', 'autoqa-test-automation'),
+                            'is less than'         => __('Is less than', 'autoqa-test-automation'),
+                            'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -415,8 +437,8 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-check-value"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_text_condition', '#cauto_field_check_text'],
-                    'describe_text' => __(' {#cauto_field_check_text_condition} {#cauto_field_check_text}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_step_check_value_alias_selector', '#cauto_field_check_value_condition', '#cauto_field_check_value'],
+                    'describe_text' => __(' {#cauto_step_check_value_alias_selector} {#cauto_field_check_value_condition} {#cauto_field_check_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_value_step'
             ],
@@ -446,19 +468,13 @@ class cauto_steps
                         'label'     => __('Selector', 'autoqa-test-automation')
                     ],
                     [
-                        'field' => 'select',
+                        'field' => 'input',
                         'attr'  => [
-                            'id'    => 'cauto_field_check_attribute_condition',
-                            'class' => 'cauto-step-nodes cauto-check-attribute-step cauto-field wide block'
+                            'id'    => 'cauto_step_check_attribute_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-set-attribute-alias-step cauto-field wide'
                         ],
-                        'label'     => __('Condition', 'autoqa-test-automation'),
-                        'options'   => [
-                            'equals to'         => __('Equals to', 'autoqa-test-automation'),
-                            'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
-                            'contains with'     => __('Contains with', 'autoqa-test-automation'),
-                            'start with'        => __('Start with', 'autoqa-test-automation'),
-                            'end with'          => __('End with', 'autoqa-test-automation')
-                        ]
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'input',
@@ -468,6 +484,25 @@ class cauto_steps
                             'class' => 'cauto-step-nodes cauto-check-attribute-step cauto-field wide'
                         ],
                         'label' => __('Attribute', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_attribute_condition',
+                            'class' => 'cauto-step-nodes cauto-check-attribute-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'is equals to'         => __('Equals to', 'autoqa-test-automation'),
+                            'is not equals to'     => __('Not equals to', 'autoqa-test-automation'),
+                            'is contains with'     => __('Contains with', 'autoqa-test-automation'),
+                            'is start with'        => __('Start with', 'autoqa-test-automation'),
+                            'is end with'          => __('End with', 'autoqa-test-automation'),
+                            'is less than'         => __('Is less than', 'autoqa-test-automation'),
+                            'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
+                        ]
                     ],
                     [
                         'field' => 'input',
@@ -482,8 +517,8 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-check-attribute"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
-                    'describe_text' => __(' {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_step_check_attribute_alias_selector', '#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
+                    'describe_text' => __(' {#cauto_step_check_attribute_alias_selector} {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_attribute_step'
             ],
@@ -747,7 +782,7 @@ class cauto_steps
             
         ];
 
-        return apply_filters('cauto-ui-steps', $steps);
+        return apply_filters('autoqa-steps', $steps);
     }
 }
 

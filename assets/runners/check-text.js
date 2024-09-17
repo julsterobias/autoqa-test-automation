@@ -1,7 +1,7 @@
 /**
  * 
  * 
- * cauto_default_set_text_step
+ * cauto_default_check_text_step
  * @since 1.0.0
  * 
  * 
@@ -33,17 +33,17 @@ cauto_default_check_text_step = (params = null) => {
             return;
         }
 
-        text_expected = (params[3].value)? params[3].value : '';
+        text_expected = (params[4].value)? params[4].value : '';
     }
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true);
     let text_recieved       = jQuery(element).text();
-    let passed_message      = 'Matched: 1, "' + text_recieved + '" ' + params[2].value + ' "' + text_expected + '"';
-    let failed_message      = 'Matched: 0, "' + text_recieved + '" ' + params[2].value + ' "' + text_expected + '"';
+    let passed_message      = 'Matched: 1, '+params[2].value+' - "' + text_recieved + '" ' + params[3].value + ' "' + text_expected + '"';
+    let failed_message      = 'Matched: 0, '+params[2].value+' - "' + text_recieved + '" ' + params[3].value + ' "' + text_expected + '"';
 
     try {
         
-        switch(params[2].value) {
+        switch(params[3].value) {
             case 'equals to':
                 if (text_expected === text_recieved) {
                     return [
