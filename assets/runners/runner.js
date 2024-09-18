@@ -289,7 +289,7 @@ const cauto_get_element_by_xpath = (xpath = '') => {
     
 }
 
-const cauto_event_manager = (selector, field_attr, event_type, alias = '', other_events = false) => {
+const cauto_event_manager = (selector, field_attr, event_type, alias = '', other_events = false, return_element = false) => {
 
     let selector_string = '#cauto-element-not-found';
     let element = jQuery(selector_string);
@@ -393,6 +393,10 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
     //other events
     if (other_events) {
         return toelement;
+    }
+
+    if (return_element && other_events) {
+        return [element, toelement];
     }
 
     return [
