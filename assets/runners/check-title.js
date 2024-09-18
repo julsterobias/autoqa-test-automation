@@ -10,7 +10,7 @@
  */
 var cauto_default_check_page_title_step = (params = null) => {
 
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',

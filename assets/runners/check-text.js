@@ -8,7 +8,7 @@
  */
 cauto_default_check_text_step = (params = null) => {
     
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',
@@ -17,29 +17,14 @@ cauto_default_check_text_step = (params = null) => {
         ];
     }
 
-    let field_attr      = null;
-    let selector        = null;
-    let text_expected   = '';
-    
-    if ( Array.isArray(params) ) {
-
-        field_attr = (params[0].value)? params[0].value : null;
-        if (!field_attr) {
-            return;
-        }
-
-        selector = (params[1].value)? params[1].value : null;
-        if (!selector) {
-            return;
-        }
-
-        text_expected = (params[4].value)? params[4].value : '';
-    }
+    let field_attr = (params[0].value)? params[0].value : null;
+    let selector = (params[1].value)? params[1].value : null;
+    let text_expected = (params[4].value)? params[4].value : '';
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true);
     let text_recieved       = jQuery(element).text();
-    let passed_message      = 'Matched: 1, '+params[2].value+' - "' + text_recieved + '" ' + params[3].value + ' "' + text_expected + '"';
-    let failed_message      = 'Matched: 0, '+params[2].value+' - "' + text_recieved + '" ' + params[3].value + ' "' + text_expected + '"';
+    let passed_message      = 'Matched: 1, Expected: '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", Received: "'+ text_recieved + '"';
+    let failed_message      = 'Matched: 0, Expected: '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", Received: "'+ text_recieved + '"';
 
     try {
         

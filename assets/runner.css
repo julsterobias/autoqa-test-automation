@@ -99,7 +99,8 @@
     margin: 25px 0 0 0;
 }
 
-.cauto-runner-completed p input {
+.cauto-runner-completed p input,
+.cauto-runner-manual-ui input {
     display: inline-block;
     margin-right: 5px;
     text-decoration: none;
@@ -216,6 +217,28 @@
     background: white;
     border-radius: 100px;
     font-size: 14px;
+}
+
+.cauto-runner-manual-ui {
+    position: absolute;
+    right: 10px;
+    bottom: 20px;
+    font-size: 14px;
+    width: 200px;
+    padding: 15px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 5px;
+    line-height: 15px;
+    text-align: center;
+    display: none;
+}
+
+.cauto-runner-manual-ui div:first-child {
+    margin-bottom: 10px;
+}
+
+.cauto-runner-manual-ui.active {
+    display: block;
 }
 
 @keyframes cauto_placeHolderShimmer{

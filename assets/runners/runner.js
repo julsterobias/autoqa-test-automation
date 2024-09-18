@@ -1,4 +1,5 @@
 var cauto_iam_leaving = false;
+var cauto_paused_data = [];
 
 window.onbeforeunload = function(){
     cauto_iam_leaving = true;
@@ -15,6 +16,15 @@ jQuery(window).on('load',function(){
 
     jQuery('#cauto-close-runner-modal-result').click(function(){
         window.parent.close();
+    });
+
+    jQuery('#cauto-continue-run-runner').on('click', function(){
+        if (cauto_paused_data.length > 0) {
+            cauto_do_run_runner(cauto_paused_data[0], cauto_paused_data[1]);
+            jQuery('.cauto-runner-manual-ui').removeClass('active');
+        } else {
+            console.error('AutoQA Error: No payload found after the runner is paused. Please contact developer');
+        }
     });
 
 });
@@ -39,6 +49,7 @@ const cauto_prepare_the_runner = () => {
                     setTimeout(function(){
                         jQuery('.cauto-runner-bars').addClass('cauto-runner-bars-'+cauto_running_flow_data.runner_id)
                         jQuery('.cauto-runner-bars-'+cauto_running_flow_data.runner_id).html(data.bars);
+                        jQuery('.cuato-runner-indicator').removeClass('ended');
                         cauto_do_run_runner();
                         jQuery('.cauto-warming-up').remove();
                     },2000);
@@ -76,9 +87,15 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
                         let response    = window[callback](data.payload.params);
                         let index       = data.payload.index;
 
+                        if (response[0].message === 'pause') {
+                            index++;
+                            cauto_paused_data = [response, index];
+                            jQuery('.cauto-runner-manual-ui').addClass('active');
+                            return;
+                        }
+
                         if (response && !cauto_iam_leaving) {
                             index++;
-                        
                             setTimeout(function(){
                                 cauto_do_run_runner(response, index);
                             }, 3000);
@@ -385,4 +402,21 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
         }
     ];
 
+}
+
+const cauto_check_data_type = (value_expected, value_recieved, type_error) => {
+
+    if (isNaN(value_expected) || isNaN(value_recieved)) {
+        return [
+            {
+                status: 'failed',
+                message: type_error
+            }
+        ];
+    }
+
+    value_expected = Number(value_expected);
+    value_recieved = Number(value_recieved);
+
+    return [value_expected, value_recieved];
 }

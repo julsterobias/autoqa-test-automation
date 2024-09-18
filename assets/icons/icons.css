@@ -8,6 +8,9 @@
 .cauto-icon-click:after {
     content: url('click.svg');
 }
+.cauto-icon-hover:after {
+    content: url('hover.svg');
+}
 .cauto-icon-text:after {
     content: url('set-text.svg');
 }
@@ -46,4 +49,7 @@
 }
 .cauto-icon-store-data:after {
     content: url('store-data.svg');
+}
+.cauto-icon-manual:after {
+    content: url('manual-input.svg');
 }

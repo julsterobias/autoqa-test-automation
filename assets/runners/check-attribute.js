@@ -1,12 +1,12 @@
 /**
  * 
  * 
- * cauto_default_check_value_step
+ * cauto_default_check_attribute_step
  * @since 1.0.0
  * 
  * 
  */
-var cauto_default_check_value_step = (params = null) => {
+var cauto_default_check_attribute_step = (params = null) => {
     
     if (!params || !Array.isArray(params)) {
         return [
@@ -16,22 +16,25 @@ var cauto_default_check_value_step = (params = null) => {
             }
         ];
     }
-    
-    let field_attr          = (params[0].value)? params[0].value : null;
-    let selector            = (params[1].value)? params[1].value : null;
-    let value_expected      = (params[4].value)? params[4].value : '';
+        
+    let field_attr      = (params[0].value)? params[0].value : null;
+    let selector        = (params[1].value)? params[1].value : null;
+    let alias           = (params[2].value)? params[2].value : '';
+    let attr_to_check   = (params[3].value)? params[3].value : '';
+    let operation       = (params[4].value)? params[4].value : '';
+    let value_expected  = (params[5].value)? params[5].value : '';
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true);
-    let value_recieved      = jQuery(element).val();
-    let passed_message      = 'Matched: 1, Expected ' + params[2].value + ' ' + params[3].value + ' "' + value_expected + '", Received: "' + value_recieved + '"';
-    let failed_message      = 'Matched: 0, Expected ' + params[2].value + ' ' + params[3].value + ' "' + value_expected + '", Received: "' + value_recieved + '"';
+    let value_recieved      = jQuery(element).attr(attr_to_check);
+    let passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
+    let failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
     let type_error          = 'Matched: 0, The value is not numeric for "' + params[3].value + '" operation';
 
     let number_data_set     = [];
 
     try {
         
-        switch(params[3].value) {
+        switch(params[4].value) {
             case 'is equals to':
                 if (value_expected === value_recieved) {
                     return [

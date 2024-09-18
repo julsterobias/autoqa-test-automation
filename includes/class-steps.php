@@ -144,13 +144,21 @@ class cauto_steps
                         'label'         => __('Field Name', 'autoqa-test-automation')
                     ]
                 ],
-                'icon'      => '<span class="cauto-icon cauto-icon-click"></span>',
+                'icon'      => '<span class="cauto-icon cauto-icon-hover"></span>',
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_hover_alias',
                     'describe_text' => __(' on {#cauto_step_hover_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_hover_step' 
+            ],
+            'manual-input' => [
+                'label'         => __('Manual Input', 'autoqa-test-automation'),
+                'settings'      => [],
+                'icon'          => '<span class="cauto-icon cauto-icon-manual"></span>',
+                'group'         => 'events',
+                'callback'      => 'cauto_default_manual_input_event',
+                'no_settings'   => true
             ],
             'set-text'          => [
                 'label'         => __('Set Value', 'autoqa-test-automation'),
@@ -548,6 +556,15 @@ class cauto_steps
                         'label' => __('Selector', 'autoqa-test-automation')
                     ],
                     [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_visibility_alias_selector',
+                            'class' => 'cauto-step-nodes cauto-check-alias-visibility-step cauto-field wide'
+                        ],
+                        'label' => __('Field Name (Alias)', 'autoqa-test-automation')
+                    ],
+                    [
                         'field' => 'select',
                         'attr'  => [
                             'id'    => 'cauto_field_check_visibilty_condition',
@@ -558,15 +575,15 @@ class cauto_steps
                             'is displayed'      => __('Is Displayed', 'autoqa-test-automation'),
                             'is hidden'         => __('Is Hidden', 'autoqa-test-automation'),
                             'is exists'         => __('Is Exists', 'autoqa-test-automation'),
-                            'is not existing'   => __('Is Not Existing', 'autoqa-test-automation')
+                            'is not exists'   => __('Is Not Exists', 'autoqa-test-automation')
                         ]
                     ]
                 ],
                 'icon'      => '<span class="cauto-icon cauto-icon-check-visibility"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
-                    'describe_text' => __(' {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_field_check_visibility_alias_selector', '#cauto_field_check_visibilty_condition'],
+                    'describe_text' => __(' {#cauto_field_check_visibility_alias_selector} {#cauto_field_check_visibilty_condition}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_visibilty_step'
             ],
