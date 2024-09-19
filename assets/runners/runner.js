@@ -390,13 +390,13 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
         jQuery(marker).remove();
     },300);
 
-    //other events
-    if (other_events) {
-        return toelement;
-    }
-
     if (return_element && other_events) {
         return [element, toelement];
+    }
+
+    //other events
+    if (other_events && !return_element) {
+        return toelement;
     }
 
     return [

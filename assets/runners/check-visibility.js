@@ -22,23 +22,94 @@ var cauto_default_check_visibilty_step = (params = null) => {
     let alias           = (params[2].value)? params[2].value : '';
     let condition       = (params[3].value)? params[3].value : '';
 
-    let element             = cauto_event_manager(selector, field_attr, 'click', '', true, true); //refactor the parameters, pass them in one object instead.
-    let passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +condition+ ', Received: ' +value_recieved;
-    let failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +condition+ ', Received: ' +value_recieved;
+    let element             = cauto_event_manager(selector, field_attr, null, '', true, true); //refactor the parameters, pass them in one object instead.
 
     if (Array.isArray(element)) {
+        
+        let is_displayed = false;
 
-        if (element[0] === element[1]) {
-            switch (condition) {
-
-            }
+        if ( element[1].isEqualNode(element[0][0]) ) {
+            is_displayed = true;
         } else {
-            return [
-                {
-                    status: 'failed',
-                    message: 'Runner can\'t interact the element'
+            is_displayed = false;
+        }
+
+        switch (condition) {
+            case 'is displayed':
+                if (is_displayed) {
+                    return [
+                        {
+                            status: 'passed',
+                            message: alias + ' is displayed'
+                        }
+                    ];
+                } else {
+
+                    let is_display  = jQuery(element[0]).css('display');
+                    let is_visible  = jQuery(element[0]).css('visibility');
+
+                    let is_virually_visible = true;
+
+                    if (is_display === 'none' || is_visible === 'hidden' || is_visible === 'collapse') {
+                        is_virually_visible = false;
+                    }
+
+                    if (is_virually_visible) {
+                        return [
+                            {
+                                status: 'failed',
+                                message: alias + ' is displayed but not interactable'
+                            }
+                        ];
+                    }
+                    
+
+
+                    return [
+                        {
+                            status: 'failed',
+                            message: alias + ' is hidden'
+                        }
+                    ];
                 }
-            ];
+                break;
+            case 'is hidden':
+                
+                if (!is_displayed) {
+
+                    let is_display  = jQuery(element[0]).css('display');
+                    let is_visible  = jQuery(element[0]).css('visibility');
+
+                    let is_virually_visible = true;
+
+                    if (is_display === 'none' || is_visible === 'hidden' || is_visible === 'collapse') {
+                        is_virually_visible = false;
+                    }
+
+                    if (is_virually_visible) {
+                        return [
+                            {
+                                status: 'failed',
+                                message: alias + ' is displayed but not interactable'
+                            }
+                        ];
+                    }
+
+                    return [
+                        {
+                            status: 'passed',
+                            message: alias + ' is hidden'
+                        }
+                    ];
+                } else {
+                    return [
+                        {
+                            status: 'failed',
+                            message: alias + ' is displayed'
+                        }
+                    ];
+                }
+                break;
         }
 
     } else {
@@ -52,3 +123,24 @@ var cauto_default_check_visibilty_step = (params = null) => {
 
 
 }
+
+
+/*
+                    let is_display  = jQuery(element[0]).css('display');
+                    let is_visible  = jQuery(element[0]).css('visibility');
+    
+                    let virtually_visible = true;
+    
+                    if ( is_display === 'none' || (is_visible === 'hidden' || is_visible === 'collapse') ) {
+                        virtually_visible = false;
+                    }
+    
+                    if (virtually_visible) {
+                        return [
+                            {
+                                status: 'failed',
+                                message: alias + ' is unreachable'
+                            }
+                        ];
+                    }
+                        */

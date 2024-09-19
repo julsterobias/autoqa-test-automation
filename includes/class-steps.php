@@ -573,9 +573,7 @@ class cauto_steps
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
                             'is displayed'      => __('Is Displayed', 'autoqa-test-automation'),
-                            'is hidden'         => __('Is Hidden', 'autoqa-test-automation'),
-                            'is exists'         => __('Is Exists', 'autoqa-test-automation'),
-                            'is not exists'   => __('Is Not Exists', 'autoqa-test-automation')
+                            'is hidden'         => __('Is Hidden', 'autoqa-test-automation')
                         ]
                     ]
                 ],
