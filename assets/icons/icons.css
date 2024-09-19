@@ -53,3 +53,6 @@
 .cauto-icon-manual:after {
     content: url('manual-input.svg');
 }
+.cauto-icon-element-count:after {
+    content: url('check-element-count.svg');
+}

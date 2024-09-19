@@ -94,7 +94,6 @@ var cauto_default_check_visibilty_step = (params = null) => {
                             }
                         ];
                     }
-
                     return [
                         {
                             status: 'passed',
@@ -123,24 +122,3 @@ var cauto_default_check_visibilty_step = (params = null) => {
 
 
 }
-
-
-/*
-                    let is_display  = jQuery(element[0]).css('display');
-                    let is_visible  = jQuery(element[0]).css('visibility');
-    
-                    let virtually_visible = true;
-    
-                    if ( is_display === 'none' || (is_visible === 'hidden' || is_visible === 'collapse') ) {
-                        virtually_visible = false;
-                    }
-    
-                    if (virtually_visible) {
-                        return [
-                            {
-                                status: 'failed',
-                                message: alias + ' is unreachable'
-                            }
-                        ];
-                    }
-                        */

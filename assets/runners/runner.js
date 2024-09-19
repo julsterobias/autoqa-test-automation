@@ -1,5 +1,6 @@
 var cauto_iam_leaving = false;
-var cauto_paused_data = [];
+var cauto_paused_data = []; //move this above
+var cauto_runner_delay = 3000; //move this above
 
 window.onbeforeunload = function(){
     cauto_iam_leaving = true;
@@ -16,15 +17,6 @@ jQuery(window).on('load',function(){
 
     jQuery('#cauto-close-runner-modal-result').click(function(){
         window.parent.close();
-    });
-
-    jQuery('#cauto-continue-run-runner').on('click', function(){
-        if (cauto_paused_data.length > 0) {
-            cauto_do_run_runner(cauto_paused_data[0], cauto_paused_data[1]);
-            jQuery('.cauto-runner-manual-ui').removeClass('active');
-        } else {
-            console.error('AutoQA Error: No payload found after the runner is paused. Please contact developer');
-        }
     });
 
 });
@@ -87,18 +79,17 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
                         let response    = window[callback](data.payload.params);
                         let index       = data.payload.index;
 
-                        if (response[0].message === 'pause') {
-                            index++;
-                            cauto_paused_data = [response, index];
-                            jQuery('.cauto-runner-manual-ui').addClass('active');
-                            return;
-                        }
-
                         if (response && !cauto_iam_leaving) {
                             index++;
+
+                            if (typeof response[0].pause !== 'undefined') {   
+                                cauto_paused_data = [response, index];
+                                return;
+                            }
+                            
                             setTimeout(function(){
                                 cauto_do_run_runner(response, index);
-                            }, 3000);
+                            }, cauto_runner_delay);
                             
                         } else {
                             console.error('AutoQA error: no response is found');
