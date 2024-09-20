@@ -22,6 +22,14 @@ var cauto_default_check_value_step = (params = null) => {
     let value_expected      = (params[4].value)? params[4].value : '';
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true);
+    if (Array.isArray(element) && element.length === 1) {
+        if (typeof element[0].status !== 'undefined') {
+            if (element[0].status === 'failed') {
+                return element;
+            }
+        }
+    }
+    
     let value_recieved      = jQuery(element).val();
     let passed_message      = 'Matched: 1, Expected ' + params[2].value + ' ' + params[3].value + ' "' + value_expected + '", Received: "' + value_recieved + '"';
     let failed_message      = 'Matched: 0, Expected ' + params[2].value + ' ' + params[3].value + ' "' + value_expected + '", Received: "' + value_recieved + '"';

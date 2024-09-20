@@ -282,7 +282,7 @@ const cauto_get_element_by_xpath = (xpath = '') => {
 
 const cauto_event_manager = (selector, field_attr, event_type, alias = '', other_events = false, return_element = false) => {
 
-    let selector_string = '#cauto-element-not-found';
+    /*let selector_string = '#cauto-element-not-found';
     let element = jQuery(selector_string);
 
 
@@ -309,7 +309,9 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
             element = cauto_get_element_by_xpath(selector);
             element = jQuery(element);
             break;
-    }
+    }*/
+
+    let element = cauto_prepare_element_selector(field_attr, selector);
 
     if (element.length === 0) {
         return [
@@ -414,4 +416,37 @@ const cauto_check_data_type = (value_expected, value_recieved, type_error) => {
     value_recieved = Number(value_recieved);
 
     return [value_expected, value_recieved];
+}
+
+const cauto_prepare_element_selector = (field_attr = '', selector = '') => {
+
+    let selector_string = '#cauto-element-not-found';
+    let element = jQuery(selector_string);
+    
+    switch(field_attr) {
+        case 'id': 
+            let id_ind = selector.substring(0, 1);
+            if (id_ind === '#') {
+                selector_string = selector;
+            } else {
+                selector_string = '#' + selector;
+            }
+            element = jQuery(selector_string);
+            break
+        case 'class':
+            let class_ind = selector.substring(0, 1);
+            if (class_ind === '.') {
+                selector_string = selector;
+            } else {
+                selector_string = '.' + selector;
+            }
+            element = jQuery(selector_string);
+            break;
+        case 'xpath':
+            element = cauto_get_element_by_xpath(selector);
+            element = jQuery(element);
+            break;
+    }
+
+    return element;
 }

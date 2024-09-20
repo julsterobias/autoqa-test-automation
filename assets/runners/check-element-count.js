@@ -1,13 +1,14 @@
 /**
  * 
  * 
- * cauto_default_check_attribute_step
+ * cauto_default_check_element_count_step
  * @since 1.0.0
  * 
  * 
  */
-var cauto_default_check_attribute_step = (params = null) => {
-    
+
+var cauto_default_check_element_count_step = (params = null) => {
+
     if (!params || !Array.isArray(params)) {
         return [
             {
@@ -16,105 +17,24 @@ var cauto_default_check_attribute_step = (params = null) => {
             }
         ];
     }
-        
-    let field_attr      = (params[0].value)? params[0].value : null;
-    let selector        = (params[1].value)? params[1].value : null;
-    let alias           = (params[2].value)? params[2].value : '';
-    let attr_to_check   = (params[3].value)? params[3].value : '';
-    let operation       = (params[4].value)? params[4].value : '';
-    let value_expected  = (params[5].value)? params[5].value : '';
-
-    let element             = cauto_event_manager(selector, field_attr, null, '', true);
-    if (Array.isArray(element) && element.length === 1) {
-        if (typeof element[0].status !== 'undefined') {
-            if (element[0].status === 'failed') {
-                return element;
-            }
-        }
-    }
     
-    let value_recieved      = jQuery(element).attr(attr_to_check);
-    let passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
-    let failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
-    let type_error          = 'Matched: 0, The value is not numeric for "' + params[3].value + '" operation';
+    let field_attr          = (params[0].value)? params[0].value : null;
+    let selector            = (params[1].value)? params[1].value : null;
+    let alias               = (params[2].value)? params[2].value : '';
+    let condition           = (params[3].value)? params[3].value : '';
+    let value_expected      = (params[4].value)? parseInt(params[4].value) : '';
 
-    let number_data_set     = [];
+    let element             = cauto_prepare_element_selector(field_attr, selector);
+
+    let value_recieved      = jQuery(element).length;
+    let passed_message      = 'Matched: 1, Expected ' + alias + ' ' + condition + ' "' + value_expected + '", Received: "' + value_recieved + '"';
+    let failed_message      = 'Matched: 0, Expected ' + alias + ' ' + condition + ' "' + value_expected + '", Received: "' + value_recieved + '"';
+    let type_error          = 'Matched: 0, The value is not numeric for "' + condition + '" operation';
 
     try {
-        
-        switch(params[4].value) {
+        switch(condition) {
             case 'is equals to':
                 if (value_expected === value_recieved) {
-                    return [
-                        {
-                            status: 'passed',
-                            message: passed_message
-                        }
-                    ];
-                } else {
-                    return [
-                        {
-                            status: 'failed',
-                            message: failed_message
-                        }
-                    ];
-                }
-                break;
-            case 'is not equals to':
-                if (value_expected !== value_recieved) {
-                    return [
-                        {
-                            status: 'passed',
-                            message: passed_message
-                        }
-                    ];
-                } else {
-                    return [
-                        {
-                            status: 'failed',
-                            message: failed_message
-                        }
-                    ];
-                }
-                break;
-            case 'is contains with':
-                if (value_recieved.search(value_expected) >= 0) {
-                    return [
-                        {
-                            status: 'passed',
-                            message: passed_message
-                        }
-                    ];
-                } else {
-                    return [
-                        {
-                            status: 'failed',
-                            message: failed_message
-                        }
-                    ];
-                }
-                break;
-            case 'is start with':
-                if (value_recieved.search(value_expected) === 0) {
-                    return [
-                        {
-                            status: 'passed',
-                            message: passed_message
-                        }
-                    ];
-                } else {
-                    return [
-                        {
-                            status: 'failed',
-                            message: failed_message
-                        }
-                    ];
-                }
-                break;
-            case 'is end with':
-                let expected_length = value_expected.length;
-                let substrin        = value_recieved.substring(value_recieved.length - expected_length);
-                if (substrin === value_expected) {
                     return [
                         {
                             status: 'passed',
@@ -238,7 +158,4 @@ var cauto_default_check_attribute_step = (params = null) => {
     } catch(error) {
         console.error('Check Title Runner: '+error);
     }
-
-
-
 }

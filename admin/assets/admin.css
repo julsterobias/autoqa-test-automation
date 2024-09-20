@@ -521,7 +521,7 @@ label.cauto-toggle-label:active:after {
 
 /* cuato drapper */
 .cauto_steps_builder{
-    min-height: 20px;
+    min-height: calc(100vh - 290px);
     border: 2px dashed #CCC;
     border-radius: 5px;
     margin-bottom: 0;

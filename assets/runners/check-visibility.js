@@ -24,6 +24,14 @@ var cauto_default_check_visibilty_step = (params = null) => {
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true, true); //refactor the parameters, pass them in one object instead.
 
+    if (Array.isArray(element) && element.length === 1) {
+        if (typeof element[0].status !== 'undefined') {
+            if (element[0].status === 'failed') {
+                return element;
+            }
+        }
+    }
+
     if (Array.isArray(element)) {
         
         let is_displayed = false;
