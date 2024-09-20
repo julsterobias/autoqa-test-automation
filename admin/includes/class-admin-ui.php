@@ -56,6 +56,8 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_step_controls', [$this, 'load_step_controls'], 10, 3);
         //load flow hidden field
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
+        //load variable popup
+        add_action('cauto_load_step_variables', [$this, 'load_step_variables_popup']);
 
     }
 
@@ -343,6 +345,11 @@ class cauto_admin_ui extends cauto_utils
     public function load_step_popup()
     {
         $this->get_view('popups/step-config', ['path' => 'admin']);
+    }
+
+    public function load_step_variables_popup()
+    {
+        $this->get_view('popups/variables', ['path' => 'admin']);
     }
 
     public function load_step_controls( $field_ids = [], $step_indicator = [])

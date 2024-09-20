@@ -68,7 +68,7 @@ jQuery(document).ready(function(){
     });
 
     jQuery('html').keyup(function(e){
-        if(e.keyCode == 46) {
+        if(e.keyCode == 46 || e.keyCode == 8) {
             jQuery('.cauto_steps_builder').find('li.active').remove();
         }
     });
@@ -154,6 +154,56 @@ jQuery(document).ready(function(){
         }
         
     }
+
+
+    let cauto_current_field_variable_call = null;
+    let cauto_my_cursor_last_pos = null;
+    jQuery('body').on('keyup', '.cauto-variable-step', function(event){
+
+        if (event.shiftKey && event.keyCode === 52) {
+            cauto_my_cursor_last_pos = event.target.selectionStart;
+            jQuery('#cauto-popup-runner-variables').show();
+            if (cauto_default_variables.length > 0) {
+                let cauto_step_values = [];
+                for (let x  in cauto_default_variables) {
+                    cauto_step_values.push(cauto_default_variables[x]);
+                }
+                if (cauto_step_values.length > 0) {
+                    jQuery('#cauto-variable-field-select').autocomplete({source: cauto_step_values});
+                }
+                jQuery('#cauto-variable-field-select').focus();
+                cauto_current_field_variable_call = jQuery(this);
+            }
+        }
+    });
+
+    jQuery('#cauto-variable-field-select').on('keyup', function(e){
+        if(e.which === 13) {
+            jQuery('#cauto-popup-runner-variables').hide();
+            if (cauto_current_field_variable_call) {
+                let cauto_variable_selected = jQuery('#cauto-variable-field-select').val();
+                let cauto_step_value_field  = jQuery(cauto_current_field_variable_call).val();
+                
+                //insert the generated code to previous cursor location
+                if (cauto_my_cursor_last_pos) {
+                    let con_part_left   = cauto_step_value_field.substr(0, cauto_my_cursor_last_pos);
+                    let con_part_right  = cauto_step_value_field.substr(cauto_my_cursor_last_pos, cauto_step_value_field.length);
+                    con_part_left = con_part_left + cauto_variable_selected;
+                    jQuery(cauto_current_field_variable_call).val(con_part_left + con_part_right);
+                }
+                jQuery('#cauto-variable-field-select').val('');
+            }
+        } else if (e.key === 'Escape') {
+            jQuery('#cauto-popup-runner-variables').hide();
+            jQuery('#cauto-variable-field-select').val('');
+        } 
+    });
+
+    jQuery('body').on('keydown', '.cauto-no-space-text-validation', function(event){
+        if (event.keyCode === 32) {
+            event.preventDefault();
+        }
+    });
     
 
 });

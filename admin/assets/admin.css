@@ -518,6 +518,31 @@ label.cauto-toggle-label:active:after {
     text-decoration: none;
 }
 
+.ui-widget-content li {
+    padding: 0 !important;
+}
+
+.ui-widget-content li .ui-menu-item-wrapper {
+    padding: 10px;
+}
+
+.ui-widget-content .ui-state-active {
+    background-color: #f25405; 
+    color: white;
+}
+
+#cauto-popup-runner-variables-content label {
+    font-size: 16px;
+}
+
+#cauto-popup-runner-variables-content input {
+    margin: 10px 0;
+}
+
+#cauto-popup-runner-variables-content i {
+    font-size: 13px;
+}
+
 
 /* cuato drapper */
 .cauto_steps_builder{

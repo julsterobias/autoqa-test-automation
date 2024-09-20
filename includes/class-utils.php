@@ -126,7 +126,10 @@ class cauto_utils
 
         if (!empty($data['value'])) {
             foreach ($data['value'] as $saved_data) {
-                if ($saved_data->class === $step_setttings['attr']['class'] && $saved_data->id === $step_setttings['attr']['id'] && $saved_data->field === $type) {
+                //I excluded the class from verification 
+                //commented code ---> $saved_data->class === $step_setttings['attr']['class'] && 
+                //does ID and type is enough?
+                if ($saved_data->id === $step_setttings['attr']['id'] && $saved_data->field === $type) {
                     $value = $saved_data->value;
                     break;
                 }

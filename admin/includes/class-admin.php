@@ -51,7 +51,7 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_setup_run_flow', [$this, 'setup_run_flow']);
         
         //load UI from ajax
-        add_action('wp_ajax_cauto_steps_ui', [$this, 'load_step_ui']);
+        //add_action('wp_ajax_cauto_steps_ui', [$this, 'load_step_ui']);
         //get flow details to edit
         add_action('wp_ajax_cauto_get_flow_details_to_edit', [$this, 'flow_details']);
         //get runner results
@@ -121,10 +121,22 @@ class cauto_admin extends cauto_utils
 
         wp_localize_script('cauto-admin-js', 'cauto_ajax', $cauto_variables);
 
+        $default_runner_variables = [ 
+            __('TimeStamp', 'autoqa-test-automation'),
+            __('Day', 'autoqa-test-automation'),
+            __('Month', 'autoqa-test-automation'),
+            __('Year', 'autoqa-test-automation'),
+            __('Time', 'autoqa-test-automation'),
+            __('Unix', 'autoqa-test-automation')
+        ];
+
+        wp_localize_script('cauto-admin-js', 'cauto_default_variables', $default_runner_variables);
+
         //jquery libraries
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-sortable');
         wp_enqueue_script('jquery-ui-draggable');
+        wp_enqueue_script('jquery-ui-autocomplete');
     }
 
 
