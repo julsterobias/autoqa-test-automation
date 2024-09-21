@@ -164,6 +164,8 @@ jQuery(document).ready(function(){
             cauto_my_cursor_last_pos = event.target.selectionStart;
             jQuery('#cauto-popup-runner-variables').show();
             if (cauto_default_variables.length > 0) {
+
+                //refactor this, generate and get the variables via ajax to get also the custom variables
                 let cauto_step_values = [];
                 for (let x  in cauto_default_variables) {
                     cauto_step_values.push(cauto_default_variables[x]);
@@ -171,6 +173,7 @@ jQuery(document).ready(function(){
                 if (cauto_step_values.length > 0) {
                     jQuery('#cauto-variable-field-select').autocomplete({source: cauto_step_values});
                 }
+
                 jQuery('#cauto-variable-field-select').focus();
                 cauto_current_field_variable_call = jQuery(this);
             }
@@ -214,9 +217,11 @@ const cauto_do_save_step = (source = null) => {
     let flow_id = jQuery('#cauto-flow-id').val();
 
     let step_data = [];
+
     jQuery('.cauto_steps_builder').find('li.cauto-steps-el').each(function(){
         let type        = jQuery(this).find('div').data('step');
         let field_data  = jQuery(this).find('input[type=hidden]').val(); 
+
         step_data.push({
             step: type,
             record: field_data

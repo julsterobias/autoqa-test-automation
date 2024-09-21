@@ -81,9 +81,12 @@ class cauto_admin extends cauto_utils
                 if (isset($_GET['reset'])) {
                     delete_transient('_cauto_running_flows');
                 }
-
+                echo get_transient('DataFromTest');
                 die();
             }
+
+
+           
 
         });
         

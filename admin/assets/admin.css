@@ -371,6 +371,7 @@ label.cauto-toggle-label:active:after {
 .cauto-builder-steps::-webkit-scrollbar-thumb {
   background-color: #f25405;
   outline: 0px solid slategrey;
+  border-radius: 10px;
 }
 
 .cauto-builder-steps ul {

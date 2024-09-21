@@ -44,7 +44,7 @@ class cauto_steps
                 'group'             => 'default',
                 'step_indicator'    => [
                     'selector'      => '#cauto_start_name',
-                    'describe_text' => __(' to open {#cauto_start_name}', 'autoqa-test-automation')
+                    'describe_text' => __(' - to open {#cauto_start_name}', 'autoqa-test-automation')
                 ],
                 'callback'          => 'cauto_default_do_start' 
             ],
@@ -104,7 +104,7 @@ class cauto_steps
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_click_alias',
-                    'describe_text' => __(' to {#cauto_step_click_alias}', 'autoqa-test-automation')
+                    'describe_text' => __(' - to {#cauto_step_click_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_click_step' 
             ],
@@ -148,7 +148,7 @@ class cauto_steps
                 'group'     => 'events',
                 'step_indicator'    => [
                     'selector'      => '#cauto_step_hover_alias',
-                    'describe_text' => __(' on {#cauto_step_hover_alias}', 'autoqa-test-automation')
+                    'describe_text' => __(' - on {#cauto_step_hover_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_hover_step' 
             ],
@@ -208,7 +208,7 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-text"></span>',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_set_text_selector_alias', '#cauto_step_set_text'],
-                    'describe_text' => __(' {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_text_step'  
             ],
@@ -260,7 +260,7 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-select"></span>',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_set_select_selector_alias', '#cauto_step_set_select'],
-                    'describe_text' => __(' {#cauto_step_set_select_selector_alias} to {#cauto_step_set_select}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_step_set_select_selector_alias} to {#cauto_step_set_select}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_select_step'  
             ],
@@ -308,7 +308,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_title_condition', '#cauto_field_check_title'],
-                    'describe_text' => __(' {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_check_title_condition} {#cauto_field_check_title}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_page_title_step'
             ],
@@ -375,7 +375,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_check_text_alias_selector', '#cauto_field_check_text_condition', '#cauto_field_check_text_value'],
-                    'describe_text' => __(' {#cauto_step_check_text_alias_selector} {#cauto_field_check_text_condition} {#cauto_field_check_text_value}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_step_check_text_alias_selector} {#cauto_field_check_text_condition} {#cauto_field_check_text_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_text_step'
             ],
@@ -446,7 +446,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_check_value_alias_selector', '#cauto_field_check_value_condition', '#cauto_field_check_value'],
-                    'describe_text' => __(' {#cauto_step_check_value_alias_selector} {#cauto_field_check_value_condition} {#cauto_field_check_value}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_step_check_value_alias_selector} {#cauto_field_check_value_condition} {#cauto_field_check_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_value_step'
             ],
@@ -526,7 +526,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_check_attribute_alias_selector', '#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
-                    'describe_text' => __(' {#cauto_step_check_attribute_alias_selector} {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_step_check_attribute_alias_selector} {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_attribute_step'
             ],
@@ -593,7 +593,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_el_count_alias_selector', '#cauto_field_check_el_count_condition', '#cauto_field_check_el_count_number_selector'],
-                    'describe_text' => __(' {#cauto_field_check_el_count_alias_selector} {#cauto_field_check_el_count_condition} {#cauto_field_check_el_count_number_selector}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_check_el_count_alias_selector} {#cauto_field_check_el_count_condition} {#cauto_field_check_el_count_number_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_element_count_step'
             ],
@@ -648,7 +648,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_visibility_alias_selector', '#cauto_field_check_visibilty_condition'],
-                    'describe_text' => __(' {#cauto_field_check_visibility_alias_selector} {#cauto_field_check_visibilty_condition}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_check_visibility_alias_selector} {#cauto_field_check_visibilty_condition}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_visibilty_step'
             ],
@@ -693,7 +693,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
-                    'describe_text' => __(' {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_visibilty_step'
             ],
@@ -720,7 +720,7 @@ class cauto_steps
                 'group'     => 'delay',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_delay_runner_for'],
-                    'describe_text' => __(' runner for {#cauto_field_delay_runner_for} second(s)', 'autoqa-test-automation')
+                    'describe_text' => __(' - runner for {#cauto_field_delay_runner_for} second(s)', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_delay_runner_for'
             ],
@@ -778,7 +778,7 @@ class cauto_steps
                 'group'     => 'delay',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_wait_to_alias_selector', '#cauto_step_wait_to_selector_action'],
-                    'describe_text' => __(' {#cauto_field_wait_to_alias_selector} {#cauto_step_wait_to_selector_action}', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_wait_to_alias_selector} {#cauto_step_wait_to_selector_action}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_wait_for_selector'
             ],
@@ -796,7 +796,7 @@ class cauto_steps
                             'id'    => 'cauto_field_store_data_from_variable_name_selector',
                             'class' => 'cauto-step-nodes cauto-store-data-from-variable-name-step cauto-field wide cauto-no-space-text-validation'
                         ],
-                        'label' => __('Name (space not allowed)', 'autoqa-test-automation')
+                        'label' => __('Name - space not allowed and make sure it\'s unique', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'select',
@@ -835,7 +835,7 @@ class cauto_steps
                 'group'     => 'data',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_store_data_from_attribute_selector', '#cauto_field_store_data_from_variable_name_selector'],
-                    'describe_text' => __(' Store {#cauto_field_store_data_from_attribute_selector} to {#cauto_field_store_data_from_variable_name_selector}', 'autoqa-test-automation')
+                    'describe_text' => __(' - Store {#cauto_field_store_data_from_attribute_selector} as {#cauto_field_store_data_from_variable_name_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_store_element_data'
             ],
@@ -866,7 +866,7 @@ class cauto_steps
                 'group'     => 'data',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_store_data_value_selector', '#cauto_field_store_data_name_selector'],
-                    'describe_text' => __(' Store the {#cauto_field_store_data_value_selector} to {#cauto_field_store_data_name_selector}', 'autoqa-test-automation')
+                    'describe_text' => __(' - Store the "{#cauto_field_store_data_value_selector}" as {#cauto_field_store_data_name_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_store_data'
             ],

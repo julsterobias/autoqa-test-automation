@@ -28,11 +28,13 @@ if ( !function_exists( 'add_filter' ) ){
 class cauto_runner extends cauto_utils
 {
 
-    private $flow_id                = 0;
+    private $flow_id                    = 0;
     
-    private $runner_id              = 0;
+    private $runner_id                  = 0;
     
-    private $flow_steps             = null;
+    private $flow_steps                 = null;
+
+    private int $data_transient_lifespan    = 3600; //one hour
 
     public function __construct()
     {
@@ -46,6 +48,9 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_prepare_runner', [$this, 'prepare_runner']);
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
         add_action('wp_ajax_cauto_do_stop_runner', [$this, 'stop_runner']);
+
+        //store data
+        add_action('wp_ajax_cauto_save_element_step_data_to_transient', [$this, 'store_element_data']);
     }
 
     public function load_global_assets()
@@ -442,6 +447,43 @@ class cauto_runner extends cauto_utils
 
         return $results;
 
+    }
+
+    public function store_element_data()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $data_name      = (isset($_POST['data_name']))? sanitize_text_field($_POST['data_name']) : null;
+        $data_to_store   = (isset($_POST['data_to_store']))? sanitize_text_field($_POST['data_to_store']) : null;
+        
+        if (!$data_name || !$data_to_store) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Required data is missing when storing to transient, contact the developer', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        //save data to stransient and will expire in one hour
+        set_transient( $data_name, $data_to_store, $this->data_transient_lifespan );
+
+        echo json_encode(
+            [
+                'status'    => 'success',
+                'message'   => ''
+            ]
+        );
+        exit();
     }
 
     

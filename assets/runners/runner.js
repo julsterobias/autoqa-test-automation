@@ -1,6 +1,7 @@
-var cauto_iam_leaving = false;
-var cauto_paused_data = []; //move this above
-var cauto_runner_delay = 3000; //move this above
+var cauto_iam_leaving                   = false;
+var cauto_paused_data                   = []; 
+var cauto_runner_delay                  = 3000; 
+var cauto_temp_runner_local_custom_data = [];
 
 window.onbeforeunload = function(){
     cauto_iam_leaving = true;
@@ -282,35 +283,6 @@ const cauto_get_element_by_xpath = (xpath = '') => {
 
 const cauto_event_manager = (selector, field_attr, event_type, alias = '', other_events = false, return_element = false) => {
 
-    /*let selector_string = '#cauto-element-not-found';
-    let element = jQuery(selector_string);
-
-
-    switch(field_attr) {
-        case 'id': 
-            let id_ind = selector.substring(0, 1);
-            if (id_ind === '#') {
-                selector_string = selector;
-            } else {
-                selector_string = '#' + selector;
-            }
-            element = jQuery(selector_string);
-            break
-        case 'class':
-            let class_ind = selector.substring(0, 1);
-            if (class_ind === '.') {
-                selector_string = selector;
-            } else {
-                selector_string = '.' + selector;
-            }
-            element = jQuery(selector_string);
-            break;
-        case 'xpath':
-            element = cauto_get_element_by_xpath(selector);
-            element = jQuery(element);
-            break;
-    }*/
-
     let element = cauto_prepare_element_selector(field_attr, selector);
 
     if (element.length === 0) {
@@ -449,4 +421,44 @@ const cauto_prepare_element_selector = (field_attr = '', selector = '') => {
     }
 
     return element;
+}
+
+const cauto_save_element_to_data_action = (data_name, data_to_store) => {
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_runner.ajaxurl,
+        data : {    
+            action: 'cauto_save_element_step_data_to_transient', 
+            nonce: cauto_runner.nonce,
+            data_name: data_name,
+            data_to_store: data_to_store
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    //continue the runner
+                    cauto_do_run_runner([
+                        {
+                            status: 'passed',
+                            message: '"'+data_to_store+'" is stored to data as '+data_name,
+                            pause: true
+                        }
+                    ], cauto_paused_data[1]);
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+        }
+    });
+}
+
+
+const cauto_translate_variable_in_steps_field = (value = null) => {
+    
+    if (value === '' || !value) return;
+
+
+
 }
