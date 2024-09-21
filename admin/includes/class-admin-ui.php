@@ -58,6 +58,10 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_load_flow_id', [$this, 'load_flow_hidden_field']);
         //load variable popup
         add_action('cauto_load_step_variables', [$this, 'load_step_variables_popup']);
+        //load delete confirmation
+        add_action('cauto_load_delete_confirm', [$this,'load_delete_confirm']);
+        //load delete buttons
+        add_action('cauto_load_delete_buttons', [$this, 'load_delete_button']);
 
     }
 
@@ -99,6 +103,15 @@ class cauto_admin_ui extends cauto_utils
                 ],
                 'label' =>  __('Help', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-sos"></span>'
+            ],
+            [
+                'field'  => 'button',
+                'attr'  => [
+                    "class" => "cauto-top-class cauto-button caut-ripple",
+                    "id"    => "cauto-settings"
+                ],
+                'label' =>  __('Settings', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-admin-generic"></span>'
             ],
            
         ];
@@ -283,6 +296,34 @@ class cauto_admin_ui extends cauto_utils
     }
 
 
+    public function load_delete_button($flow = null)
+    {
+        if (!$flow) return;
+
+        $buttons = [
+            [
+                'field'  => 'button',
+                'attr'  => [
+                    'id'    => 'cauto-delete-flow-confirm',
+                    'class' => 'cauto-top-class cauto-button primary caut-ripple'
+                ],
+                'label'     => __('Let the world burn, let\'s go!', 'autoqa-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-saved"></span>'
+            ],
+            [
+                'field' => 'button',
+                'attr'  => [
+                    "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
+                ],
+                'label' =>  __('Nope', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-no"></span>'
+            ]
+        ];
+        $run_button = $this->prepare_attr($buttons);
+        $this->render_ui(['buttons' => $run_button], 'buttons', []);
+    }
+
+
     public function load_step_ui()
     {
         if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
@@ -350,6 +391,11 @@ class cauto_admin_ui extends cauto_utils
     public function load_step_variables_popup()
     {
         $this->get_view('popups/variables', ['path' => 'admin']);
+    }
+
+    public function load_delete_confirm()
+    {
+        $this->get_view('popups/delete-flow', ['path' => 'admin']);
     }
 
     public function load_step_controls( $field_ids = [], $step_indicator = [])

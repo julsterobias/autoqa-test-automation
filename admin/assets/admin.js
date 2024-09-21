@@ -159,24 +159,11 @@ jQuery(document).ready(function(){
     let cauto_current_field_variable_call = null;
     let cauto_my_cursor_last_pos = null;
     jQuery('body').on('keyup', '.cauto-variable-step', function(event){
-
         if (event.shiftKey && event.keyCode === 52) {
             cauto_my_cursor_last_pos = event.target.selectionStart;
             jQuery('#cauto-popup-runner-variables').show();
-            if (cauto_default_variables.length > 0) {
-
-                //refactor this, generate and get the variables via ajax to get also the custom variables
-                let cauto_step_values = [];
-                for (let x  in cauto_default_variables) {
-                    cauto_step_values.push(cauto_default_variables[x]);
-                }
-                if (cauto_step_values.length > 0) {
-                    jQuery('#cauto-variable-field-select').autocomplete({source: cauto_step_values});
-                }
-
-                jQuery('#cauto-variable-field-select').focus();
-                cauto_current_field_variable_call = jQuery(this);
-            }
+            cauto_get_available_variables();
+            cauto_current_field_variable_call = jQuery(this);
         }
     });
 
@@ -206,6 +193,22 @@ jQuery(document).ready(function(){
         if (event.keyCode === 32) {
             event.preventDefault();
         }
+    });
+
+    jQuery('.cauto-flow-delete-flow').on('click', function(){
+        jQuery('#cauto-popup-delete-flow-confirmation').fadeIn(200);
+        let flow_id = jQuery(this).data('flow-id');
+        if (flow_id) {
+            jQuery('#cauto-delete-flow-confirm').attr('data-flow-id', flow_id);
+        }
+    });
+
+    jQuery('#cauto-delete-flow-confirm').on('click', function(){
+        let flow_id = jQuery(this).data('flow-id');
+        jQuery(this).prop('disabled', true);
+        jQuery(this).text('Deleting...');
+        jQuery('.cauto-cancel').prop('disabled', true);
+        cauto_do_delete_flow(flow_id);
     });
     
 
@@ -583,6 +586,71 @@ const cauto_load_more_runners = () => {
                 jQuery('.cauto-see-other-runners').remove();
             }
             jQuery('.cauto-see-other-runners span').removeClass('loading');
+            
+        }
+    });
+
+}
+
+const cauto_get_available_variables = () => {
+
+    jQuery('#cauto-variable-field-select').prop('disabled', true);
+    jQuery('#cauto-variable-field-select').attr('placeholder', 'Loading variables...');
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_load_runner_variables', 
+            nonce: cauto_ajax.nonce,
+            flow_id: cauto_ajax.flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    if (typeof data.variables !== 'undefined') {
+                        jQuery('#cauto-variable-field-select').autocomplete({source: data.variables});
+                    }
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }
+            jQuery('#cauto-variable-field-select').prop('disabled', false);
+            jQuery('#cauto-variable-field-select').focus();
+            jQuery('#cauto-variable-field-select').attr('placeholder', 'Search value name');
+            
+            
+        }
+    });
+}
+
+const cauto_do_delete_flow = ( flow_id = null ) => {
+
+    if (!flow_id) return;
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_delete_flow', 
+            nonce: cauto_ajax.nonce,
+            flow_id: flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    window.location = data.redirect;
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+
+                jQuery('#cauto-delete-flow-confirm').prop('disabled', false);
+                jQuery('#cauto-delete-flow-confirm').text('Let the world burn, let\'s go!');
+                jQuery('.cauto-cancel').prop('disabled', false);
+            }           
             
         }
     });

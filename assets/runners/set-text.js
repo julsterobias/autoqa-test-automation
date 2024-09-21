@@ -17,23 +17,22 @@ cauto_default_set_text_step = (params = null) => {
         ];
     }
 
-    let field_attr  = null;
-    let selector    = null;
-    let text        = null;
-    
-    if ( Array.isArray(params) ) {
-        field_attr = (params[0].value)? params[0].value : null;
-        if (!field_attr) {
-            return;
+    for (let x in params) {
+        if (typeof params[x].value === 'undefined') {
+            return [
+                {
+                    status: 'failed',
+                    message: cauto_step_text.unconfigured_msg
+                }
+            ];
+            break;
         }
-
-        selector = (params[1].value)? params[1].value : null;
-        if (!selector) {
-            return;
-        }
-
-        text = (params[3].value)? params[3].value : null;
     }
+
+    let field_attr  = params[0].value;
+    let selector    = params[1].value;
+
+    let text        = cauto_translate_variable_in_steps_field(params[3].value);
     
     //manage event and validate element existing
     //emulate human bahaviour by clicking the field before doing their intentions
@@ -69,7 +68,6 @@ cauto_default_set_text_step = (params = null) => {
             ];
         }
     } else {
-        console.log('22222');
         return element;
     }
 

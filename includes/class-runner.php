@@ -49,8 +49,6 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
         add_action('wp_ajax_cauto_do_stop_runner', [$this, 'stop_runner']);
 
-        //store data
-        add_action('wp_ajax_cauto_save_element_step_data_to_transient', [$this, 'store_element_data']);
     }
 
     public function load_global_assets()
@@ -96,7 +94,7 @@ class cauto_runner extends cauto_utils
                 'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                 'nonce'             => wp_create_nonce( $this->nonce )
             ]
-        );
+        );        
 
         $cauto_steps_text = [
             'element_not_found' => __('Matched 0: The element cannot be found.', 'autoqa-test-automation'),
@@ -152,11 +150,20 @@ class cauto_runner extends cauto_utils
             $this->get_view('part-runner-bar', ['steps' => $flow_steps]);
             $bars = ob_get_clean();
 
+
+            //add dollar
+            $available_variables = $this->runner_available_variables($flow_id);
+            if (!empty($available_variables)) {
+                foreach ($available_variables as $i => $variable) {
+                    $available_variables[$i] = '$'.$variable;
+                }
+            }
             echo json_encode(
                 [
                     'status'        => 'success',
                     'runner_steps'  => $available_runners,
-                    'bars'          => $bars
+                    'bars'          => $bars,
+                    'variables'     => $available_variables
                 ]
             );
 
@@ -448,44 +455,6 @@ class cauto_runner extends cauto_utils
         return $results;
 
     }
-
-    public function store_element_data()
-    {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
-                [
-                    'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
-                ]
-            );
-            exit();
-        }
-
-        $data_name      = (isset($_POST['data_name']))? sanitize_text_field($_POST['data_name']) : null;
-        $data_to_store   = (isset($_POST['data_to_store']))? sanitize_text_field($_POST['data_to_store']) : null;
-        
-        if (!$data_name || !$data_to_store) {
-            echo json_encode(
-                [
-                    'status'    => 'failed',
-                    'message'   => __('Required data is missing when storing to transient, contact the developer', 'autoqa-test-automation')
-                ]
-            );
-            exit();
-        }
-
-        //save data to stransient and will expire in one hour
-        set_transient( $data_name, $data_to_store, $this->data_transient_lifespan );
-
-        echo json_encode(
-            [
-                'status'    => 'success',
-                'message'   => ''
-            ]
-        );
-        exit();
-    }
-
     
 }
 

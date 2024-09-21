@@ -66,15 +66,15 @@ var cauto_default_store_element_data = (params = null) => {
             break;
     }
 
-    if (data_to_store) {
-        //save the data as transient and pause the runner
-        cauto_save_element_to_data_action(data_name, data_to_store);
-        return [
-            {
-                pause: true
-            }
-        ];
-    }
+    data_to_store = cauto_translate_variable_in_steps_field(data_to_store)
+    sessionStorage.setItem('$'+data_name, data_to_store);
+    
+    return [
+        {
+            status: 'passed',
+            message: '"' + data_to_store + '" is stored as "' + data_name + '"'
+        }
+    ];
 
     
 }

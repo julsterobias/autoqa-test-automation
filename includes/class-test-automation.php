@@ -185,7 +185,6 @@ class cauto_test_automation extends cauto_utils
     }
 
 
-
     public function start($runner_id = 0)
     {
         $this->set_running_flow(

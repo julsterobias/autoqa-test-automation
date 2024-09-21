@@ -29,16 +29,13 @@ var cauto_default_store_data = (params = null) => {
         }
     }
 
-
+    let data_to_store   = cauto_translate_variable_in_steps_field(params[1].value);
     let data_name       = params[0].value;
-    let value           = params[1].value;
-
-    //save the data as transient and pause the runner
-    cauto_save_element_to_data_action(data_name, value);
-    
+    sessionStorage.setItem('$'+data_name, data_to_store);
     return [
         {
-            pause: true
+            status: 'passed',
+            message: '"' + data_to_store + '" is stored as "' + data_name + '"'
         }
     ];
 

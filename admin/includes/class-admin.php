@@ -60,35 +60,10 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_load_runner_results', [$this, 'load_runner_steps']);
         //load saved runners
         add_action('cauto_load_runners', [$this, 'load_runners'], 10, 3);
-
-
-        add_action('admin_init', function(){
-            if (isset($_GET['reset'])) {
-                delete_post_meta($_GET['flow'], '_cauto_test_automation_steps');
-            }
-
-            if (isset($_GET['debug'])) {
-                if ((int)$_GET['debug'] === 1) {
-                    print_r(get_post_meta($_GET['post']));
-                    print_r(get_post_meta($_GET['post'], $_GET['debug'], true));
-                }
-                
-
-                if ($_GET['debug'] === 'running') {
-                    print_r(get_transient('_cauto_running_flows'));
-                }
-
-                if (isset($_GET['reset'])) {
-                    delete_transient('_cauto_running_flows');
-                }
-                echo get_transient('DataFromTest');
-                die();
-            }
-
-
-           
-
-        });
+        //load the default variables
+        add_action('wp_ajax_cauto_load_runner_variables', [$this, 'load_variables']);
+        //delete flow
+        add_action('wp_ajax_cauto_delete_flow', [$this, 'delete_flow']);
         
     }
 
@@ -123,17 +98,6 @@ class cauto_admin extends cauto_utils
         }
 
         wp_localize_script('cauto-admin-js', 'cauto_ajax', $cauto_variables);
-
-        $default_runner_variables = [ 
-            __('TimeStamp', 'autoqa-test-automation'),
-            __('Day', 'autoqa-test-automation'),
-            __('Month', 'autoqa-test-automation'),
-            __('Year', 'autoqa-test-automation'),
-            __('Time', 'autoqa-test-automation'),
-            __('Unix', 'autoqa-test-automation')
-        ];
-
-        wp_localize_script('cauto-admin-js', 'cauto_default_variables', $default_runner_variables);
 
         //jquery libraries
         wp_enqueue_script('jquery-ui-core');
@@ -788,6 +752,66 @@ class cauto_admin extends cauto_utils
 
         $results = apply_filters('autoqa-results-list', $results);
         $this->get_view('flow/results', ['path' => 'admin', 'results' => $results, 'runner_count' => $total, 'flow_id' => $flow_id]);
+    }
+
+    public function load_variables()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $default_runner_variables = $this->runner_available_variables($flow_id);
+
+        echo json_encode(
+            [
+                'status'    => 'success',
+                'variables' => $default_runner_variables
+            ]
+        );
+        exit();
+
+    }
+
+    public function delete_flow()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+
+        exit();
+
+        if ($flow_id) {
+            $deleted = wp_delete_post($flow_id);
+            if ($deleted) {
+
+                //delete runners
+
+
+                $url = get_admin_url('tools.php?page=cauto-test-tools');
+                echo json_encode([
+                    'status'    => 'success',
+                    'redirect'  => $url
+                ]);
+            }
+        }
+
+        exit();
+        
     }
 
     

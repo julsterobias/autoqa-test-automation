@@ -247,5 +247,45 @@ class cauto_utils
 
         return $adjectives[$adjectives_index].' '.$human_animal_nouns[$human_animal_nouns_index].' '.$person_nouns[$person_nouns_index];
     }
+
+    public function runner_available_variables($flow_id)
+    {
+        $default_runner_variables = [ 
+            __('FullDate', 'autoqa-test-automation'),
+            __('Date', 'autoqa-test-automation'),
+            __('Day', 'autoqa-test-automation'),
+            __('Month', 'autoqa-test-automation'),
+            __('Year', 'autoqa-test-automation'),
+            __('Time', 'autoqa-test-automation'),
+            __('Hour', 'autoqa-test-automation'),
+            __('Minute', 'autoqa-test-automation'),
+            __('Second', 'autoqa-test-automation'),
+            __('UnixTimeStamp', 'autoqa-test-automation')
+        ];
+
+        if ($flow_id) {
+            //get the steps and append the saved data steps to default variables
+            $flow_steps = get_post_meta($flow_id, $this->flow_steps_key, true);
+            if ($flow_steps) {
+
+                $get_steps  = cauto_steps::steps();
+                $data_steps = []; 
+                foreach ($get_steps as $type => $step) {
+                    if ($step['group'] === 'data') {
+                        $data_steps[] = $type;
+                    }
+                }
+                foreach ($flow_steps as $row_step) {
+                    if ( in_array($row_step['step'], $data_steps) ) {
+                        array_unshift($default_runner_variables, $row_step['record'][0]['value']);
+                    }
+                }
+                
+            }
+        }
+
+        return $default_runner_variables;
+    }
+
 }
 ?>

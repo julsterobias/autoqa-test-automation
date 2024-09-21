@@ -264,6 +264,39 @@ class cauto_steps
                 ],
                 'callback'  => 'cauto_default_set_select_step'  
             ],
+            'scroll-to'        => [
+                'label'         => __('Scroll', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_scroll_type',
+                            'class' => 'cauto-step-nodes cauto-check-select-step cauto-field'
+                        ],
+                        'label'     => __('Scroll To', 'autoqa-test-automation'),
+                        'options'   => [
+                            'down' => __('Down', 'autoqa-test-automation'),
+                            'up'    => __('Up', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_scroll_value',
+                            'type'  => 'number',
+                            'class' => 'cauto-step-nodes cauto-set-select-step cauto-field wide'
+                        ],
+                        'label'     => __('Distance (By Pixel)', 'autoqa-test-automation')
+                    ]
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-event-scroll"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_scroll_type', '#cauto_step_scroll_value'],
+                    'describe_text' => __(' - {#cauto_step_scroll_type} with distance of {#cauto_step_scroll_value}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_set_scroll_to_step'  
+            ],
             'reload' => [
                 'label'         => __('Reload', 'autoqa-test-automation'),
                 'settings'      => [],
@@ -660,7 +693,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_check_data_selector',
-                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide'
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide cauto-variable-step'
                         ],
                         'label' => __('Data Name', 'autoqa-test-automation')
                     ],
@@ -672,11 +705,15 @@ class cauto_steps
                         ],
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
-                            'equals to'         => __('Equals to', 'autoqa-test-automation'),
-                            'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
-                            'contains with'     => __('Contains with', 'autoqa-test-automation'),
-                            'start with'        => __('Start with', 'autoqa-test-automation'),
-                            'end with'          => __('End with', 'autoqa-test-automation')
+                            'is equals to'         => __('Is Equals to', 'autoqa-test-automation'),
+                            'is not equals to'     => __('Is Not equals to', 'autoqa-test-automation'),
+                            'is contains with'     => __('Is Contains with', 'autoqa-test-automation'),
+                            'is start with'        => __('Is Start with', 'autoqa-test-automation'),
+                            'is end with'          => __('Is End with', 'autoqa-test-automation'),
+                            'is less than'         => __('Is less than', 'autoqa-test-automation'),
+                            'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
                         ]
                     ],
                     [
@@ -692,10 +729,10 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-check-data"></span>',
                 'group'     => 'check',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_attribute_attr', '#cauto_field_check_attribute_condition','#cauto_field_check_attribute_value'],
-                    'describe_text' => __(' - {#cauto_field_check_attribute_attr} {#cauto_field_check_attribute_condition} {#cauto_field_check_attribute_value}', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_field_check_data_selector', '#cauto_field_check_data_condition','#cauto_field_check_data_value'],
+                    'describe_text' => __(' - {#cauto_field_check_data_selector} {#cauto_field_check_data_condition} "{#cauto_field_check_data_value}"', 'autoqa-test-automation')
                 ],
-                'callback'  => 'cauto_default_check_visibilty_step'
+                'callback'  => 'cauto_default_check_data_step'
             ],
             'delay_divider' => [
                 'divider'    => true,

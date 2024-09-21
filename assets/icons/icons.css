@@ -56,3 +56,7 @@
 .cauto-icon-element-count:after {
     content: url('check-element-count.svg');
 }
+
+.cauto-icon-event-scroll:after {
+    content: url('scroll.svg');
+}

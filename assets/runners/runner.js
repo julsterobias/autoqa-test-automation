@@ -1,7 +1,8 @@
 var cauto_iam_leaving                   = false;
 var cauto_paused_data                   = []; 
 var cauto_runner_delay                  = 3000; 
-var cauto_temp_runner_local_custom_data = [];
+var cauto_temp_runner_variables         = [];
+
 
 window.onbeforeunload = function(){
     cauto_iam_leaving = true;
@@ -38,6 +39,9 @@ const cauto_prepare_the_runner = () => {
             if (data) {
                 data = JSON.parse(data);
                 if (data.status === 'success') {
+                    if (typeof data.variables !== 'undefined') {
+                        cauto_temp_runner_variables = data.variables;
+                    }
                     cauto_runner['runner_steps'] = data.runner_steps;
                     setTimeout(function(){
                         jQuery('.cauto-runner-bars').addClass('cauto-runner-bars-'+cauto_running_flow_data.runner_id)
@@ -86,7 +90,7 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
                             if (typeof response[0].pause !== 'undefined') {   
                                 cauto_paused_data = [response, index];
                                 return;
-                            }
+                            }                            
                             
                             setTimeout(function(){
                                 cauto_do_run_runner(response, index);
@@ -109,7 +113,7 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
 
                         if (response && !cauto_iam_leaving) {
                             index++;
-
+                            
                             setTimeout(function(){
                                 cauto_do_run_runner(response, index, true);
                             }, 3000);
@@ -309,19 +313,23 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
     let middleX = position.left + (width / 2);
     let middleY = position.top + (height / 2);
 
+    let viewportX = middleX - window.scrollX;
+    let viewportY = middleY - window.scrollY;
+
     var event = new MouseEvent(event_type, {
         view: window,
         bubbles: true,
         cancelable: true,
-        clientX: middleX,
-        clientY: middleY 
+        clientX: viewportX,
+        clientY: viewportY 
     });
-    let toelement = document.elementFromPoint(middleX, middleY);
+    
+    let toelement = document.elementFromPoint(viewportX, viewportY);
 
     if (event_type) {
         if (toelement) {
             toelement.dispatchEvent(event);
-        }else {
+        } else {
             return [
                 {
                     status: 'failed',
@@ -344,6 +352,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
             ]
         }
     );
+
     //set markers
     let markerx = middleX - (30 / 2);
     let markery = middleY - (30 / 2);
@@ -372,6 +381,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
     ];
 
 }
+
 
 const cauto_check_data_type = (value_expected, value_recieved, type_error) => {
 
@@ -455,10 +465,66 @@ const cauto_save_element_to_data_action = (data_name, data_to_store) => {
 }
 
 
-const cauto_translate_variable_in_steps_field = (value = null) => {
+const cauto_translate_variable_in_steps_field = (data_to_store = null) => {
     
-    if (value === '' || !value) return;
+    if (data_to_store === '' || !data_to_store) return;
 
-
+    if (cauto_temp_runner_variables.length > 0) {
+        for (let x in cauto_temp_runner_variables) {
+            $converted_data = cauto_variable_date_data(cauto_temp_runner_variables[x]); 
+            data_to_store = data_to_store.replace(cauto_temp_runner_variables[x], $converted_data);
+        }
+    }
+    return data_to_store;
 
 }
+
+
+const cauto_variable_date_data = (type) => {
+
+    var date = new Date();
+    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+    var day = ('0' + date.getDate()).slice(-2);
+    var year = date.getFullYear();
+    var hours = ('0' + date.getHours()).slice(-2);
+    var minutes = ('0' + date.getMinutes()).slice(-2);
+    var seconds = ('0' + date.getSeconds()).slice(-2); 
+
+    switch(type) {
+        case '$FullDate':
+            return month + '-' + day + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+            break;
+        case '$Date':
+            return month + '-' + day + '-' + year;
+            break;
+        case '$Month':
+            return month;
+            break;
+        case '$Day':
+            return day;
+            break;
+        case '$Year':
+            return year;
+            break;
+        case '$Time':
+            return year;
+            break;
+        case '$Hour':
+            return hours;
+            break;
+        case '$Minute':
+            return minutes;
+            break;
+        case '$Second':
+            return seconds;
+            break;
+        case '$UnixTimeStamp':
+            return Math.floor(Date.now() / 1000);
+            break;
+        default:
+            return sessionStorage.getItem(type);
+            break;
+    }
+    
+}
+
