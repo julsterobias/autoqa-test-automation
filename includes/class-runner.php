@@ -88,6 +88,7 @@ class cauto_runner extends cauto_utils
             }
         }
 
+        $app_settings = get_option($this->settings_key);
         wp_enqueue_style('cauto-runner-css', CAUTO_PLUGIN_URL.'assets/runner.css' , [], null);
         wp_localize_script('cauto-runner-js', 'cauto_runner', 
             [
@@ -96,6 +97,7 @@ class cauto_runner extends cauto_utils
             ]
         );        
 
+        //translatable will go here
         $cauto_steps_text = [
             'element_not_found' => __('Matched 0: The element cannot be found.', 'autoqa-test-automation'),
             'multiple_element'  => __('Matched > 1: Multiple elements were found, but the specific event cannot be dispatched.', 'autoqa-test-automation'),

@@ -66,6 +66,8 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_load_settings', [$this, 'load_settings']);
         //load settings UI
         add_action('cauto_load_settings_fields', [$this, 'load_settings_fields']);
+        //load settings button
+        add_action('cauto_load_settings_buttons', [$this, 'load_settings_buttons']);
 
     }
 
@@ -217,7 +219,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
-                    "title"     => __('Run Flow', 'condecorun-test-automation'),
+                    "title"     => __('Run Flow', 'autoqa-test-automation'),
                     'data-id'   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     => null,
@@ -228,7 +230,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon",
                     "id"        => "cauto-save-flow",
-                    "title"     => __('Save Changes', 'condecorun-test-automation')
+                    "title"     => __('Save Changes', 'autoqa-test-automation')
                 ],
                 'label'     =>  null,
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
@@ -238,7 +240,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon cauto-flow-delete-flow",
                     "id"        => "cauto-delete-flow",
-                    "title"     => __('Delete Flow', 'condecorun-test-automation'),
+                    "title"     => __('Delete Flow', 'autoqa-test-automation'),
                     "data-flow-id"   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     =>  null,
@@ -267,7 +269,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon primary cauto-flow-run-flow",
-                    "title"         => __('Run Flow', 'condecorun-test-automation'),
+                    "title"         => __('Run Flow', 'autoqa-test-automation'),
                     "data-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -277,7 +279,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon cauto-flow-edit-flow",
-                    "title"         => __('Edit', 'condecorun-test-automation'),
+                    "title"         => __('Edit', 'autoqa-test-automation'),
                     "data-flow-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -287,7 +289,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon cauto-flow-delete-flow",
-                    "title"         => __('Delete', 'condecorun-test-automation'),
+                    "title"         => __('Delete', 'autoqa-test-automation'),
                     "data-flow-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -404,10 +406,11 @@ class cauto_admin_ui extends cauto_utils
 
     public function load_settings()
     {
-        $this->get_view('popups/settings', ['path' => 'admin']);
+        $settings = get_option($this->settings_key);
+        $this->get_view('popups/settings', ['path' => 'admin', 'settings' => $settings]);
     }
 
-    public function load_settings_fields () 
+    public function load_settings_fields ($data = []) 
     {
         $fields = [
             [
@@ -416,9 +419,9 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-settings-runner-duration',
                     'class' => 'cauto-field wide',
                     'type'  => 'number',
-                    'value' => 3000
+                    'value' => (isset($data['settings']['step-duration']))? $data['settings']['step-duration'] : 3000
                 ],
-                'label'     => __('Runner duration in seconds', 'autoqa-test-automation'),
+                'label'     => __('Runner duration in milliseconds(ms)', 'autoqa-test-automation'),
                 'icon'      => null
             ]
         ];
@@ -427,6 +430,36 @@ class cauto_admin_ui extends cauto_utils
         $fields = $this->prepare_attr($fields);
         $this->render_ui(['fields' => $fields], 'fields', []);
 
+    }
+
+    public function load_settings_buttons()
+    {
+        $buttons = [
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-top-class cauto-button primary caut-ripple",
+                    "id"        => "cauto-save-settings",
+                    "title"     => __('Save', 'autoqa-test-automation')
+                ],
+                'label'     => __('Save', 'autoqa-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-saved"></span>'
+            ],
+            [
+                'field'     => 'button',
+                'attr'      => [
+                    "class"     => "cauto-top-class cauto-button caut-ripple cauto-cancel",
+                    "id"        => "cauto-cancel-settings",
+                    "title"     => __('Cancel', 'autoqa-test-automation')
+                ],
+                'label'     => __('Cancel', 'autoqa-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-no"></span>'
+            ],
+            
+        ];
+        $buttons = apply_filters('cauto_settings_buttons_area', $buttons);
+        $buttons = $this->prepare_attr($buttons);
+        $this->render_ui(['buttons' => $buttons], 'buttons', []);
     }
 
     public function load_step_controls( $field_ids = [], $step_indicator = [])
@@ -438,9 +471,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
                     "id"        => "cauto-save-step",
-                    "title"     => __('Save Changes', 'condecorun-test-automation')
+                    "title"     => __('Save Changes', 'autoqa-test-automation')
                 ],
-                'label'     => __('Save', 'condecorun-test-automation'),
+                'label'     => __('Save', 'autoqa-test-automation'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -448,9 +481,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button caut-ripple cauto-cancel",
                     "id"        => "",
-                    "title"     => __('Abort Changes', 'condecorun-test-automation')
+                    "title"     => __('Abort Changes', 'autoqa-test-automation')
                 ],
-                'label'     =>  __('Cancel', 'condecorun-test-automation'),
+                'label'     =>  __('Cancel', 'autoqa-test-automation'),
                 'icon'      => '<span class="dashicons dashicons-no"></span>'
             ],
         ];
@@ -464,7 +497,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon",
                     "id"        => "cauto-delete-step",
-                    "title"     => __('Delete Step', 'condecorun-test-automation')
+                    "title"     => __('Delete Step', 'autoqa-test-automation')
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-trash"></span>'
@@ -474,10 +507,10 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button caut-ripple",
                     "id"        => "cauto-delete-step-confirm",
-                    "title"     => __('Detele', 'condecorun-test-automation')
+                    "title"     => __('Detele', 'autoqa-test-automation')
                 ],
-                'label'     => __("Yes", 'condecorun-test-automation'),
-                'text'      => __("You sure?", 'condecorun-test-automation'),
+                'label'     => __("Yes", 'autoqa-test-automation'),
+                'text'      => __("You sure?", 'autoqa-test-automation'),
                 'icon'      => null,
                 'hidden'    => true
             ]

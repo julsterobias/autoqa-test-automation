@@ -213,6 +213,12 @@ jQuery(document).ready(function(){
     jQuery('#cauto-settings').on('click', function(){
         jQuery('#cauto-popup-settings').fadeIn(200);
     });
+
+    jQuery('#cauto-save-settings').on('click', function(){
+        jQuery(this).prop('disabled', true);
+        jQuery('.cauto-cancel').prop('disabled', true);
+        cauto_do_save_settings();
+    });
     
 
 });
@@ -656,4 +662,30 @@ const cauto_do_delete_flow = ( flow_id = null ) => {
         }
     });
 
+}
+
+
+const cauto_do_save_settings = () => {
+
+    let duration = jQuery('#cauto-settings-runner-duration').val();
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_save_settings', 
+            nonce: cauto_ajax.nonce,
+            duration: duration
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+            }           
+        }
+    });
 }

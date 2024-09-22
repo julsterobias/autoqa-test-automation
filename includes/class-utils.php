@@ -38,6 +38,8 @@ class cauto_utils
 
     public string $flow_stop_on_error   = '_stop_on_error';
 
+    public string $settings_key         = 'autoqa-test-automation-options';
+
     /**
 	*
 	*

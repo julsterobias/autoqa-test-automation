@@ -29,9 +29,9 @@ if ( !function_exists( 'add_filter' ) ){
 class cauto_admin extends cauto_utils
 {
 
-    private int $see_more_max   = 10; 
+    private int $see_more_max       = 10; 
 
-    private $admin_ui           = null;
+    private $admin_ui               = null;
 
     public function __construct()
     {
@@ -64,6 +64,8 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_load_runner_variables', [$this, 'load_variables']);
         //delete flow
         add_action('wp_ajax_cauto_delete_flow', [$this, 'delete_flow']);
+        //save settings
+        add_action('wp_ajax_cauto_save_settings', [$this, 'cauto_save_settings']);
         
     }
 
@@ -819,6 +821,43 @@ class cauto_admin extends cauto_utils
 
         exit();
         
+    }
+
+    public function cauto_save_settings()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $duration = (isset($_POST['duration']))? $_POST['duration'] : null;
+        $options = get_option($this->settings_key);
+        if ($duration) {
+            if (!$options) {
+                update_option( $this->settings_key, ['step-duration' => $duration ] );
+            } else {
+                $options['step-duration'] = $duration;
+                update_option( $this->settings_key, $options );
+            }
+        } else {
+            if ($options) {
+                if (isset($options['step-duration'])) {
+                    unset($options['step-duration']);
+                    update_option( $this->settings_key, $options );
+                }
+            }
+        }
+
+        echo json_encode([
+            'status'    => 'success'
+        ]);
+
+        exit();
     }
 
     
