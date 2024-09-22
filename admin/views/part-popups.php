@@ -2,3 +2,4 @@
 <?php do_action('cauto_load_step_config'); ?>
 <?php do_action('cauto_load_step_variables'); ?>
 <?php do_action('cauto_load_delete_confirm'); ?>
+<?php do_action('cauto_load_settings'); ?>

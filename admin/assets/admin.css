@@ -1,3 +1,11 @@
+.autoqa-logo {
+    height: auto;
+    width: 120px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .cauto-settings-wrappers {
     padding-right: 20px;
     height: 100%;

@@ -62,6 +62,10 @@ class cauto_admin_ui extends cauto_utils
         add_action('cauto_load_delete_confirm', [$this,'load_delete_confirm']);
         //load delete buttons
         add_action('cauto_load_delete_buttons', [$this, 'load_delete_button']);
+        //settings
+        add_action('cauto_load_settings', [$this, 'load_settings']);
+        //load settings UI
+        add_action('cauto_load_settings_fields', [$this, 'load_settings_fields']);
 
     }
 
@@ -207,7 +211,6 @@ class cauto_admin_ui extends cauto_utils
 
     public function builder_buttons($data)
     {
-
         $controls = [
             [
                 'field'     => 'button',
@@ -215,7 +218,7 @@ class cauto_admin_ui extends cauto_utils
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
                     "title"     => __('Run Flow', 'condecorun-test-automation'),
-                    'data-id'   => ($_GET['flow'])? sanitize_text_field($_GET['flow']) : 0
+                    'data-id'   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-controls-play"></span>'
@@ -233,9 +236,10 @@ class cauto_admin_ui extends cauto_utils
             [
                 'field'     => 'button',
                 'attr'      => [
-                    "class"     => "cauto-button-icon",
+                    "class"     => "cauto-button-icon cauto-flow-delete-flow",
                     "id"        => "cauto-delete-flow",
-                    "title"     => __('Delete Flow', 'condecorun-test-automation')
+                    "title"     => __('Delete Flow', 'condecorun-test-automation'),
+                    "data-flow-id"   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     =>  null,
                 'icon'      => '<span class="dashicons dashicons-trash"></span>'
@@ -307,7 +311,7 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-delete-flow-confirm',
                     'class' => 'cauto-top-class cauto-button primary caut-ripple'
                 ],
-                'label'     => __('Let the world burn, let\'s go!', 'autoqa-test-automation'),
+                'label'     => __('Let the world burn, do it!', 'autoqa-test-automation'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -396,6 +400,33 @@ class cauto_admin_ui extends cauto_utils
     public function load_delete_confirm()
     {
         $this->get_view('popups/delete-flow', ['path' => 'admin']);
+    }
+
+    public function load_settings()
+    {
+        $this->get_view('popups/settings', ['path' => 'admin']);
+    }
+
+    public function load_settings_fields () 
+    {
+        $fields = [
+            [
+                'field'  => 'input',
+                'attr'  => [
+                    'id'    => 'cauto-settings-runner-duration',
+                    'class' => 'cauto-field wide',
+                    'type'  => 'number',
+                    'value' => 3000
+                ],
+                'label'     => __('Runner duration in seconds', 'autoqa-test-automation'),
+                'icon'      => null
+            ]
+        ];
+
+        $fields = apply_filters('cauto_settings_fields', $fields);
+        $fields = $this->prepare_attr($fields);
+        $this->render_ui(['fields' => $fields], 'fields', []);
+
     }
 
     public function load_step_controls( $field_ids = [], $step_indicator = [])

@@ -793,16 +793,23 @@ class cauto_admin extends cauto_utils
 
         $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
 
-        exit();
-
         if ($flow_id) {
+
+            $runners = new cauto_test_runners();
+            $runners->set_flow_id($flow_id);
+            $get_runners = $runners->get_runners();
+
+            if (!empty($get_runners)) {
+                foreach ($get_runners as $index => $runner) {
+                    wp_delete_post($runner['ID']);
+                }
+            }
+
             $deleted = wp_delete_post($flow_id);
+
             if ($deleted) {
 
-                //delete runners
-
-
-                $url = get_admin_url('tools.php?page=cauto-test-tools');
+                $url = admin_url('tools.php?page=cauto-test-tools');
                 echo json_encode([
                     'status'    => 'success',
                     'redirect'  => $url

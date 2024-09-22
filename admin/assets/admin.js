@@ -206,9 +206,12 @@ jQuery(document).ready(function(){
     jQuery('#cauto-delete-flow-confirm').on('click', function(){
         let flow_id = jQuery(this).data('flow-id');
         jQuery(this).prop('disabled', true);
-        jQuery(this).text('Deleting...');
         jQuery('.cauto-cancel').prop('disabled', true);
         cauto_do_delete_flow(flow_id);
+    });
+
+    jQuery('#cauto-settings').on('click', function(){
+        jQuery('#cauto-popup-settings').fadeIn(200);
     });
     
 
@@ -646,9 +649,7 @@ const cauto_do_delete_flow = ( flow_id = null ) => {
                 } else {
                     console.error('CAUTO ERROR: '+ data.message);
                 }
-
                 jQuery('#cauto-delete-flow-confirm').prop('disabled', false);
-                jQuery('#cauto-delete-flow-confirm').text('Let the world burn, let\'s go!');
                 jQuery('.cauto-cancel').prop('disabled', false);
             }           
             
