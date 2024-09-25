@@ -3,9 +3,7 @@ Automate the testing of your WordPress sites and plugins without the need for co
 
 ## Version: 1.0.0 Pre-Beta
 
-[Information](https://julsterobias.github.io/autoqa/)
-
-[Documentation](https://julsterobias.github.io/autoqa/documentation/)
+[Information](https://julsterobias.github.io/autoqa/) | [Documentation](https://julsterobias.github.io/autoqa/documentation/)
 
 Releases
 * 1.0.0 - Pre-Beta
