@@ -6,3 +6,10 @@ Automate the testing of your WordPress sites and plugins without the need for co
 [Information](https://julsterobias.github.io/autoqa/)
 
 [Documentation](https://julsterobias.github.io/autoqa/documentation/)
+
+Releases
+* 1.0.0 - Pre-Beta
+.. Flows
+.. Steps
+.. Runner
+.. Admin and runner UI
