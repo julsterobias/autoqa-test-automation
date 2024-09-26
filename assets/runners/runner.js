@@ -1,6 +1,6 @@
 var cauto_iam_leaving                   = false;
 var cauto_paused_data                   = []; 
-var cauto_runner_delay                  = 3000; 
+var cauto_runner_delay                  = cauto_runner.step_duration; 
 var cauto_temp_runner_variables         = [];
 
 
@@ -20,6 +20,8 @@ jQuery(window).on('load',function(){
     jQuery('#cauto-close-runner-modal-result').click(function(){
         window.parent.close();
     });
+
+    cauto_runner_delay = parseInt(cauto_runner_delay);
 
 });
 

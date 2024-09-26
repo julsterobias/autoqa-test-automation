@@ -17,6 +17,18 @@ var cauto_default_check_visibilty_step = (params = null) => {
         ];
     }
 
+    for (let x in params) {
+        if (typeof params[x].value === 'undefined') {
+            return [
+                {
+                    status: 'failed',
+                    message: cauto_step_text.unconfigured_msg
+                }
+            ];
+            break;
+        }
+    }
+
     let field_attr      = (params[0].value)? params[0].value : null;
     let selector        = (params[1].value)? params[1].value : null;
     let alias           = (params[2].value)? params[2].value : '';

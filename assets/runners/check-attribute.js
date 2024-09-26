@@ -16,6 +16,18 @@ var cauto_default_check_attribute_step = (params = null) => {
             }
         ];
     }
+
+    for (let x in params) {
+        if (typeof params[x].value === 'undefined') {
+            return [
+                {
+                    status: 'failed',
+                    message: cauto_step_text.unconfigured_msg
+                }
+            ];
+            break;
+        }
+    }
         
     let field_attr      = (params[0].value)? params[0].value : null;
     let selector        = (params[1].value)? params[1].value : null;
@@ -23,6 +35,7 @@ var cauto_default_check_attribute_step = (params = null) => {
     let attr_to_check   = (params[3].value)? params[3].value : '';
     let operation       = (params[4].value)? params[4].value : '';
     let value_expected  = (params[5].value)? params[5].value : '';
+    value_expected      = cauto_translate_variable_in_steps_field(value_expected);
 
     let element             = cauto_event_manager(selector, field_attr, null, '', true);
     if (Array.isArray(element) && element.length === 1) {

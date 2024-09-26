@@ -34,8 +34,6 @@ class cauto_runner extends cauto_utils
     
     private $flow_steps                 = null;
 
-    private int $data_transient_lifespan    = 3600; //one hour
-
     public function __construct()
     {
 
@@ -93,7 +91,8 @@ class cauto_runner extends cauto_utils
         wp_localize_script('cauto-runner-js', 'cauto_runner', 
             [
                 'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
-                'nonce'             => wp_create_nonce( $this->nonce )
+                'nonce'             => wp_create_nonce( $this->nonce ),
+                'step_duration'     => (isset($app_settings['step-duration']))? $app_settings['step-duration'] : 3000
             ]
         );        
 

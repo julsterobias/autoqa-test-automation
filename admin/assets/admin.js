@@ -219,6 +219,18 @@ jQuery(document).ready(function(){
         jQuery('.cauto-cancel').prop('disabled', true);
         cauto_do_save_settings();
     });
+
+    jQuery('body').on('click', '.cauto-send-keys-steps', function(){
+        let key         = jQuery(this).data('key');
+        let position    = jQuery('#cauto_step_send_keys')[0].selectionStart;
+        let get_existing_value = jQuery('#cauto_step_send_keys').val();
+        let keycode = '['+key+']';
+        let con_part_left   = get_existing_value.substr(0, position);
+        let con_part_right  = get_existing_value.substr(position, get_existing_value.length);
+        con_part_left = con_part_left + keycode;
+        jQuery('#cauto_step_send_keys').val(con_part_left + con_part_right);
+        jQuery('#cauto_step_send_keys').focus();
+    });
     
 
 });

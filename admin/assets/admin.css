@@ -835,3 +835,24 @@ label.cauto-toggle-label:active:after {
 .cuato-flow-status.failed {
     background-color: #f25405;
 }
+
+/* custom htmls for send keys*/
+.cauto-send-keys-buttons span{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color:#8c8c8c;
+    border-radius: 100px;
+    color: white;
+    margin-right: 3px;
+    cursor: pointer;
+    opacity: 0.7;
+    font-size: 12px;
+}
+
+.cauto-send-keys-buttons span:last-child {
+    margin-right: 0;
+}
+
+.cauto-send-keys-buttons span:hover {
+    opacity: 1;
+}

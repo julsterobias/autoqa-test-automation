@@ -56,7 +56,12 @@
 .cauto-icon-element-count:after {
     content: url('check-element-count.svg');
 }
-
 .cauto-icon-event-scroll:after {
     content: url('scroll.svg');
+}
+.cauto-icon-send-keys:after {
+    content: url('send-keys.svg');
+}
+.cauto-icon-empty-field:after {
+    content: url('backspace.svg');
 }

@@ -9,7 +9,7 @@
 
 var cauto_default_set_scroll_to_step = (params = null) => {
 
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',
