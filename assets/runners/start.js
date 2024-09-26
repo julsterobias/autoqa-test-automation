@@ -8,13 +8,25 @@
  */
 var cauto_default_do_start = (params = null) => {
 
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',
                 message: cauto_step_text.unconfigured_msg
             }
         ];
+    }
+
+    for (let x in params) {
+        if (typeof params[x].value === 'undefined') {
+            return [
+                {
+                    status: 'failed',
+                    message: cauto_step_text.unconfigured_msg
+                }
+            ];
+            break;
+        }
     }
 
     let current_url     = String(window.location.href);

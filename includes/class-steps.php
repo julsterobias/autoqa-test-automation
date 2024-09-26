@@ -94,7 +94,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_step_click_alias',
-                            'class' => 'cauto-step-nodes cauto-set-click-step cauto-field wide cauto-variable-step',
+                            'class' => 'cauto-step-nodes cauto-set-click-step cauto-field wide',
                             'placeholder'   => __('Element temporary name', 'autoqa-test-automation')
                         ],
                         'label'         => __('Field Name (Alias)', 'autoqa-test-automation')
@@ -138,7 +138,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_step_hover_alias',
-                            'class' => 'cauto-step-nodes cauto-set-hover-step cauto-field wide cauto-variable-step',
+                            'class' => 'cauto-step-nodes cauto-set-hover-step cauto-field wide',
                             'placeholder'   => __('Element temporary name', 'autoqa-test-automation')
                         ],
                         'label'         => __('Field Name', 'autoqa-test-automation')
@@ -190,7 +190,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_set_text_selector_alias',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field wide'
                         ],
                         'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -211,6 +211,105 @@ class cauto_steps
                     'describe_text' => __(' - {#cauto_step_set_text_selector_alias} to {#cauto_step_set_text}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_text_step'  
+            ],
+            'send-keys'          => [
+                'label'         => __('Send Keys', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_send_keys_selector_type',
+                            'class' => 'cauto-step-nodes cauto-send-keys-step cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_send_keys_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-send-keys-step cauto-field wide'
+                        ],
+                        'label'     => __('Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_send_keys_selector_alias',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-send-keys-step cauto-field wide'
+                        ],
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_send_keys',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-send-keys-step cauto-field wide'
+                        ],
+                        'label'     => __('Text', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'custom',
+                        'html'  => '<div class="cauto-send-keys-buttons"><span class="cauto-send-keys-steps" data-key="enter">Enter</span><span class="cauto-send-keys-steps" data-key="tab">Tab</span></div>'
+                    ]
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-send-keys"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_send_keys', '#cauto_step_send_keys_selector_alias'],
+                    'describe_text' => __(' - "{#cauto_step_send_keys}" to {#cauto_step_send_keys_selector_alias}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_send_keys_step'  
+            ],
+            'empty-field'          => [
+                'label'         => __('Empty Field', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_empty_field_selector_type',
+                            'class' => 'cauto-step-nodes cauto-set-text-step cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_empty_field_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-empty-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_empty_field_selector_alias',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-empty-text-step cauto-field wide'
+                        ],
+                        'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
+                    ]
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-empty-field"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_empty_field_selector_alias'],
+                    'describe_text' => __(' - {#cauto_step_empty_field_selector_alias}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_empty_field_step'  
             ],
             'set-select'        => [
                 'label'         => __('Set Select', 'autoqa-test-automation'),
@@ -242,7 +341,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_set_select_selector_alias',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-set-select-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-set-select-step cauto-field wide'
                         ],
                         'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -375,7 +474,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_check_text_alias_selector',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-check-text-alias-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-check-text-alias-step cauto-field wide'
                         ],
                         'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -442,7 +541,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_check_value_alias_selector',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-set-value-alias-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-set-value-alias-step cauto-field wide'
                         ],
                         'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -513,7 +612,7 @@ class cauto_steps
                         'attr'  => [
                             'id'    => 'cauto_step_check_attribute_alias_selector',
                             'type'  => 'text',
-                            'class' => 'cauto-step-nodes cauto-set-attribute-alias-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-set-attribute-alias-step cauto-field wide'
                         ],
                         'label'     => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -593,7 +692,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_check_el_count_alias_selector',
-                            'class' => 'cauto-step-nodes cauto-check-alias-el-count-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-check-alias-el-count-step cauto-field wide'
                         ],
                         'label' => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -660,7 +759,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_check_visibility_alias_selector',
-                            'class' => 'cauto-step-nodes cauto-check-alias-visibility-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-check-alias-visibility-step cauto-field wide'
                         ],
                         'label' => __('Field Name (Alias)', 'autoqa-test-automation')
                     ],
@@ -693,7 +792,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_check_data_selector',
-                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide'
                         ],
                         'label' => __('Data Name', 'autoqa-test-automation')
                     ],
@@ -791,7 +890,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_wait_to_alias_selector',
-                            'class' => 'cauto-step-nodes cauto-wait-to-step cauto-field wide cauto-variable-step'
+                            'class' => 'cauto-step-nodes cauto-wait-to-step cauto-field wide'
                         ],
                         'label' => __('Element Name (Alias)', 'autoqa-test-automation')
                     ],

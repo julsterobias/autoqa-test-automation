@@ -9,7 +9,7 @@
 
 var cauto_default_store_element_data = (params = null) => {
 
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',

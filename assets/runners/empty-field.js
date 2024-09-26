@@ -1,12 +1,13 @@
 /**
  * 
  * 
- * cauto_default_set_text_step
+ * cauto_default_empty_field_step
  * @since 1.0.0
  * 
  * 
  */
-cauto_default_set_text_step = (params = null) => {
+
+var cauto_default_empty_field_step = (params = null) => {
 
     if (!params || !Array.isArray(params)) {
         return [
@@ -29,35 +30,25 @@ cauto_default_set_text_step = (params = null) => {
         }
     }
 
-    let field_attr  = params[0].value;
-    let selector    = params[1].value;
-
-    let text        = cauto_translate_variable_in_steps_field(params[3].value);
+    let field_attr      = params[0].value;
+    let selector        = params[1].value;
+    let alias           = params[2].value;
     
-    //manage event and validate element existing
-    //emulate human bahaviour by clicking the field before doing their intentions
     let element =  cauto_event_manager(selector, field_attr, 'click', '', true);
 
     if (!Array.isArray(element)) {
-        if (jQuery(element).length > 0) {
-            jQuery(element).val(text);
 
-            if (jQuery(element).val() === text) {
-                return [
-                    {
-                        status: 'passed',
-                        message: '"' + text + '" is set to ' + params[2].value
-                    }
-                ];
-            } else {
-                return [
-                    {
-                        status: 'failed',
-                        message: 'Action failed: Runner cannot set "' + text + '" to ' + params[2].value
-                    }
-                ];
-            }
-            
+        if (jQuery(element).length > 0) {
+
+            jQuery(element).val('');
+
+            return [
+                {
+                    status: 'passed',
+                    message: alias + ' is emptied'
+                }
+            ];
+
         } else {
             //redundant fail safe
             return [
@@ -67,6 +58,7 @@ cauto_default_set_text_step = (params = null) => {
                 }
             ];
         }
+
     } else {
         return element;
     }

@@ -8,7 +8,7 @@
 
 var cauto_default_check_data_step = (params = null) => {
 
-    if (!params) {
+    if (!params || !Array.isArray(params)) {
         return [
             {
                 status: 'failed',
@@ -31,7 +31,7 @@ var cauto_default_check_data_step = (params = null) => {
 
     let data_name       = params[0].value;
     let condition       = params[1].value;
-    let value_expected  = params[2].value;
+    let value_expected  = cauto_translate_variable_in_steps_field(params[2].value);
 
     let value_recieved  = sessionStorage.getItem(data_name);
     let passed_message      = 'Matched: 1, Expected: '+data_name+ ' ' + condition + ' "' + value_expected + '", Received: "'+ value_recieved + '"';
