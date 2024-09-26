@@ -41,4 +41,4 @@ Designed to efficiently handle and execute each step of your flow in sequence. I
 - Element Data - Stores the value or attribute of an element into a data variable for later use.
 - Store Data - Allows users to store dynamic data into a variable, which can include system-generated values like date and timestamp, or data extracted from elements.
 
-[Website] https://julsterobias.github.io/autoqa/ | [Documentation] https://julsterobias.github.io/autoqa/documentation
+[Website](https://julsterobias.github.io/autoqa/) | [Documentation](https://julsterobias.github.io/autoqa/documentation)
