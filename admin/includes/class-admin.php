@@ -66,6 +66,31 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_delete_flow', [$this, 'delete_flow']);
         //save settings
         add_action('wp_ajax_cauto_save_settings', [$this, 'cauto_save_settings']);
+
+
+        if (isset($_GET['reset'])) {
+            switch($_GET['reset'])
+            {
+                case 'running-flows':
+                    delete_transient('_cauto_running_flows');
+                    break;
+            }
+            die();
+        }
+
+        if (isset($_GET['debug'])) {
+            switch($_GET['debug'])
+            {
+                case 'running-flows':
+                    print_r(get_transient('_cauto_running_flows'));
+                    break;
+                case 'runner':
+                    print_r(get_post_meta(1049));
+                    break;
+            }
+            
+            die();
+        }
         
     }
 
@@ -358,19 +383,21 @@ class cauto_admin extends cauto_utils
                 $step_data[$index] = $step;
             }
         } 
+
+        $step_data = apply_filters('autoqa_steps_before_save_filter', $step_data, $flow_id);
         
         if ($step_data && !empty($step_data) && $flow_id) {
 
-            do_action('cauto_before_save_steps',$flow_id, $step_data);
+            do_action('autoqa_before_save_steps_action', $step_data, $flow_id);
             //move to class
             update_post_meta($flow_id, $this->flow_steps_key, $step_data);
-            do_action('cauto_after_save_steps',$flow_id, $step_data);
 
-            echo json_encode(
-                [
-                    'status'    => 'success'
-                ]
-            );
+            do_action('autoqa_after_save_steps_action', $step_data, $flow_id);
+
+            echo json_encode([
+                'status'    => 'success',
+                'message'   => ''
+            ]);
         }
 
         exit();
