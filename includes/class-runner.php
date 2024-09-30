@@ -72,8 +72,6 @@ class cauto_runner extends cauto_utils
         wp_register_script('cauto-runner-js', CAUTO_PLUGIN_URL.'assets/runners/runner.js', ['jquery'], null );
         wp_enqueue_script('cauto-runner-js');
         
-        //we load the assets regardless to the current status of runner
-        //find a way to clear the flow after completing the run time. Maybe during the run is completed.
         if (isset($this->flow_steps)) {
             foreach ($this->flow_steps as $steps) {
                 if (!empty($steps)) {
@@ -213,10 +211,12 @@ class cauto_runner extends cauto_utils
 
             if ( $logged_user && current_user_can('administrator') && !empty($running_flows)) {
 
-                error_log(print_r($running_flows, true));
-
                 //let's load all available steps. In the future find a solution on how to load the steps of the running flow.
-                $flows = $cauto_test->get_flows();
+                $running_flows_ids = [];
+                foreach ($running_flows as $flow_id => $flows) {
+                    $running_flows_ids[] = $flow_id;
+                }
+                $flows = $cauto_test->get_flows( ['post__in' => $running_flows_ids] );
                 if (!empty($flows)) {
                     foreach ($flows as $flow) {
                         $this->flow_steps[] = get_post_meta($flow->ID, $this->flow_steps_key, true);

@@ -628,6 +628,10 @@ label.cauto-toggle-label:active:after {
     background-color: #fffcad;
 }
 
+.cauto-step-group_wordpress .cauto-step-element {
+    background-color: #F7F7F7;
+}
+
 .cauto_step_set_wide {
     width: auto !important;
 }

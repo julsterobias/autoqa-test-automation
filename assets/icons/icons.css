@@ -65,3 +65,6 @@
 .cauto-icon-empty-field:after {
     content: url('backspace.svg');
 }
+.cauto-icon-wp:after {
+    content: url('wp.svg');
+}

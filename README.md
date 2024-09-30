@@ -1,9 +1,11 @@
-# Ver 0.9.1 Pre-Beta
+# Ver 0.9.2 Pre-Beta
 
 # AutoQA
 Automate the testing of your WordPress sites and plugins without the need for coding.
 
 AutoQA is a simple automation plugin designed to improve your regression testing process, reducing testing time by up to 70%. It comes equipped with a variety of useful testing steps and a WordPress-specific test runner, ensuring seamless integration and efficient performance within your WordPress environment.
+
+[Website](https://julsterobias.github.io/autoqa/) | [Documentation](https://julsterobias.github.io/autoqa/documentation)
 
 ## Flows
 Each flow acts as a customizable test case, allowing users to simulate and verify various processes within their application. A flow consists of a series of steps, which represent specific actions or interactions. Whether it's a simple user journey or a complex workflow, this feature enables detailed testing by breaking down tasks into manageable steps, ensuring that every aspect of your process works seamlessly from start to finish.
@@ -40,5 +42,3 @@ Designed to efficiently handle and execute each step of your flow in sequence. I
 ### Data
 - Element Data - Stores the value or attribute of an element into a data variable for later use.
 - Store Data - Allows users to store dynamic data into a variable, which can include system-generated values like date and timestamp, or data extracted from elements.
-
-[Website](https://julsterobias.github.io/autoqa/) | [Documentation](https://julsterobias.github.io/autoqa/documentation)

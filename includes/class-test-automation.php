@@ -72,13 +72,14 @@ class cauto_test_automation extends cauto_utils
         $expiration_time = 24 * HOUR_IN_SECONDS;
 
         if (empty($running_flow)) {
+            delete_transient($this->session_runner_name);
+        } else {
+
             if ($update_after_stop) {
                 set_transient( $this->session_runner_name, $running_flow, $expiration_time);
-            } else {
-                delete_transient($this->session_runner_name);
+                return;
             }
-            
-        } else {
+
             $running_saved_flow = get_transient($this->session_runner_name);
             $running_saved_flow = ($running_saved_flow)? $running_saved_flow : [];
             $running_saved_flow[$running_flow['flow_id']] = $running_flow['runner_id'];

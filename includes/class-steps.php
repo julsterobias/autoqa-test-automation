@@ -1005,8 +1005,7 @@ class cauto_steps
                     'describe_text' => __(' - Store the "{#cauto_field_store_data_value_selector}" as {#cauto_field_store_data_name_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_store_data'
-            ],
-            
+            ],            
         ];
 
         return apply_filters('autoqa-steps', $steps);
