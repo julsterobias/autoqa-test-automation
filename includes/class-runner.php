@@ -34,6 +34,8 @@ class cauto_runner extends cauto_utils
     
     private $flow_steps                 = null;
 
+    private array $running_flows        = [];
+
     public function __construct()
     {
 
@@ -45,7 +47,6 @@ class cauto_runner extends cauto_utils
 
         add_action('wp_ajax_cauto_prepare_runner', [$this, 'prepare_runner']);
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
-        add_action('wp_ajax_cauto_do_stop_runner', [$this, 'stop_runner']);
 
     }
 
@@ -71,8 +72,6 @@ class cauto_runner extends cauto_utils
         wp_register_script('cauto-runner-js', CAUTO_PLUGIN_URL.'assets/runners/runner.js', ['jquery'], null );
         wp_enqueue_script('cauto-runner-js');
         
-        //we load the assets regardless to the current status of runner
-        //find a way to clear the flow after completing the run time. Maybe during the run is completed.
         if (isset($this->flow_steps)) {
             foreach ($this->flow_steps as $steps) {
                 if (!empty($steps)) {
@@ -128,7 +127,8 @@ class cauto_runner extends cauto_utils
         $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
 
         if ($flow_id && $runner_id) {
-            $runner = new cauto_test_runners($this->runner_id);
+
+            $runner = new cauto_test_runners($runner_id);
             $runner->set_flow_id($flow_id);
             $runner_steps = $runner->get_runner_flow_step();
 
@@ -207,15 +207,16 @@ class cauto_runner extends cauto_utils
 
             $logged_user    = get_current_user_id();
             $cauto_test     = new cauto_test_automation();
-            $running_flows  = $cauto_test->get_running_flow(); //clean this up. I don't think we still need this?????
+            $running_flows  = $cauto_test->get_running_flow();
 
             if ( $logged_user && current_user_can('administrator') && !empty($running_flows)) {
 
-                $this->flow_id      = $running_flows['flow_id'];
-                $this->runner_id    = $running_flows['runner_id'];
-
                 //let's load all available steps. In the future find a solution on how to load the steps of the running flow.
-                $flows = $cauto_test->get_flows();
+                $running_flows_ids = [];
+                foreach ($running_flows as $flow_id => $flows) {
+                    $running_flows_ids[] = $flow_id;
+                }
+                $flows = $cauto_test->get_flows( ['post__in' => $running_flows_ids] );
                 if (!empty($flows)) {
                     foreach ($flows as $flow) {
                         $this->flow_steps[] = get_post_meta($flow->ID, $this->flow_steps_key, true);
@@ -277,7 +278,13 @@ class cauto_runner extends cauto_utils
                 $temp_index = $step_index;
                 $temp_index--;
                 $runner->update_runner_steps($temp_index, $response);
-                $this->return_last_step($runner->get_runner_flow_step());
+                $this->return_last_step(
+                    [
+                        'payload'   => $runner->get_runner_flow_step(),
+                        'flow_id'   => $flow_id,
+                        'runner_id' => $runner_id
+                    ]
+                );
                 exit();
             }
 
@@ -304,7 +311,13 @@ class cauto_runner extends cauto_utils
                 }
 
                 if ( $started_steps >= count($runner_steps) ) {
-                    $this->return_last_step($runner->get_runner_flow_step()); //uncomment this after the plotter is implemented
+                    $this->return_last_step(
+                        [
+                            'payload'   => $runner->get_runner_flow_step(),
+                            'flow_id'   => $flow_id,
+                            'runner_id' => $runner_id
+                        ]
+                    ); //uncomment this after the plotter is implemented
                     exit();
                 }
 
@@ -318,7 +331,13 @@ class cauto_runner extends cauto_utils
                     $started_steps++;
 
                     if ($started_steps >= count($runner_steps)) {
-                        $this->return_last_step($runner->get_runner_flow_step()); //uncomment this after the plotter is implemented
+                        $this->return_last_step(
+                            [
+                                'payload'   => $runner->get_runner_flow_step(),
+                                'flow_id'   => $flow_id,
+                                'runner_id' => $runner_id
+                            ]
+                        ); //uncomment this after the plotter is implemented
                         exit();
                     }
 
@@ -380,7 +399,13 @@ class cauto_runner extends cauto_utils
                     } 
                 }
                 if ($abort) {
-                    $this->return_last_step($runner_steps);
+                    $this->return_last_step(
+                        [
+                            'payload'   => $runner_steps,
+                            'flow_id'   => $flow_id,
+                            'runner_id' => $runner_id
+                        ]
+                    );
                     exit();
                 }
             }
@@ -413,33 +438,18 @@ class cauto_runner extends cauto_utils
         exit();
     }
 
-    public function stop_runner()
+    public function return_last_step($data = [])
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
-                [
-                    'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
-                ]
-            );
-            exit();
-        }
+        //stop the running flow
+        $flow_class = new cauto_test_automation($data['flow_id']);
+        $flow_class->stop($data['runner_id']);
 
-        echo json_encode([
-            'status'       => 'success',
-            'message'      => null 
-        ]);
-
-        exit();
-    }
-
-    public function return_last_step($payload = [])
-    {
         echo json_encode([
             'status'       => 'completed',
-            'payload'      => $payload,
+            'payload'      => $data['payload'],
             'message'      => null
         ]);
+
     }
 
     public function extract_results($steps = []) 

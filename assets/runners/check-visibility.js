@@ -83,8 +83,6 @@ var cauto_default_check_visibilty_step = (params = null) => {
                         ];
                     }
                     
-
-
                     return [
                         {
                             status: 'failed',

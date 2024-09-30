@@ -149,7 +149,7 @@ class cauto_test_runners extends cauto_utils
                 $steps[] = [
                     'ID'        => $runner->ID,
                     'name'      => $runner->post_title,
-                    'date'      => get_the_date('M d, Y h:i A', $runner->ID),
+                    'date'      => get_the_date(get_option('date_format').' '.get_option('time_format'), $runner->ID),
                     'steps'     => $run_steps
                 ];
             }
@@ -159,8 +159,6 @@ class cauto_test_runners extends cauto_utils
 
     }
 
-    //This is questionable
-    //why I am doing this?
     public function check_flow()
     {
         $flow       = get_post_meta($this->id, $this->meta_flow_id_key, true);

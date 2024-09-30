@@ -17,8 +17,13 @@ jQuery(window).on('load',function(){
         }
     }
 
-    jQuery('#cauto-close-runner-modal-result').click(function(){
+    jQuery('#cauto-close-runner-modal-result').on('click',function(){
         window.parent.close();
+    });
+
+    jQuery('#cauto-close-runner-result-result').on('click', function(){
+        jQuery('.cauto-runner-completed').hide();
+        jQuery('.cuato-runner-indicator').removeClass('ended');
     });
 
     cauto_runner_delay = parseInt(cauto_runner_delay);
