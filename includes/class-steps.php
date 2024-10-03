@@ -1005,7 +1005,179 @@ class cauto_steps
                     'describe_text' => __(' - Store the "{#cauto_field_store_data_value_selector}" as {#cauto_field_store_data_name_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_store_data'
-            ],            
+            ],
+            'wp_divider' => [
+                'divider'    => true,
+                'label'     => __('Wordpress', 'autoqa-test-automation'), 
+            ],
+            'wp-check-meta-value' => [
+                'label'     => __('Check Meta', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'        => 'cauto_field_check_meta_post_selector',
+                            'class'     => 'cauto-step-nodes cauto-meta-key-post cauto-field wide cauto-select2-field'
+                        ],
+                        'select2'   => ['post', 'page', 'autoqa-automation'],
+                        'label' => __('Post', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_meta_key_selector',
+                            'class' => 'cauto-step-nodes cauto-meta-key-step cauto-field wide'
+                        ],
+                        'label' => __('Meta Key', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_meta_value_condition',
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'is equals to'                  => __('Is equals To', 'autoqa-test-automation'),
+                            'is not equals to'              => __('Is not equals to', 'autoqa-test-automation'),
+                            'is contains with'              => __('Is contains with', 'autoqa-test-automation'),
+                            'is start with'                 => __('Is start With', 'autoqa-test-automation'),
+                            'is end with'                   => __('Is end with', 'autoqa-test-automation'),
+                            'is less than'                  => __('Is less Than', 'autoqa-test-automation'),
+                            'is greater than'               => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'      => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'   => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'                       => __('Has any', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_meta_value_selector'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
+                        ]
+                    ],
+                    [
+                        'field' => 'textarea',
+                        'attr'  => [
+                            'id'            => 'cauto_field_check_meta_value_selector',
+                            'class'         => 'cauto-step-nodes cauto-meta-key-value cauto-field wide cauto-variable-step',
+                            'rows'           => 5,
+                            'placeholder'   => __('Text or {JSON}', 'autoqa-test-automation')
+                        ],
+                        'help-text' => __('If the value is array convert them into JSON', 'autoqa-test-automation'),
+                        'label' => __('Value', 'autoqa-test-automation')
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-wp"></span>',
+                'group'     => 'wordpress',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_meta_key_selector', '#cauto_field_check_meta_value_condition', '#cauto_field_check_meta_value_selector'],
+                    'describe_text' => __(' - {#cauto_field_check_meta_key_selector} {#cauto_field_check_meta_value_condition} {#cauto_field_check_meta_value_selector}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_wp_check_meta'
+            ],
+            'wp-check-transient-value' => [
+                'label'     => __('Check Transient', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_transient_key_selector',
+                            'class' => 'cauto-step-nodes cauto-transient-key-step cauto-field wide'
+                        ],
+                        'label' => __('Transient Key', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_transient_value_condition',
+                            'class' => 'cauto-step-nodes cauto-check-transient-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'has any'                       => __('Has any', 'autoqa-test-automation'),
+                            'is equals to'                  => __('Is equals To', 'autoqa-test-automation'),
+                            'is not equals to'              => __('Is not equals to', 'autoqa-test-automation'),
+                            'is contains with'              => __('Is contains with', 'autoqa-test-automation'),
+                            'is start with'                 => __('Is start With', 'autoqa-test-automation'),
+                            'is end with'                   => __('Is end with', 'autoqa-test-automation'),
+                            'is less than'                  => __('Is less Than', 'autoqa-test-automation'),
+                            'is greater than'               => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'      => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'   => __('Is greater than or equal to', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'has any'   => [
+                                'hide'  => ['#cauto_field_check_transient_value_selector']
+                            ]
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_transient_value_selector',
+                            'class' => 'cauto-step-nodes cauto-transient-value cauto-field wide cauto-variable-step'
+                        ],
+                        'label' => __('Value', 'autoqa-test-automation')
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-wp"></span>',
+                'group'     => 'wordpress',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_transient_key_selector', '#cauto_field_check_transient_value_condition', '#cauto_field_check_transient_value_selector'],
+                    'describe_text' => __(' - {#cauto_field_check_transient_key_selector} {#cauto_field_check_transient_value_condition} {#cauto_field_check_transient_value_selector}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_wp_check_transient'
+            ],
+            'wp-check-scheduler' => [
+                'label'     => __('Check Scheduler', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'type'  => 'text',
+                            'id'    => 'cauto_field_check_scheduler_key_selector',
+                            'class' => 'cauto-step-nodes cauto-meta-scheduler-step cauto-field wide'
+                        ],
+                        'label' => __('Name', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_scheduler_value_condition',
+                            'class' => 'cauto-step-nodes cauto-check-scheduler-step cauto-field wide block'
+                        ],
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'is scheduled'      => __('Is scheduled', 'autoqa-test-automation'),
+                            'is missed'         => __('Is missed', 'autoqa-test-automation'),
+                            'last run'          => __('Last run', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'has any'   => [
+                                'hide'  => ['#cauto_field_check_scheduler_value_condition']
+                            ]
+                        ]
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-wp"></span>',
+                'group'     => 'wordpress',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_scheduler_key_selector', '#cauto_field_check_scheduler_value_condition'],
+                    'describe_text' => __(' - {#cauto_field_check_scheduler_key_selector} {#cauto_field_check_scheduler_value_condition}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_wp_check_scheduler'
+            ]
+            
         ];
 
         return apply_filters('autoqa-steps', $steps);

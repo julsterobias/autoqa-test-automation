@@ -231,7 +231,6 @@ jQuery(document).ready(function(){
         jQuery('#cauto_step_send_keys').val(con_part_left + con_part_right);
         jQuery('#cauto_step_send_keys').focus();
     });
-    
 
 });
 
@@ -403,6 +402,9 @@ const cauto_build_step_settings = (type) => {
                     alert(data.message);
                 }
             }
+            //trigger other UI behavior
+            cauto_do_user_interact();
+            cauto_init_select2_selects();
         }
     });
 }
@@ -700,4 +702,109 @@ const cauto_do_save_settings = () => {
             }           
         }
     });
+}
+
+const cauto_do_user_interact = () => {
+
+    jQuery('.cauto-fields').find('.cauto-step-nodes').each(function(){
+        let interact = jQuery(this).data('interact');
+        if (interact) {
+            if (typeof interact.event !== 'undefined') {
+                let callback    = interact.callback;
+                let id          = jQuery(this).attr('id');
+                jQuery('body').on(interact.event, '#'+id, function(){
+                    window[callback](interact.payload, this);
+                });
+            }
+            
+        } 
+    });
+    
+}
+
+var cauto_default_steps_hide_related = (params = {}, obj) => {
+
+    if (typeof params.value !== 'undefined' && typeof params.target !== 'undefined' && typeof params.action !== 'undefined') {
+        let el_type     = obj.tagName.toLowerCase();
+        let field_val   = null;
+        switch (el_type) {
+            case 'input':
+                let type = jQuery(obj).attr('type');
+                switch(type) {
+                    case 'checkbox':
+                    case 'radio':
+                        if (jQuery(obj).is(':checked')) {
+                            field_val = jQuery(obj).val();
+                        }
+                        break;
+                    default:
+                        field_val = jQuery(obj).val();
+                        break;
+                }
+            case 'select':
+            case 'textarea':
+                field_val = jQuery(obj).val();
+                break;
+            default:
+                break;
+        }
+
+        if (field_val === params.value) {
+            switch (params.action) {
+                case 'hide':
+                    for (let x in params.target) {
+                        jQuery(params.target[x]).val('');
+                        jQuery(params.target[x]).prop('checked', false);
+                        jQuery(params.target[x]).closest('.cauto-ui-wrapper').addClass('hide');
+                    }
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            for (let x in params.target) {
+                jQuery(params.target[x]).closest('.cauto-ui-wrapper').removeClass('hide');
+            }
+        }
+    }
+}
+
+var cauto_init_select2_selects = () => {
+    if (jQuery('.cauto-select2-field').length > 0) {
+        jQuery('.cauto-select2-field').each(function() {
+            let get_source = jQuery(this).data('select-source');
+            if (get_source) {
+                //do init
+                get_source = JSON.stringify(get_source);
+                jQuery(this).select2({
+                    ajax: {
+                        url: cauto_ajax.ajaxurl,
+                        dataType: 'json',
+                        delay: 250,
+                        data: function(params) {
+                            return {
+                                action: 'cauto_get_select2_data',  
+                                search: params.term,
+                                source: get_source,
+                                nonce: cauto_ajax.nonce
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: jQuery.map(data, function(item) {
+                                    return {
+                                        id: item.id,
+                                        text: item.text
+                                    };
+                                })
+                            };
+                        },
+                        cache: true
+                    },
+                    minimumInputLength: 1 
+                });
+
+            }
+        });
+    }
 }

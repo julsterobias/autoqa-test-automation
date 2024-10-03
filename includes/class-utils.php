@@ -273,6 +273,9 @@ class cauto_utils
                 $get_steps  = cauto_steps::steps();
                 $data_steps = []; 
                 foreach ($get_steps as $type => $step) {
+
+                    if (!isset($step['group']) || empty($step['group'])) continue;
+
                     if ($step['group'] === 'data') {
                         $data_steps[] = $type;
                     }

@@ -535,3 +535,16 @@ const cauto_variable_date_data = (type) => {
     
 }
 
+const cuato_resume_paused_runner = (status, message) => {
+
+    setTimeout(function(){
+        cauto_do_run_runner([
+            {
+                status: status,
+                message: message
+            }
+        ], cauto_paused_data[1]);
+
+    }, cauto_runner_delay);
+
+}
