@@ -798,7 +798,6 @@ label.cauto-toggle-label:active:after {
 
 .cauto-runner-step-item div:first-child {
     width: 60px;
-    height: 60px;
     position: relative;
     background-color: #CCC;
 }
@@ -896,6 +895,10 @@ select2 CSS adjustments
     margin-top: 0 !important;
 }
 
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    right: 20px;
+}
+
 .cauto-inline-tip {
     font-size: 13px;
     line-height: 13px;
@@ -906,4 +909,16 @@ select2 CSS adjustments
 
 .select2-container {
     z-index: 9999 !important;
+}
+
+.cauto-select-wrapper {
+    position: relative;
+}
+
+.cauto-clear-select2 {
+    position: absolute;
+    right: 0px;
+    top: 1px;
+    z-index: 99999;
+    cursor: pointer;
 }

@@ -232,6 +232,13 @@ jQuery(document).ready(function(){
         jQuery('#cauto_step_send_keys').focus();
     });
 
+    jQuery('body').on('click', '.cauto-clear-select2', function(){
+        let get_parent = jQuery(this).closest('.cauto-select-wrapper');
+        let get_select = jQuery(get_parent).find('.cauto-select2-field, .cauto-select2-field-static');
+        let get_first_opt = jQuery(get_select).find('option:first-child').val();
+        jQuery(get_select).val(get_first_opt).trigger('change'); //clear other
+    });
+
 });
 
 // save step on close
@@ -276,6 +283,7 @@ const cauto_do_save_step = (source = null) => {
                         cauto_describe_step_action(jQuery('#cauto_step_config_describe').val());
                     }
                     jQuery(cauto_step_popup_step).fadeOut(200);
+                    jQuery('.cauto-cancel').prop('disabled', false);
                     
                 } else {
                     console.error('CAUTO ERROR: unable to save step, please contact support');
@@ -770,6 +778,7 @@ var cauto_default_steps_hide_related = (params = {}, obj) => {
 }
 
 var cauto_init_select2_selects = () => {
+
     if (jQuery('.cauto-select2-field').length > 0) {
         jQuery('.cauto-select2-field').each(function() {
             let get_source = jQuery(this).data('select-source');
@@ -805,6 +814,12 @@ var cauto_init_select2_selects = () => {
                 });
 
             }
+        });
+    }
+
+    if (jQuery('.cauto-select2-field-static').length > 0) {
+        jQuery('.cauto-select2-field-static').each(function() {
+                jQuery(this).select2();
         });
     }
 }

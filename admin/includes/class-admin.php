@@ -377,11 +377,10 @@ class cauto_admin extends cauto_utils
                 $step = (array) $step;
                 foreach ($step as $i => $data) {
                     if ($i === 'record' && !empty($data)) {
-                        $data = json_decode(stripslashes($data));
+                        $data = json_decode($data);
                         $data = (array) $data;
                         foreach ($data as $x => $indata) {
                             $indata = (array) $indata;
-
                             if (is_array($indata['value'])) {
                                 $indata['value'] = array_map('sanitize_text_field', $indata['value']);
                             } else {
@@ -396,6 +395,8 @@ class cauto_admin extends cauto_utils
                 $step_data[$index] = $step;
             }
         } 
+
+       
 
         $step_data = apply_filters('autoqa_steps_before_save_filter', $step_data, $flow_id);
         

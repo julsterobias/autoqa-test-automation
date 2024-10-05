@@ -55,7 +55,7 @@ if (!empty($data['data']['fields'])):
                 }
 ?>
             <div class="cauto-ui-wrapper">
-                <div class="cauto-select-wrapper">
+                <div class="cauto-select-wrapper"><?php if (isset($field['select2_allow_clear'])): ?><span class="cauto-clear-select2">Clear</span><?php endif; ?>
                     <label><?php echo esc_html($field['label']); ?>
                         <select <?php echo $field['iattr'] ?> <?php echo $el_interaction; ?> <?php echo $select2; ?>>
                             <?php if (!empty($field['options'])): 
@@ -65,8 +65,8 @@ if (!empty($data['data']['fields'])):
                             <?php 
                                 endforeach;
                             endif; ?>
-                            <?php if ($select2 && !is_array($selected)): ?>
-                                <option value="<?php echo esc_attr($selected); ?>"><?php echo esc_attr($selected); ?></option>
+                            <?php if ($select2 && !is_array($selected) && $selected): ?>
+                                <option value="<?php echo esc_attr($selected); ?>" selected><?php echo esc_attr($selected); ?></option>
                             <?php elseif ($select2 && is_array($selected)): 
                                 foreach ($selected as $select_value):    
                             ?>

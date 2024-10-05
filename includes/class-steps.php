@@ -1101,7 +1101,6 @@ class cauto_steps
                         ],
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
-                            'has any'                       => __('Has any', 'autoqa-test-automation'),
                             'is equals to'                  => __('Is equals To', 'autoqa-test-automation'),
                             'is not equals to'              => __('Is not equals to', 'autoqa-test-automation'),
                             'is contains with'              => __('Is contains with', 'autoqa-test-automation'),
@@ -1110,7 +1109,8 @@ class cauto_steps
                             'is less than'                  => __('Is less Than', 'autoqa-test-automation'),
                             'is greater than'               => __('Is greater than', 'autoqa-test-automation'),
                             'is less than or equal to'      => __('Is less than or equal to', 'autoqa-test-automation'),
-                            'is greater than or equal to'   => __('Is greater than or equal to', 'autoqa-test-automation')
+                            'is greater than or equal to'   => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'                       => __('Has any', 'autoqa-test-automation'),
                         ],
                         'field-interact'    => [
                             'has any'   => [
@@ -1147,7 +1147,7 @@ class cauto_steps
                             'id'    => 'cauto_field_check_scheduler_key_selector',
                             'class' => 'cauto-step-nodes cauto-meta-scheduler-step cauto-field wide'
                         ],
-                        'label' => __('Name', 'autoqa-test-automation')
+                        'label' => __('Hook', 'autoqa-test-automation')
                     ],
                     [
                         'field' => 'select',
@@ -1158,13 +1158,7 @@ class cauto_steps
                         'label'     => __('Condition', 'autoqa-test-automation'),
                         'options'   => [
                             'is scheduled'      => __('Is scheduled', 'autoqa-test-automation'),
-                            'is missed'         => __('Is missed', 'autoqa-test-automation'),
-                            'last run'          => __('Last run', 'autoqa-test-automation')
-                        ],
-                        'field-interact'    => [
-                            'has any'   => [
-                                'hide'  => ['#cauto_field_check_scheduler_value_condition']
-                            ]
+                            'has run'          => __('Has run', 'autoqa-test-automation')
                         ]
                     ]
                     
@@ -1176,6 +1170,76 @@ class cauto_steps
                     'describe_text' => __(' - {#cauto_field_check_scheduler_key_selector} {#cauto_field_check_scheduler_value_condition}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_wp_check_scheduler'
+            ],
+            'wp-check-post' => [
+                'label'     => __('Check Post', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'        => 'cauto_field_check_post_data_selector',
+                            'class'     => 'cauto-step-nodes cauto-post-data-post cauto-field wide cauto-select2-field'
+                        ],
+                        'options'               => [ 'Current Post' => __('Current Post', 'autoqa-test-automation')],
+                        'select2'               => ['any'],
+                        'select2_allow_clear'   => true,
+                        'label'         => __('Post', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'        => 'cauto_field_check_post_data_to_check',
+                            'class'     => 'cauto-step-nodes cauto-check-post-data-step cauto-field wide block cauto-select2-field-static'
+                        ],
+                        'label'         => __('Post meta data', 'autoqa-test-automation'),
+                        'options'       => [
+                            'ID'                    => __('ID', 'autoqa-test-automation'),
+                            'post_title'            => __('Post Title', 'autoqa-test-automation'),
+                            'post_author'           => __('Author', 'autoqa-test-automation'),
+                            'post_date '            => __('Post Date', 'autoqa-test-automation'),
+                            'post_date_gmt '        => __('Post Date GMT', 'autoqa-test-automation'),
+                            'post_content'          => __('Post Content', 'autoqa-test-automation'),
+                            'post_excerpt'          => __('Post Excerpt', 'autoqa-test-automation'),
+                            'post_status'           => __('Post Status', 'autoqa-test-automation'),
+                            'comment_status '       => __('Comment Status', 'autoqa-test-automation'),
+                            'ping_status'           => __('Ping Status', 'autoqa-test-automation'),
+                            'post_password '        => __('Post Password', 'autoqa-test-automation'),
+                            'post_name'             => __('Post Slug', 'autoqa-test-automation'),
+                            'to_ping'               => __('To Ping', 'autoqa-test-automation'),
+                            'pinged'                => __('Pinged', 'autoqa-test-automation'),
+                            'post_modified'         => __('Post Modified', 'autoqa-test-automation'),
+                            'post_modified_gmt'     => __('Post Modified GMT', 'autoqa-test-automation'),
+                            'post_content_filtered' => __('Post Content Filtered', 'autoqa-test-automation'),
+                            'post_parent '          => __('Post Parent ', 'autoqa-test-automation'),
+                            'guid'                  => __('Guid', 'autoqa-test-automation'),
+                            'menu_order'            => __('Menu Order', 'autoqa-test-automation'),
+                            'post_type'             => __('Post Type', 'autoqa-test-automation'),
+                            'post_mime_type'        => __('Post Mime Type', 'autoqa-test-automation'),
+                            'comment_count'         => __('Comment Count', 'autoqa-test-automation'),
+                            'filter'                => __('Filter', 'autoqa-test-automation')
+                        ],
+                        'select2_allow_clear'   => true,
+                    ],
+                    [
+                        'field' => 'textarea',
+                        'attr'  => [
+                            'id'            => 'cauto_field_check_post_data_value_selector',
+                            'class'         => 'cauto-step-nodes cauto-post_data-value-value cauto-field wide cauto-variable-step',
+                            'rows'           => 5,
+                            'placeholder'   => __('Text or {JSON}', 'autoqa-test-automation')
+                        ],
+                        'help-text' => __('If the value is array convert them into JSON', 'autoqa-test-automation'),
+                        'label' => __('Value', 'autoqa-test-automation')
+                    ]
+                    
+                ],
+                'icon'      => '<span class="cauto-icon cauto-icon-wp"></span>',
+                'group'     => 'wordpress',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_field_check_post_data_to_check', '#cauto_field_check_post_data_selector', '#cauto_field_check_post_data_value_selector'],
+                    'describe_text' => __(' - The {#cauto_field_check_post_data_to_check} of "{#cauto_field_check_post_data_selector}" to "{#cauto_field_check_post_data_value_selector}"', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_wp_check_post_data'
             ]
             
         ];

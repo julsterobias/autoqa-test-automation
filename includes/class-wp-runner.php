@@ -31,6 +31,8 @@ class cauto_wp_runner extends cauto_utils
     public function __construct()
     {
         add_action('wp_ajax_cauto_step_check_meta_key', [$this, 'check_meta_value']);
+        add_action('wp_ajax_cauto_step_check_transient_value', [$this, 'check_transient_value']);
+        add_action('wp_ajax_cauto_step_check_scheduler', [$this, 'check_scheduler']);
     }
 
     public function check_meta_value()
@@ -54,30 +56,14 @@ class cauto_wp_runner extends cauto_utils
 
         if ($post && $key && $condition && $value) {
             
-            if ( is_array($post) ) {
-                foreach ($post as $post_data)
-                {
-                    $check_status = $this->process_check_meta(
-                        [
-                            'post_data' => $post_data,
-                            'key'       => $key,
-                            'value'     => $value,
-                            'condition' => $condition
-                        ]
-                    );
-                }
-            } else {
-
-                $check_status = $this->process_check_meta(
-                    [
-                        'post_data' => $post,
-                        'key'       => $key,
-                        'value'     => $value,
-                        'condition' => $condition
-                    ]
-                );
-
-            }
+            $check_status = $this->process_check_key(
+                [
+                    'post_data' => $post,
+                    'key'       => $key,
+                    'value'     => $value,
+                    'condition' => $condition
+                ]
+            );
 
         }
 
@@ -87,6 +73,100 @@ class cauto_wp_runner extends cauto_utils
         ]);
 
         exit();
+    }
+
+    public function check_transient_value()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+        
+        $key        = (isset($_POST['key']))? sanitize_text_field($_POST['key']) : null;
+        $condition  = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
+        $value      = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
+
+        if ($key && $condition && $value) {
+            $check_status = $this->process_check_key(
+                [
+                    'transient'       => $key,
+                    'value'           => $value,
+                    'condition'       => $condition
+                ]
+            );
+        }
+
+        wp_send_json([
+            'status'    => 'success',
+            'step'      => $check_status
+        ]);
+
+        exit();
+
+    }
+
+    public function check_scheduler()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $hook           = (isset($_POST['hook']))? sanitize_text_field($_POST['hook']) : null;
+        $condition      = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
+
+        $timestamp = wp_next_scheduled($hook);
+
+        $status         = 'failed';
+        $message        = '"'.$hook.'" '.$condition.', {mathed_text}, Received: ';
+        $other_message  = ''; 
+
+        switch ($condition) {
+            case 'is scheduled':
+
+                if ($timestamp) {
+                    $status         = 'passed';
+                    $other_message  = 'is scheduled';
+                } else {
+                    $other_message  = 'not scheduled';
+                }
+
+                break;
+            case 'has run':
+
+                if ($timestamp && $timestamp < time()) {
+                    $other_message  = 'missed the schedule';
+                } else {
+                    $status         = 'passed';
+                    $other_message  = 'is running as expected';
+                }
+
+                break;
+        }
+
+        $message = ($status === 'passed')? str_replace('{mathed_text}', 'Matched: 1', $message) : str_replace('{mathed_text}', 'Matched: 0', $message);
+
+        wp_send_json([
+            'status'    => 'success',
+            'step'      => [
+                'status'    => $status,
+                'message'   => ucfirst($message).$other_message
+            ]
+        ]);
+
+        exit();
+        
+
     }
 
     public function get_post_id(string $post = '') {
@@ -171,26 +251,36 @@ class cauto_wp_runner extends cauto_utils
         ]; 
     }
 
-    public function process_check_meta($payload = [])
+    public function process_check_key($payload = [])
     {
 
         if (empty($payload)) return;
         
+        $saved_wp_data = null;
 
-        $id     = $this->get_post_id($payload['post_data']);
-        $saved_meta   = get_post_meta($id, $payload['key'], true); 
-        if (is_array($saved_meta)) {
-            $saved_meta   = json_encode($saved_meta);
+        if (isset($payload['post_data'])) {
+            $id                 = $this->get_post_id($payload['post_data']);
+            $saved_wp_data      = get_post_meta($id, $payload['key'], true); 
+        }
+
+        if (isset($payload['transient'])) {
+            $saved_wp_data      = get_transient($payload['transient']);
+        }
+
+        if (is_array($saved_wp_data)) {
+            $saved_wp_data      = json_encode($saved_wp_data);
         } 
-        $saved_meta  = stripslashes($saved_meta);      
+
+        $saved_wp_data  = stripslashes($saved_wp_data);      
         $value  = stripslashes($payload['value']);
         return $this->check_with_condition(
             [
-                'received'      => $saved_meta,
+                'received'      => $saved_wp_data,
                 'expected'      => $value,
                 'condition'     => $payload['condition']
             ]
         );
+
     }
 
     public function process_numeric_data_type($payload = [])
