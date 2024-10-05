@@ -913,12 +913,13 @@ class cauto_admin extends cauto_utils
             exit();
         }
 
-        $search  = (isset($_GET['search']))? $_GET['search'] : null;
+        $search  = (isset($_GET['search']))? sanitize_text_field($_GET['search']) : null;
         $source  = (isset($_GET['source']))? $_GET['source'] : null;
        
         if ($search && $source) {
 
             $source = json_decode(stripslashes($source));
+            $source = array_map('sanitize_text_field', $source);
             
             $args = [
                 'posts_per_page'    => -1,
