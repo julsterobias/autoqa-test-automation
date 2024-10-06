@@ -8,7 +8,7 @@
 * Author:      Juls Terobias
 * Plugin Type: Test Tool
 * Author URI: 
-* Version: 0.9.2
+* Version: 0.9.3
 * Text Domain: autoqa-test-automation
 * License:     GPLv3
 * License URI: https://www.gnu.org/licenses/gpl.html
@@ -21,7 +21,7 @@
 defined( 'ABSPATH' ) or die( 'No access area' );
 define('CAUTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 define('CAUTO_PLUGIN_URL', plugin_dir_url( __FILE__ ));
-define('CAUTO_PLUGIN_VERSION','0.9.2');
+define('CAUTO_PLUGIN_VERSION','0.9.3');
 define('CAUTO_PLUGIN_VERSION_CODE','Pre-Beta');
 define('CAUTO_NAMESPACES', ['includes','admin/includes']);
 define('CAUTO_RUNNER_IS_RUNNING', false);
