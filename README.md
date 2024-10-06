@@ -1,4 +1,4 @@
-# Ver 0.9.2 Pre-Beta
+# Ver 0.9.3 Pre-Beta
 
 # AutoQA
 Automate the testing of your WordPress sites and plugins without the need for coding.
@@ -42,3 +42,8 @@ Designed to efficiently handle and execute each step of your flow in sequence. I
 ### Data
 - Element Data - Stores the value or attribute of an element into a data variable for later use.
 - Store Data - Allows users to store dynamic data into a variable, which can include system-generated values like date and timestamp, or data extracted from elements.
+### Wordpress
+- Check Meta
+- Check Transient
+- Check Scheduler
+- Check Post
