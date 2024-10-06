@@ -33,7 +33,7 @@ var cauto_default_check_data_step = (params = null) => {
     let condition       = params[1].value;
     let value_expected  = cauto_translate_variable_in_steps_field(params[2].value);
 
-    let value_recieved  = sessionStorage.getItem(data_name);
+    let value_recieved      = sessionStorage.getItem(data_name);
     let passed_message      = 'Matched: 1, Expected: '+data_name+ ' ' + condition + ' "' + value_expected + '", Received: "'+ value_recieved + '"';
     let failed_message      = 'Matched: 0, Expected: '+data_name+ ' ' + condition + ' "' + value_expected + '", Received: "'+ value_recieved + '"';
 
@@ -229,6 +229,26 @@ var cauto_default_check_data_step = (params = null) => {
                 }
 
             break;
+            case 'has any':
+                passed_message      = 'Matched: 1, Expected: '+data_name+ ' ' + condition + ', Received: "'+ value_recieved + '"';
+                failed_message      = 'Matched: 0, Expected: '+data_name+ ' ' + condition + ', Received: "'+ value_recieved + '"';
+                if (value_recieved && value_recieved.length > 0) {
+                    return [
+                        {
+                            status: 'passed',
+                            message: passed_message
+                        }
+                    ];
+                } else {
+                    return [
+                        {
+                            status: 'failed',
+                            message: failed_message
+                        }
+                    ];
+                }
+                
+                break;
 
         }
 

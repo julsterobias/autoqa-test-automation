@@ -1,5 +1,5 @@
 <?php if (!empty($data['results'])): 
-add_action('autoqa-results-before-list', $data['results']);    
+do_action('autoqa-results-before-list', $data['results']);    
 ?>
 
 <ul id="cauto-results-list" data-rucnt="<?php echo $data['runner_count']; ?>" data-flow-id="<?php echo $data['flow_id']; ?>">
@@ -28,5 +28,5 @@ add_action('autoqa-results-before-list', $data['results']);
 <div class="cauto-see-other-runners"><span><?php esc_html_e('Show more', 'autoqa-test-automation'); ?></span></div>
 
 <?php 
-add_action('autoqa-results-end-list', $data['results']);    
+do_action('autoqa-results-end-list', $data['results']);    
 endif; ?>

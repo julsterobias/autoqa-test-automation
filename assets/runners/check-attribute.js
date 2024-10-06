@@ -245,6 +245,25 @@ var cauto_default_check_attribute_step = (params = null) => {
                 }
 
             break;
+            case 'has any':
+                passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', Received: ' +value_recieved;
+                failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', Received: ' +value_recieved;
+                if (value_recieved && value_recieved.length > 0) {
+                    return [
+                        {
+                            status: 'passed',
+                            message: passed_message
+                        }
+                    ];
+                } else {
+                    return [
+                        {
+                            status: 'failed',
+                            message: failed_message
+                        }
+                    ];
+                }
+            break;
 
         }
 

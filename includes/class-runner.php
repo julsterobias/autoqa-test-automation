@@ -28,13 +28,11 @@ if ( !function_exists( 'add_filter' ) ){
 class cauto_runner extends cauto_utils
 {
 
-    private $flow_id                    = 0;
+    private $flow_id         = 0;
     
-    private $runner_id                  = 0;
+    private $runner_id       = 0;
     
-    private $flow_steps                 = null;
-
-    private array $running_flows        = [];
+    private $flow_steps      = null;
 
     public function __construct()
     {
@@ -54,8 +52,8 @@ class cauto_runner extends cauto_utils
     {
         $logged_user    = get_current_user_id();   
         if ( $logged_user && current_user_can('administrator') ) {
-            wp_register_script('cauto-runner-global-js', CAUTO_PLUGIN_URL.'assets/onloadrunner.js', ['jquery'], null );
-            wp_enqueue_script('cauto-runner-global-js');
+            wp_register_script('autoqa-runner-global-js', CAUTO_PLUGIN_URL.'assets/onloadrunner.js', ['jquery'], null );
+            wp_enqueue_script('autoqa-runner-global-js');
         }
     }
 
@@ -69,6 +67,9 @@ class cauto_runner extends cauto_utils
      */
     public function load_assets()
     {
+
+        global $post;
+
         wp_register_script('cauto-runner-js', CAUTO_PLUGIN_URL.'assets/runners/runner.js', ['jquery'], null );
         wp_enqueue_script('cauto-runner-js');
         
@@ -91,7 +92,8 @@ class cauto_runner extends cauto_utils
             [
                 'ajaxurl'           => admin_url( 'admin-ajax.php' ), 
                 'nonce'             => wp_create_nonce( $this->nonce ),
-                'step_duration'     => (isset($app_settings['step-duration']))? $app_settings['step-duration'] : 3000
+                'step_duration'     => (isset($app_settings['step-duration']))? $app_settings['step-duration'] : 3000,
+                'post_id'           => (isset($post->ID))? $post->ID : 0
             ]
         );        
 

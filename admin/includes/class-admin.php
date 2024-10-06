@@ -66,6 +66,8 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_delete_flow', [$this, 'delete_flow']);
         //save settings
         add_action('wp_ajax_cauto_save_settings', [$this, 'cauto_save_settings']);
+        //load data into select2 via source(ajax)
+        add_action('wp_ajax_cauto_get_select2_data', [$this, 'load_select2_data']);
 
 
         if (isset($_GET['reset'])) {
@@ -113,6 +115,11 @@ class cauto_admin extends cauto_utils
         wp_enqueue_style('cauto-admin-css', CAUTO_PLUGIN_URL.'admin/assets/admin.css' , [], null);
         wp_enqueue_style('cauto-admin-icons', CAUTO_PLUGIN_URL.'assets/icons/icons.css' , [], null);
         wp_enqueue_style('cauto-admin-grid-css', CAUTO_PLUGIN_URL.'admin/assets/admin-grid.css' , [], null);
+
+        //load select2 library
+        wp_register_script('cauto-select2-js', CAUTO_PLUGIN_URL.'libs/select2/js/select2.min.js', ['jquery'], null );
+        wp_enqueue_script('cauto-select2-js');
+        wp_enqueue_style('cauto-select2-css', CAUTO_PLUGIN_URL.'libs/select2/css/select2.min.css' , [], null);
 
         $cauto_variables = [
             'ajaxurl' => admin_url( 'admin-ajax.php' ), 
@@ -370,11 +377,16 @@ class cauto_admin extends cauto_utils
                 $step = (array) $step;
                 foreach ($step as $i => $data) {
                     if ($i === 'record' && !empty($data)) {
-                        $data = json_decode(stripslashes($data));
+                        $data = json_decode($data);
                         $data = (array) $data;
                         foreach ($data as $x => $indata) {
                             $indata = (array) $indata;
-                            $indata['value'] = sanitize_text_field($indata['value']);
+                            if (is_array($indata['value'])) {
+                                $indata['value'] = array_map('sanitize_text_field', $indata['value']);
+                            } else {
+                                $indata['value'] = sanitize_text_field($indata['value']);
+                            }
+                          
                             $data[$x] = $indata;
                         }
                     }
@@ -383,6 +395,8 @@ class cauto_admin extends cauto_utils
                 $step_data[$index] = $step;
             }
         } 
+
+       
 
         $step_data = apply_filters('autoqa_steps_before_save_filter', $step_data, $flow_id);
         
@@ -883,6 +897,49 @@ class cauto_admin extends cauto_utils
         echo json_encode([
             'status'    => 'success'
         ]);
+
+        exit();
+    }
+
+    public function load_select2_data()
+    {
+        if ( !wp_verify_nonce( $_GET['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $search  = (isset($_GET['search']))? sanitize_text_field($_GET['search']) : null;
+        $source  = (isset($_GET['source']))? $_GET['source'] : null;
+       
+        if ($search && $source) {
+
+            $source = json_decode(stripslashes($source));
+            $source = array_map('sanitize_text_field', $source);
+            
+            $args = [
+                'posts_per_page'    => -1,
+                'post_type'         => $source,
+                'orderby'           => 'post_title',
+                'order'             => 'ASC',
+                's'                 => $search
+            ];
+            $posts = get_posts($args);
+            $result = [];
+
+            if ($posts) {
+                foreach ($posts as $post) {
+                    $result[] = ['id' => $post->ID.' - '.$post->post_title, 'text' => $post->ID.' - '.$post->post_title];
+                }
+            }
+
+            echo json_encode($result);
+
+        } 
 
         exit();
     }

@@ -102,10 +102,12 @@ class cauto_admin_ui extends cauto_utils
                 'icon'  => '<span class="dashicons dashicons-insert"></span>'
             ],
             [
-                'field'  => 'button',
+                'field'  => 'a',
                 'attr'  => [
-                    "class" => "cauto-top-class cauto-button caut-ripple",
-                    "id"    => "cauto-support"
+                    "class"     => "cauto-top-class cauto-button caut-ripple",
+                    "id"        => "cauto-support",
+                    "href"      => 'https://julsterobias.github.io/autoqa/documentation/',
+                    "target"    => '_blank'
                 ],
                 'label' =>  __('Help', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-sos"></span>'
