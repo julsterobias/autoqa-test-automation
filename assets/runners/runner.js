@@ -474,7 +474,7 @@ const cauto_save_element_to_data_action = (data_name, data_to_store) => {
 
 const cauto_translate_variable_in_steps_field = (data_to_store = null) => {
     
-    if (data_to_store === '' || !data_to_store) return;
+    if (data_to_store === '' || !data_to_store) return data_to_store;
 
     if (cauto_temp_runner_variables.length > 0) {
         for (let x in cauto_temp_runner_variables) {
@@ -489,11 +489,11 @@ const cauto_translate_variable_in_steps_field = (data_to_store = null) => {
 
 const cauto_variable_date_data = (type) => {
 
-    var date = new Date();
-    var month = ('0' + (date.getMonth() + 1)).slice(-2);
-    var day = ('0' + date.getDate()).slice(-2);
-    var year = date.getFullYear();
-    var hours = ('0' + date.getHours()).slice(-2);
+    var date    = new Date();
+    var month   = ('0' + (date.getMonth() + 1)).slice(-2);
+    var day     = ('0' + date.getDate()).slice(-2);
+    var year    = date.getFullYear();
+    var hours   = ('0' + date.getHours()).slice(-2);
     var minutes = ('0' + date.getMinutes()).slice(-2);
     var seconds = ('0' + date.getSeconds()).slice(-2); 
 

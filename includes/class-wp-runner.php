@@ -33,6 +33,7 @@ class cauto_wp_runner extends cauto_utils
         add_action('wp_ajax_cauto_step_check_meta_key', [$this, 'check_meta_value']);
         add_action('wp_ajax_cauto_step_check_transient_value', [$this, 'check_transient_value']);
         add_action('wp_ajax_cauto_step_check_scheduler', [$this, 'check_scheduler']);
+        add_action('wp_ajax_cauto_step_check_post_metedata', [$this, 'check_post_metadata']);
     }
 
     public function check_meta_value()
@@ -54,7 +55,7 @@ class cauto_wp_runner extends cauto_utils
 
         $check_status = [];
 
-        if ($post && $key && $condition && $value) {
+        if ($post && $key && $condition) {
             
             $check_status = $this->process_check_key(
                 [
@@ -91,7 +92,7 @@ class cauto_wp_runner extends cauto_utils
         $condition  = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
         $value      = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
 
-        if ($key && $condition && $value) {
+        if ($key && $condition) {
             $check_status = $this->process_check_key(
                 [
                     'transient'       => $key,
@@ -165,7 +166,71 @@ class cauto_wp_runner extends cauto_utils
         ]);
 
         exit();
-        
+
+    }
+
+    public function check_post_metadata()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $post           = (isset($_POST['wp_post']))? sanitize_text_field($_POST['wp_post']) : null;
+        $metadata       = (isset($_POST['metadata']))? sanitize_text_field($_POST['metadata']) : null;
+        $condition      = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
+        $value          = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
+
+        $this->validate_required_fields([$post, $metadata, $condition]);
+
+        $post_id    = $this->get_post_id($post);
+
+        if ($post_id === 0) {
+            wp_send_json([
+                'status'    => 'success',
+                'step'      => [
+                    'status'    => 'failed',
+                    'message'   => __('Step can\'t find a relevant post, please check the step settings', 'autoqa-test-automation')
+                ]
+            ]);
+            exit();
+        }
+
+        $post_data      = get_post($post_id);
+        $post_data      = (array) $post_data;
+        $post_meta_data = $post_data[$metadata];
+
+        if (is_numeric($post_meta_data)) {
+            $post_meta_data = (int) $post_meta_data;
+        }
+
+        if (is_array($post_meta_data)) {
+            $post_meta_data = json_encode($post_meta_data);
+        }
+
+        if (is_numeric($value)) {
+            $value  = (int) $value;
+        }
+
+        $status = $this->check_with_condition(
+            [
+                'received'      => $post_meta_data,
+                'expected'      => $value,
+                'condition'     => $condition
+            ]
+        );
+
+        wp_send_json([
+            'status'    => 'success',
+            'step'      => $status
+        ]);
+
+        exit();
 
     }
 
@@ -240,6 +305,7 @@ class cauto_wp_runner extends cauto_utils
                 break;
             case 'has any':
                 $status = (strlen($payload['received']) > 0)? 'passed' : 'failed';
+                $message    = '"'.$payload['received'].'" '.$payload['condition'].' , {matched_text} Expected: '.$payload['condition'].' Received: "'.$payload['received'].'"';
                 break;
         }
         
@@ -297,6 +363,23 @@ class cauto_wp_runner extends cauto_utils
         }
 
         return $payload;
+    }
+
+    public function validate_required_fields($data)
+    {
+        foreach ($data as $to_validate) {
+            if (!$to_validate) {
+                wp_send_json([
+                    'status'    => 'success',
+                    'step'      => [
+                        'status'    => 'failed',
+                        'message'   => __('Step is not properly configured please check the settings', 'autoqa-test-automation')
+                    ]
+                ]);
+                exit();
+            }
+        }
+        
     }
 
 }

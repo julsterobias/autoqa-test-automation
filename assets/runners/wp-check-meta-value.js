@@ -6,7 +6,7 @@
  * 
  * 
  */
-cauto_default_wp_check_meta = (params = null) => {
+var cauto_default_wp_check_meta = (params = null) => {
     
     if (!params || !Array.isArray(params)) {
         return [
@@ -32,7 +32,9 @@ cauto_default_wp_check_meta = (params = null) => {
     let wp_post     = params[0].value;
     let meta_key    = params[1].value;
     let condition   = params[2].value;
-    let value       = params[3].value;    
+    let value       = params[3].value;   
+    
+    value = cauto_translate_variable_in_steps_field(value);
 
     jQuery.ajax( {
         type : "post",  

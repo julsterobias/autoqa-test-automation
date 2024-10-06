@@ -490,7 +490,17 @@ class cauto_steps
                             'not equals to'     => __('Not equals to', 'autoqa-test-automation'),
                             'contains with'     => __('Contains with', 'autoqa-test-automation'),
                             'start with'        => __('Start with', 'autoqa-test-automation'),
-                            'end with'          => __('End with', 'autoqa-test-automation')
+                            'end with'          => __('End with', 'autoqa-test-automation'),
+                            'has any'           => __('Has any', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_text_value'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
                         ]
                     ],
                     [
@@ -561,7 +571,17 @@ class cauto_steps
                             'is less than'         => __('Is less than', 'autoqa-test-automation'),
                             'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
                             'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
-                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'              => __('Has any', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_value'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
                         ]
                     ],
                     [
@@ -641,7 +661,17 @@ class cauto_steps
                             'is less than'         => __('Is less than', 'autoqa-test-automation'),
                             'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
                             'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
-                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'              => __('Has any', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_attribute_value'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
                         ]
                     ],
                     [
@@ -792,7 +822,7 @@ class cauto_steps
                         'attr'  => [
                             'type'  => 'text',
                             'id'    => 'cauto_field_check_data_selector',
-                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide'
+                            'class' => 'cauto-step-nodes cauto-check-data-step cauto-field wide cauto-variable-step'
                         ],
                         'label' => __('Data Name', 'autoqa-test-automation')
                     ],
@@ -812,7 +842,17 @@ class cauto_steps
                             'is less than'         => __('Is less than', 'autoqa-test-automation'),
                             'is greater than'      => __('Is greater than', 'autoqa-test-automation'),
                             'is less than or equal to'       => __('Is less than or equal to', 'autoqa-test-automation'),
-                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation')
+                            'is greater than or equal to'    => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'               => __('Has any', 'autoqa-test-automation')
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_data_value'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
                         ]
                     ],
                     [
@@ -829,7 +869,7 @@ class cauto_steps
                 'group'     => 'check',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_field_check_data_selector', '#cauto_field_check_data_condition','#cauto_field_check_data_value'],
-                    'describe_text' => __(' - {#cauto_field_check_data_selector} {#cauto_field_check_data_condition} "{#cauto_field_check_data_value}"', 'autoqa-test-automation')
+                    'describe_text' => __(' - {#cauto_field_check_data_selector} {#cauto_field_check_data_condition} {#cauto_field_check_data_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_check_data_step'
             ],
@@ -1113,9 +1153,13 @@ class cauto_steps
                             'has any'                       => __('Has any', 'autoqa-test-automation'),
                         ],
                         'field-interact'    => [
-                            'has any'   => [
-                                'hide'  => ['#cauto_field_check_transient_value_selector']
-                            ]
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_transient_value_selector'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
                         ]
                     ],
                     [
@@ -1217,8 +1261,36 @@ class cauto_steps
                             'post_mime_type'        => __('Post Mime Type', 'autoqa-test-automation'),
                             'comment_count'         => __('Comment Count', 'autoqa-test-automation'),
                             'filter'                => __('Filter', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_field_check_transient_value_condition',
+                            'class' => 'cauto-step-nodes cauto-check-transient-step cauto-field wide block'
                         ],
-                        'select2_allow_clear'   => true,
+                        'label'     => __('Condition', 'autoqa-test-automation'),
+                        'options'   => [
+                            'is equals to'                  => __('Is equals To', 'autoqa-test-automation'),
+                            'is not equals to'              => __('Is not equals to', 'autoqa-test-automation'),
+                            'is contains with'              => __('Is contains with', 'autoqa-test-automation'),
+                            'is start with'                 => __('Is start With', 'autoqa-test-automation'),
+                            'is end with'                   => __('Is end with', 'autoqa-test-automation'),
+                            'is less than'                  => __('Is less Than', 'autoqa-test-automation'),
+                            'is greater than'               => __('Is greater than', 'autoqa-test-automation'),
+                            'is less than or equal to'      => __('Is less than or equal to', 'autoqa-test-automation'),
+                            'is greater than or equal to'   => __('Is greater than or equal to', 'autoqa-test-automation'),
+                            'has any'                       => __('Has any', 'autoqa-test-automation'),
+                        ],
+                        'field-interact'    => [
+                            'event'     => 'change',
+                            'payload'   => [
+                                'value'     => 'has any',
+                                'target'    => ['#cauto_field_check_post_data_value_selector'],
+                                'action'     => 'hide'
+                            ],
+                            'callback'  => 'cauto_default_steps_hide_related'
+                        ]
                     ],
                     [
                         'field' => 'textarea',
@@ -1236,8 +1308,8 @@ class cauto_steps
                 'icon'      => '<span class="cauto-icon cauto-icon-wp"></span>',
                 'group'     => 'wordpress',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_field_check_post_data_to_check', '#cauto_field_check_post_data_selector', '#cauto_field_check_post_data_value_selector'],
-                    'describe_text' => __(' - The {#cauto_field_check_post_data_to_check} of "{#cauto_field_check_post_data_selector}" to "{#cauto_field_check_post_data_value_selector}"', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_field_check_post_data_to_check', '#cauto_field_check_transient_value_condition', '#cauto_field_check_post_data_selector', '#cauto_field_check_post_data_value_selector'],
+                    'describe_text' => __(' - {#cauto_field_check_post_data_to_check} of "{#cauto_field_check_post_data_selector}" if {#cauto_field_check_transient_value_condition} {#cauto_field_check_post_data_value_selector}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_wp_check_post_data'
             ]

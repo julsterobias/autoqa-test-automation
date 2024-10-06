@@ -716,10 +716,14 @@ const cauto_do_user_interact = () => {
 
     jQuery('.cauto-fields').find('.cauto-step-nodes').each(function(){
         let interact = jQuery(this).data('interact');
+        let value    = jQuery(this).val();
         if (interact) {
             if (typeof interact.event !== 'undefined') {
                 let callback    = interact.callback;
                 let id          = jQuery(this).attr('id');
+                if (value === 'has any') {
+                    window[callback](interact.payload, this);
+                }
                 jQuery('body').on(interact.event, '#'+id, function(){
                     window[callback](interact.payload, this);
                 });

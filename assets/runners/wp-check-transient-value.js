@@ -33,6 +33,8 @@ var cauto_default_wp_check_transient = (params = null) => {
     let condition       = params[1].value;
     let value           = params[2].value;
 
+    value = cauto_translate_variable_in_steps_field(value);
+
     jQuery.ajax( {
         type : "post",  
         url: cauto_runner.ajaxurl,
