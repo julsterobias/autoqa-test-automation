@@ -7,7 +7,8 @@
 * Description: A plugin that will automate the testing of your website without the need of coding.
 * Author:      Juls Terobias
 * Plugin Type: Test Tool
-* Author URI: 
+* Author URI: https://julsterobias.github.io/autoqa/author/
+* Plugin URI: https://julsterobias.github.io/autoqa
 * Version: 0.9.3
 * Text Domain: autoqa-test-automation
 * License:     GPLv3

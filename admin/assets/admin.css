@@ -22,6 +22,18 @@
     position: relative;
 }
 
+.cauto-fields {
+    min-height: auto;
+    max-height: 400px;
+    overflow: auto;
+    padding: 0 20px;
+    margin: 0 -20px;
+}
+
+input[type=range].cauto-field {
+    padding: 0 !important;
+}
+
 .cauto-settings-wrappers .wrapper .title span {
     vertical-align: middle;
     top: 50%;
@@ -379,15 +391,18 @@ label.cauto-toggle-label:active:after {
     max-height: calc(100vh - 190px);
 }
 
-.cauto-builder-steps::-webkit-scrollbar {
+.cauto-builder-steps::-webkit-scrollbar,
+.cauto-fields::-webkit-scrollbar {
     width: 0.5em;
 }
  
-.cauto-builder-steps::-webkit-scrollbar-track {
+.cauto-builder-steps::-webkit-scrollbar-track,
+.cauto-fields::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 }
  
-.cauto-builder-steps::-webkit-scrollbar-thumb {
+.cauto-builder-steps::-webkit-scrollbar-thumb,
+.cauto-fields::-webkit-scrollbar-thumb {
   background-color: #f25405;
   outline: 0px solid slategrey;
   border-radius: 10px;

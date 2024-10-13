@@ -7,21 +7,20 @@ if (!empty($data['data']['fields'])):
 ?>
                 <div class="cauto-ui-wrapper">
                     <div class="cauto-input-wrapper">
-                        <?php 
-                            if ($field['attr']['type'] === 'checkbox'):
-                        ?>  
+                        <?php if ($field['attr']['type'] === 'checkbox'): ?>  
                         <label>
                             <input <?php echo $field['iattr']; ?> <?php echo ($value)? 'checked' : null; ?>> <?php echo esc_html($field['label']); ?>
                         </label>
-                        <?php
-                            else:
-                        ?>
+                        <?php else: ?>
                         <label><?php echo esc_html($field['label']); ?>
                             <input <?php echo $field['iattr']; ?> value="<?php echo esc_attr($value); ?>">
                         </label>
-                        <?php if (isset($field['help-text'])): ?>
-                            <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
+                            <?php if (isset($field['help-text'])): ?>
+                                <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
+                            <?php endif; ?>
                         <?php endif; ?>
+                        <?php if ($field['attr']['type'] === 'range'): ?>  
+                            <span class="cauto-input-range-value"><span><?php echo esc_html($field['attr']['value']); ?></span>px</span>
                         <?php endif; ?>
                     </div>
                 </div>

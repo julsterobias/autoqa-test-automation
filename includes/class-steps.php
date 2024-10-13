@@ -257,7 +257,7 @@ class cauto_steps
                     ],
                     [
                         'field' => 'custom',
-                        'html'  => '<div class="cauto-send-keys-buttons"><span class="cauto-send-keys-steps" data-key="enter">Enter</span><span class="cauto-send-keys-steps" data-key="tab">Tab</span></div>'
+                        'html'  => '<div class="cauto-send-keys-buttons"><span class="cauto-send-keys-steps" data-key="enter">'.__('Enter', 'autoqa-test-automation').'</span><span class="cauto-send-keys-steps" data-key="tab">'.__('Tab', 'autoqa-test-automation').'</span></div>'
                     ]
                 ],
                 'group'     => 'events',
@@ -267,6 +267,85 @@ class cauto_steps
                     'describe_text' => __(' - "{#cauto_step_send_keys}" to {#cauto_step_send_keys_selector_alias}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_send_keys_step'  
+            ],
+            'drag-drop'          => [
+                'label'         => __('Drag Drop', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_source_selector_type',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-source-step cauto-field wide'
+                        ],
+                        'label'     => __('Source Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_source_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-source-step cauto-field wide'
+                        ],
+                        'label'     => __('Source Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_source_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-source-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('Alias', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field'     => 'custom',
+                        'html'      => '<br/>'
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_target_selector_type',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-target-step cauto-field wide'
+                        ],
+                        'label'     => __('Target Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_target_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-target-step cauto-field wide'
+                        ],
+                        'label'     => __('Target Selector', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_drag_drop_target_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-drag-drop-target-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('Alias', 'autoqa-test-automation')
+                    ],
+
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-drag-drop"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_drag_drop_source_alias_selector', '#cauto_step_drag_drop_target_alias_selector'],
+                    'describe_text' => __(' - {#cauto_step_drag_drop_source_alias_selector} to {#cauto_step_drag_drop_target_alias_selector}', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_drag_drop_step'  
             ],
             'empty-field'          => [
                 'label'         => __('Empty Field', 'autoqa-test-automation'),
@@ -395,6 +474,90 @@ class cauto_steps
                     'describe_text' => __(' - {#cauto_step_scroll_type} with distance of {#cauto_step_scroll_value}', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_set_scroll_to_step'  
+            ],
+            'upload-file-image'       => [
+                'label'         => __('Upload Image File', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_selector_type',
+                            'class' => 'cauto-step-nodes cauto-upload-file-step-type cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-upload-image-step cauto-field wide'
+                        ],
+                        'label'     => __('File', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-upload-image-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('Image File Alias', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_type',
+                            'class' => 'cauto-step-nodes cauto-upload-file-file-step-type cauto-field'
+                        ],
+                        'label'     => __('File Type', 'autoqa-test-automation'),
+                        'options'   => [
+                            'png'   => __('PNG', 'autoqa-test-automation'),
+                            'jpeg'  => __('JPEG', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field'     => 'custom',
+                        'html'      => '<div><label>'.__('Image Size','autoqa-test-automation').'</label></div>'
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_width_selector',
+                            'type'  => 'range',
+                            'class' => 'cauto-step-nodes cauto-upload-image-width-step cauto-field wide cauto-range-value-change',
+                            'min'   => 0,
+                            'max'   => 1000,
+                            'value' => 200
+                        ],
+                        'label'     => __('Width', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_image_height_selector',
+                            'type'  => 'range',
+                            'class' => 'cauto-step-nodes cauto-upload-image-height-step cauto-field wide cauto-range-value-change',
+                            'min'   => 0,
+                            'max'   => 1000,
+                            'value' => 200
+                        ],
+                        'label'     => __('Height', 'autoqa-test-automation')
+                    ],
+
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-upload-image"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_upload_image_alias_selector', '#cauto_step_upload_image_type'],
+                    'describe_text' => __(' - {#cauto_step_upload_image_alias_selector} is set to upload "{#cauto_step_upload_image_type}"', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_upload_image_step'  
             ],
             'reload' => [
                 'label'         => __('Reload', 'autoqa-test-automation'),
