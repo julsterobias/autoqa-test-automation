@@ -36,7 +36,7 @@ cauto_default_set_text_step = (params = null) => {
     
     //manage event and validate element existing
     //emulate human bahaviour by clicking the field before doing their intentions
-    let element =  cauto_event_manager(selector, field_attr, 'click', '', true);
+    let element     =  cauto_event_manager(selector, field_attr, 'click', '', true);
 
     if (!Array.isArray(element)) {
         if (jQuery(element).length > 0) {

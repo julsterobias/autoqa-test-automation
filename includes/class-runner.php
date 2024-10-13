@@ -280,6 +280,7 @@ class cauto_runner extends cauto_utils
                 $temp_index = $step_index;
                 $temp_index--;
                 $runner->update_runner_steps($temp_index, $response);
+
                 $this->return_last_step(
                     [
                         'payload'   => $runner->get_runner_flow_step(),
@@ -307,7 +308,13 @@ class cauto_runner extends cauto_utils
                     $flow_class = new cauto_test_automation($flow_id);
                     $on_error   = $flow_class->get_stop_on_error();
                     if ($on_error) {
-                        $this->return_last_step($runner_steps);
+                        $this->return_last_step(
+                            [
+                                'payload'   => $runner->get_runner_flow_step(),
+                                'flow_id'   => $flow_id,
+                                'runner_id' => $runner_id
+                            ]
+                        );
                         exit();
                     }
                 }

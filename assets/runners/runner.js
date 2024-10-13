@@ -104,7 +104,6 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
                             }, cauto_runner_delay);
                             
                         } else {
-                            console.error('AutoQA error: no response is found');
                             return;
                         }
                     } catch (error) {

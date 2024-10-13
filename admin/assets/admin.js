@@ -239,6 +239,13 @@ jQuery(document).ready(function(){
         jQuery(get_select).val(get_first_opt).trigger('change'); //clear other
     });
 
+
+    jQuery('#cauto-popup-content-step').on('input', '.cauto-range-value-change', function(){
+       let get_value    = jQuery(this).val(); 
+       let parent       = jQuery(this).closest('div.cauto-input-wrapper');
+       jQuery(parent).find('span.cauto-input-range-value span').text(get_value);
+    });
+
 });
 
 // save step on close

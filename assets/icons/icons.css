@@ -68,3 +68,9 @@
 .cauto-icon-wp:after {
     content: url('wp.svg');
 }
+.cauto-icon-drag-drop:after {
+    content: url('drag-drop.svg');
+}
+.cauto-icon-upload-image:after {
+    content: url('upload-image.svg');
+}
