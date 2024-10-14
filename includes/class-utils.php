@@ -292,5 +292,49 @@ class cauto_utils
         return $default_runner_variables;
     }
 
+    public function generate_image ($payload = [])
+    {
+
+        if (empty($payload)) return;
+
+        header("Content-Type: image/{$payload['type']}");
+
+        $width      = (isset($payload['width']))? $payload['width'] : 250;
+        $height     = (isset($payload['height']))? $payload['height'] : 250;
+        $image      = imagecreatetruecolor($width, $height);
+
+        $bgColor = imagecolorallocate($image, 242, 85, 5);
+        $textColor = imagecolorallocate($image, 255, 255, 255);
+
+        imagefilledrectangle($image, 0, 0, $width, $height, $bgColor);
+
+        $text_font_size = 5;
+        $text           = "AutoQA";
+        $charWidth = imagefontwidth($text_font_size);
+        $textWidth =  strlen($text) * $charWidth; 
+        $textX = ($width - $textWidth) / 2;
+        $textY = ($height - imagefontheight($text_font_size)) / 2 - ($text_font_size * 1.5);
+        imagestring($image, $text_font_size, $textX, $textY, $text, $textColor);
+
+        $text_font_size = 5;
+        $text_dimension = "$width X $height";
+        $charWidth = imagefontwidth($text_font_size);
+        $textWidth =  strlen($text_dimension) * $charWidth; 
+        $textX = ($width - $textWidth) / 2;
+        $textY = ($height - imagefontheight($text_font_size)) / 2 + ($text_font_size * 1.5);
+        imagestring($image, $text_font_size, $textX, $textY, $text_dimension, $textColor);
+
+        switch ($payload['type']) {
+            case 'png':
+                imagepng($image);
+                break;
+            case 'jpeg':
+                imagejpeg($image);
+                break;
+        }
+        imagedestroy($image);
+
+    }
+
 }
 ?>

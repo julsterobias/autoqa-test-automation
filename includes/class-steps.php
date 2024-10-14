@@ -476,7 +476,7 @@ class cauto_steps
                 'callback'  => 'cauto_default_set_scroll_to_step'  
             ],
             'upload-file-image'       => [
-                'label'         => __('Upload Image File', 'autoqa-test-automation'),
+                'label'         => __('Upload Image', 'autoqa-test-automation'),
                 'settings'      => [
                     [
                         'field' => 'select',
