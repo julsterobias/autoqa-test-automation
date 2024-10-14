@@ -46,6 +46,8 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_prepare_runner', [$this, 'prepare_runner']);
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
 
+        add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']);        
+
     }
 
     public function load_global_assets()
@@ -473,6 +475,47 @@ class cauto_runner extends cauto_utils
         }
 
         return $results;
+
+    }
+
+    public function do_generate_image() 
+    {
+
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $type       = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
+        $width      = (isset($_POST['width']))? sanitize_text_field($_POST['width']) : null;
+        $height     = (isset($_POST['height']))? sanitize_text_field($_POST['height']) : null;
+        $filename   = (isset($_POST['file_alias']))? sanitize_text_field($_POST['file_alias']) : uniqid();
+        $filename   = strtolower(str_replace(' ','-', $filename)).'.'.$type;
+        
+        ob_start();
+        $this->generate_image(
+            [
+                'type'      => $type,
+                'width'     => $width,
+                'height'    => $height
+            ]
+        );
+        $data = ob_get_clean();
+        $base64 = base64_encode($data);
+
+        wp_send_json(
+            [
+                'status'    => 'success',
+                'image'     => "data:image/$type;base64," . $base64, 
+                'filename'  => $filename
+            ]
+        );
+        exit();
 
     }
     
