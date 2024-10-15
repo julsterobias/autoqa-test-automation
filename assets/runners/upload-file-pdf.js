@@ -1,10 +1,11 @@
 /**
  * 
+ * cauto_default_upload_pdf_step
+ * @since 1.0.0
  * 
  */
 
-var cauto_default_upload_image_step = (params = null) => {
-
+var cauto_default_upload_pdf_step = (params = null) => {
     if (!params || !Array.isArray(params)) {
         return [
             {
@@ -25,14 +26,12 @@ var cauto_default_upload_image_step = (params = null) => {
         }
     }
 
-    let file_attr       = params[0].value;
-    let file_selector   = params[1].value;
-    let file_alias      = params[2].value;
-    let file_type       = params[3].value;
-    let file_width      = params[4].value;
-    let file_height     = params[5].value;
-
-    let element  = cauto_event_manager(file_selector, file_attr, null, '', true);
+    let pdf_attr        = params[0].value;
+    let pdf_selector    = params[1].value;
+    let pdf_alias       = params[2].value;
+    let pdf_content     = params[3].value;
+    
+    let element  = cauto_event_manager(pdf_selector, pdf_attr, null, '', true);
 
     let file_found  = false;
 
@@ -60,26 +59,37 @@ var cauto_default_upload_image_step = (params = null) => {
             type : "post",  
             url: cauto_runner.ajaxurl,
             data : {    
-                action: 'cauto_generate_image_step',
+                action: 'cauto_generate_pdf_step',
                 nonce: cauto_runner.nonce,
-                type: file_type,
-                width: file_width,
-                height: file_height,
-                file_alias: file_alias
+                content: pdf_content,
+                file_alias: pdf_alias
             },
             success: function( data ) {
                 //response data
                 if (data) {
+              
                     if (data.status === 'success') {
-                        if (typeof data.image !== 'undefined') {
+    
+                        if (typeof data.pdf !== 'undefined') {
                             
                             if (cauto_paused_data.length > 0) {
-                                let blob = cauto_base64_to_blob(data.image);
-                                let file = new File([blob], data.filename, { type: "image/"+file_type });
+
+                                const pdfData = atob(data.pdf);
+                                const arrayBuffer = new ArrayBuffer(pdfData.length);
+                                const uint8Array = new Uint8Array(arrayBuffer);
+
+                                for (let i = 0; i < pdfData.length; i++) {
+                                    uint8Array[i] = pdfData.charCodeAt(i);
+                                }
+
+                                // Create a Blob from the binary data
+                                let blob = new Blob([uint8Array], { type: 'application/pdf' });
+                                let file = new File([blob], data.filename, { type: "application/pdf" });
                                 let dataTransfer = new DataTransfer();
                                 dataTransfer.items.add(file);
                                 jQuery(element)[0].files = dataTransfer.files;
-                                cuato_resume_paused_runner('passed', '- ' + file_type + ' is assigned to field ' + file_alias);
+                                cuato_resume_paused_runner('passed', '- PDF is assigned to field ' + pdf_alias);
+
     
                             } else {
                                 console.error('AutoQA Error: No payload found after the runner is paused. Please contact developer');
@@ -104,21 +114,4 @@ var cauto_default_upload_image_step = (params = null) => {
             pause: true
         }
     ];
-
-}
-
-const cauto_base64_to_blob = (base64) => {
-
-    const parts = base64.split(',');
-    const byteString = atob(parts[1]);
-    const mimeType = parts[0].split(':')[1].split(';')[0];
-
-    const arrayBuffer = new ArrayBuffer(byteString.length);
-    const uint8Array = new Uint8Array(arrayBuffer);
-
-    for (let i = 0; i < byteString.length; i++) {
-        uint8Array[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([arrayBuffer], { type: mimeType });
 }

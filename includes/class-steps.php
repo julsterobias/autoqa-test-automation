@@ -554,10 +554,64 @@ class cauto_steps
                 'group'     => 'events',
                 'icon'      => '<span class="cauto-icon cauto-icon-upload-image"></span>',
                 'step_indicator'    => [
-                    'selector'      => ['#cauto_step_upload_image_alias_selector', '#cauto_step_upload_image_type'],
-                    'describe_text' => __(' - {#cauto_step_upload_image_alias_selector} is set to upload "{#cauto_step_upload_image_type}"', 'autoqa-test-automation')
+                    'selector'      => ['#cauto_step_upload_image_alias_selector', '#cauto_step_upload_image_alias_selector'],
+                    'describe_text' => __(' - {#cauto_step_upload_image_alias_selector} is set to upload "{#cauto_step_upload_image_alias_selector}"', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_upload_image_step'  
+            ],
+            'upload-file-pdf'       => [
+                'label'         => __('Upload PDF', 'autoqa-test-automation'),
+                'settings'      => [
+                    [
+                        'field' => 'select',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_pdf_selector_type',
+                            'class' => 'cauto-step-nodes cauto-upload-pdf-step-type cauto-field'
+                        ],
+                        'label'     => __('Attribute', 'autoqa-test-automation'),
+                        'options'   => [
+                            'class' => __('Class', 'autoqa-test-automation'),
+                            'id'    => __('ID', 'autoqa-test-automation'),
+                            'xpath' => __('Xpath', 'autoqa-test-automation')
+                        ]
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_pdf_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-upload-pdf-step cauto-field wide'
+                        ],
+                        'label'     => __('File Field', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'input',
+                        'attr'  => [
+                            'id'    => 'cauto_step_upload_pdf_alias_selector',
+                            'type'  => 'text',
+                            'class' => 'cauto-step-nodes cauto-upload-pdf-alias-step cauto-field wide'
+                        ],
+                        'label'     => __('PDF File Alias', 'autoqa-test-automation')
+                    ],
+                    [
+                        'field' => 'textarea',
+                        'attr'  => [
+                            'id'            => 'cauto_step_upload_pdf_content_selector',
+                            'class'         => 'cauto-step-nodes cauto-upload-pdf-content-step cauto-field wide',
+                            'placeholder'   => __('Plain Text', 'autoqa-test-automation'),
+                            'rows'          => 5
+                        ],
+                        'label'     => __('Content', 'autoqa-test-automation')
+                    ]
+
+                ],
+                'group'     => 'events',
+                'icon'      => '<span class="cauto-icon cauto-icon-pdf"></span>',
+                'step_indicator'    => [
+                    'selector'      => ['#cauto_step_upload_pdf_alias_selector', '#cauto_step_upload_pdf_content_selector'],
+                    'describe_text' => __(' - {#cauto_step_upload_pdf_alias_selector} is set to upload "{#cauto_step_upload_pdf_content_selector}"', 'autoqa-test-automation')
+                ],
+                'callback'  => 'cauto_default_upload_pdf_step'  
             ],
             'reload' => [
                 'label'         => __('Reload', 'autoqa-test-automation'),

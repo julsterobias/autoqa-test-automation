@@ -336,5 +336,34 @@ class cauto_utils
 
     }
 
+    public function generate_pdf($data)
+    {
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: inline; filename="'.$data['filename'].'.pdf"');
+
+        // Define the basic PDF structure
+        $pdf = "%PDF-1.4\n";
+        $pdf .= "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
+        $pdf .= "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
+        $pdf .= "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << >> >> endobj\n";
+        $pdf .= "4 0 obj << /Length 44 >> stream\n";
+        $pdf .= "BT\n/F1 12 Tf\n50 730 Td\n(".$data['content'].") Tj\nET\n";
+        $pdf .= "endstream endobj\n";
+        $pdf .= "xref\n";
+        $pdf .= "0 5\n";
+        $pdf .= "0000000000 65535 f \n";
+        $pdf .= "0000000010 00000 n \n";
+        $pdf .= "0000000079 00000 n \n";
+        $pdf .= "0000000178 00000 n \n";
+        $pdf .= "0000000329 00000 n \n";
+        $pdf .= "trailer << /Size 5 /Root 1 0 R >>\n";
+        $pdf .= "startxref\n";
+        $pdf .= "394\n";
+        $pdf .= "%%EOF";
+
+        // Output the PDF content to the browser
+        echo $pdf;
+    }
+
 }
 ?>
