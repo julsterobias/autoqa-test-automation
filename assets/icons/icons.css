@@ -74,3 +74,6 @@
 .cauto-icon-upload-image:after {
     content: url('upload-image.svg');
 }
+.cauto-icon-pdf:after {
+    content: url('pdf.svg');
+}

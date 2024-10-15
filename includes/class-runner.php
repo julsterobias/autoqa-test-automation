@@ -46,7 +46,39 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_prepare_runner', [$this, 'prepare_runner']);
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
 
-        add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']);        
+        add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']); 
+        add_action('wp_ajax_cauto_generate_pdf_step', [$this, 'do_generate_pdf']);
+        
+        add_action('init', function(){
+            if (isset($_GET['pdf'])) {
+                header('Content-Type: application/pdf');
+                header('Content-Disposition: inline; filename="simple.pdf"');
+
+                // Define the basic PDF structure
+                $pdf = "%PDF-1.4\n";
+                $pdf .= "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
+                $pdf .= "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
+                $pdf .= "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << >> >> endobj\n";
+                $pdf .= "4 0 obj << /Length 44 >> stream\n";
+                $pdf .= "BT\n/F1 12 Tf\n50 730 Td\n(Hello, Julius!) Tj\nET\n";
+                $pdf .= "endstream endobj\n";
+                $pdf .= "xref\n";
+                $pdf .= "0 5\n";
+                $pdf .= "0000000000 65535 f \n";
+                $pdf .= "0000000010 00000 n \n";
+                $pdf .= "0000000079 00000 n \n";
+                $pdf .= "0000000178 00000 n \n";
+                $pdf .= "0000000329 00000 n \n";
+                $pdf .= "trailer << /Size 5 /Root 1 0 R >>\n";
+                $pdf .= "startxref\n";
+                $pdf .= "394\n";
+                $pdf .= "%%EOF";
+
+                // Output the PDF content to the browser
+                echo $pdf;
+                die();
+            }
+        });
 
     }
 
@@ -517,6 +549,42 @@ class cauto_runner extends cauto_utils
         );
         exit();
 
+    }
+
+    public function do_generate_pdf()
+    {
+        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
+            echo json_encode(
+                [
+                    'status'    => 'failed',
+                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                ]
+            );
+            exit();
+        }
+
+        $content    = (isset($_POST['content']))? sanitize_text_field($_POST['content']) : null;
+        $filename   = (isset($_POST['file_alias']))? sanitize_text_field($_POST['file_alias']) : uniqid();
+        $filename   = strtolower(str_replace(' ','-', $filename)).'.pdf';
+        
+        ob_start();
+        $this->generate_pdf(
+            [
+                'content'      => $content,
+                'filename'     => $filename,
+            ]
+        );
+        $data = ob_get_clean();
+        $pdf = base64_encode($data);
+
+        wp_send_json(
+            [
+                'status'    => 'success',
+                'pdf'       => $pdf, 
+                'filename'  => $filename
+            ]
+        );
+        exit();
     }
     
 }
