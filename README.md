@@ -18,17 +18,21 @@ Designed to efficiently handle and execute each step of your flow in sequence. I
 
 ## Steps
 - Start - This step initiates the test by directing the browser or test framework to navigate to a specific URL provided by the user.
-### Input
+## Input
 - Click - Simulates a user clicking on an element (e.g., a button or a link) on the web page.
 - Hover - Simulates a user hovering their mouse over a particular element on the webpage.
 - Manual Input - Provides an opportunity for the user to input values or perform actions manually during the test run.
 - Set Text - Automatically fills in a text field or text area with specified input.
 - Set Select - Simulates selecting an option from a dropdown or selection field.
-- Send Keys -
-- Empty Field - Empty the text field
+- Send Keys - Simulates the sending keys to field.
+- Drag and Drop - Simulates the drag and drop event.
+- Empty Field - Empty the text field.
 - Scroll - Emulates the action of scrolling through a page or a specific element.
 - Reload - Simulates refreshing or reloading the current web page.
-### Check
+## Upload File
+- Upload Image - Generates test image and simulate the upload event.
+- Upload PDF - Generates test PDF and simulate the upload event.
+## Check
 - Check Page Title - Verifies that the title of the current webpage matches the expected value.
 - Check Text - Verifies that specific text is present within a non-input field element, such as a <div>, <span>, or <p>.
 - Check Value - Validates the value of form field elements like input, textarea, or select.
@@ -36,13 +40,13 @@ Designed to efficiently handle and execute each step of your flow in sequence. I
 - Check Element Count - Verifies the number of occurrences of certain elements (e.g., li, div, option) on the page matches the expected count.
 - Check Visibility - Checks if a specified element is visible or hidden on the page.
 - Check Data - Validates data stored in the browser’s local or session storage, using a user-assigned name and value.
-### Delay
+## Delay
 - Delay - Pauses the execution of the test for a specified amount of time (in seconds).
 - Wait To - Pauses the test execution until a specific element performs a certain action (e.g., becomes visible, clickable, or contains text).
-### Data
+# Data
 - Element Data - Stores the value or attribute of an element into a data variable for later use.
 - Store Data - Allows users to store dynamic data into a variable, which can include system-generated values like date and timestamp, or data extracted from elements.
-### Wordpress
+## Wordpress
 - Check Meta
 - Check Transient
 - Check Scheduler
