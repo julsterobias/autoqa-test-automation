@@ -658,6 +658,10 @@ label.cauto-toggle-label:active:after {
     background-color: #F7F7F7;
 }
 
+.cauto-step-group_files .cauto-step-element {
+    background-color: #85efff;
+}
+
 .cauto_step_set_wide {
     width: auto !important;
 }

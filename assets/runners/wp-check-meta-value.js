@@ -12,7 +12,7 @@ var cauto_default_wp_check_meta = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_wp_check_meta = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -59,11 +59,11 @@ var cauto_default_wp_check_meta = (params = null) => {
                             cuato_resume_paused_runner(data.step.status, data.step.message);
 
                         } else {
-                            console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                            console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                         }
 
                     } else {
-                        console.error("autoQA Error: No data response from WP steps, please contact developer");
+                        console.error(cauto_translable_labels["autoQA Error: No data response from WP steps, please contact developer"]);
                     }
 
                 } else {

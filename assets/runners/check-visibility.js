@@ -12,7 +12,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -60,7 +60,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: alias + ' is displayed'
+                            message: alias + ' ' + cauto_translable_labels['is displayed']
                         }
                     ];
                 } else {
@@ -78,7 +78,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
                         return [
                             {
                                 status: 'failed',
-                                message: alias + ' is displayed but not interactable'
+                                message: alias + ' ' + cauto_translable_labels['is displayed but not interactable']
                             }
                         ];
                     }
@@ -86,7 +86,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
                     return [
                         {
                             status: 'failed',
-                            message: alias + ' is hidden'
+                            message: alias + ' ' + cauto_translable_labels['is hidden']
                         }
                     ];
                 }
@@ -108,21 +108,21 @@ var cauto_default_check_visibilty_step = (params = null) => {
                         return [
                             {
                                 status: 'failed',
-                                message: alias + ' is displayed but not interactable'
+                                message: alias + ' ' + cauto_translable_labels['is displayed but not interactable']
                             }
                         ];
                     }
                     return [
                         {
                             status: 'passed',
-                            message: alias + ' is hidden'
+                            message: alias + ' ' + cauto_translable_labels['is hidden']
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: alias + ' is displayed'
+                            message: alias + ' ' + cauto_translable_labels['is displayed']
                         }
                     ];
                 }
@@ -133,7 +133,7 @@ var cauto_default_check_visibilty_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: 'Runner can\'t compare element for visibility please contact developer'
+                message: cauto_translable_labels['Runner can\'t compare element for visibility please contact developer']
             }
         ];
     }

@@ -13,6 +13,7 @@ use cauto\admin\includes\cauto_admin_ui;
 use cauto\includes\cauto_test_automation;
 use cauto\includes\cauto_steps;
 use cauto\includes\cauto_test_runners;
+use cauto\includes\cauto_ui_translatables;
 
 if ( !function_exists( 'add_action' ) ){
     header( 'Status: 403 Forbidden' );
@@ -68,31 +69,6 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_save_settings', [$this, 'cauto_save_settings']);
         //load data into select2 via source(ajax)
         add_action('wp_ajax_cauto_get_select2_data', [$this, 'load_select2_data']);
-
-
-        if (isset($_GET['reset'])) {
-            switch($_GET['reset'])
-            {
-                case 'running-flows':
-                    delete_transient('_cauto_running_flows');
-                    break;
-            }
-            die();
-        }
-
-        if (isset($_GET['debug'])) {
-            switch($_GET['debug'])
-            {
-                case 'running-flows':
-                    print_r(get_transient('_cauto_running_flows'));
-                    break;
-                case 'runner':
-                    print_r(get_post_meta(1049));
-                    break;
-            }
-            
-            die();
-        }
         
     }
 
@@ -122,8 +98,8 @@ class cauto_admin extends cauto_utils
         wp_enqueue_style('cauto-select2-css', CAUTO_PLUGIN_URL.'libs/select2/css/select2.min.css' , [], null);
 
         $cauto_variables = [
-            'ajaxurl' => admin_url( 'admin-ajax.php' ), 
-            'nonce' => wp_create_nonce( $this->nonce )
+            'ajaxurl'   => admin_url( 'admin-ajax.php' ), 
+            'nonce'     => wp_create_nonce( $this->nonce )
         ];
 
         //pass the variable to inline js variable for editing
@@ -132,6 +108,7 @@ class cauto_admin extends cauto_utils
         }
 
         wp_localize_script('cauto-admin-js', 'cauto_ajax', $cauto_variables);
+        wp_localize_script('cauto-admin-js', 'cauto_translable_labels', cauto_ui_translatables::ui_text()['admin']);
 
         //jquery libraries
         wp_enqueue_script('jquery-ui-core');
@@ -432,14 +409,14 @@ class cauto_admin extends cauto_utils
 
         foreach ($get_steps as $steps) {
         
-            $step_group         = (isset($data[$steps['step']]['group']))? $data[$steps['step']]['group'] : []; 
-            $step_indicator     = (isset($data[$steps['step']]['step_indicator']))? $data[$steps['step']]['step_indicator'] : [];
-            $step_selectors     = (isset($step_indicator['selector']))? $step_indicator['selector'] : [];
-            $icon               = (isset($data[$steps['step']]['icon']))? $data[$steps['step']]['icon'] : [];
-            $step_label         = (isset($data[$steps['step']]['label']))? $data[$steps['step']]['label'] : [];
+            $step_group         = (isset($data[$steps['step']]['group']))? $data[$steps['step']]['group'] : null; 
+            $step_indicator     = (isset($data[$steps['step']]['step_indicator']))? $data[$steps['step']]['step_indicator'] : null;
+            $step_selectors     = (isset($step_indicator['selector']))? $step_indicator['selector'] : null;
+            $icon               = (isset($data[$steps['step']]['icon']))? $data[$steps['step']]['icon'] : null;
+            $step_label         = (isset($data[$steps['step']]['label']))? $data[$steps['step']]['label'] : null;
 
     
-            $describe_text      = (!empty($step_indicator['describe_text']))? $step_indicator['describe_text'] : [];
+            $describe_text      = (!empty($step_indicator['describe_text']))? $step_indicator['describe_text'] : null;
             $describe_text_set  = [];
 
             if (is_array($step_selectors)) { 
@@ -782,8 +759,10 @@ class cauto_admin extends cauto_utils
             if (!empty($result['steps'])) {
                 foreach ($result['steps'] as $step) {
                     if (!empty($step['result'])) {
-                        if ($step['result'][0]->status === 'failed') {
-                            $is_failed++;
+                        if (isset($step['result'][0]->status)) {
+                            if ($step['result'][0]->status === 'failed') {
+                                $is_failed++;
+                            }
                         }
                     }
                 }

@@ -293,7 +293,7 @@ const cauto_do_save_step = (source = null) => {
                     jQuery('.cauto-cancel').prop('disabled', false);
                     
                 } else {
-                    console.error('CAUTO ERROR: unable to save step, please contact support');
+                    console.error(cauto_translable_labels.autoqa_error1); // c_error1
                 }
             }
         }
@@ -361,7 +361,7 @@ const cauto_validate_set_step_config = (fields = null) => {
                                 fields[x]['value'] = multi_checkbox;
                             } else {
                                 //no identifier
-                                console.error("CAUTO STEP FIELD ERROR: No element identifier was found for radio button");
+                                console.error(cauto_translable_labels.autoqa_error2); //autoqa_error2
                             }
                         break;
                         default:
@@ -381,7 +381,7 @@ const cauto_validate_set_step_config = (fields = null) => {
         if (cuato_active_selected_step) {
             jQuery(cuato_active_selected_step).find('input[type=hidden]').val(JSON.stringify(fields));
         } else {
-            console.error("CAUTO STEP ERROR: No step indentifier is found. Please contact developer");
+            console.error(cauto_translable_labels.autoqa_error3); //autoqa_error3
         }
     }
 
@@ -488,7 +488,7 @@ const cauto_run_flow = (flow_id) => {
                     if (url !== '') {
                         window.open(url, "_blank");
                     } else {
-                        console.error('CAUTO ERROR: Flow and Runner not found.');
+                        console.error(cauto_translable_labels.autoqa_error4); //autoqa_error4
                     }
 
                     jQuery('#cauto-run-flow').find('span.cauto-icon').attr('class', 'dashicons dashicons-controls-play');

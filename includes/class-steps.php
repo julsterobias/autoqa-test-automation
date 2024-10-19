@@ -475,6 +475,18 @@ class cauto_steps
                 ],
                 'callback'  => 'cauto_default_set_scroll_to_step'  
             ],
+            'reload' => [
+                'label'         => __('Reload', 'autoqa-test-automation'),
+                'settings'      => [],
+                'icon'          => '<span class="cauto-icon cauto-icon-reload"></span>',
+                'group'         => 'events',
+                'callback'      => 'cauto_default_reload_page',
+                'no_settings'   => true
+            ],
+            'file_divider' => [
+                'divider'    => true,
+                'label'     => __('Files', 'autoqa-test-automation'),
+            ],
             'upload-file-image'       => [
                 'label'         => __('Upload Image', 'autoqa-test-automation'),
                 'settings'      => [
@@ -551,7 +563,7 @@ class cauto_steps
                     ],
 
                 ],
-                'group'     => 'events',
+                'group'     => 'files',
                 'icon'      => '<span class="cauto-icon cauto-icon-upload-image"></span>',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_upload_image_alias_selector', '#cauto_step_upload_image_alias_selector'],
@@ -605,21 +617,13 @@ class cauto_steps
                     ]
 
                 ],
-                'group'     => 'events',
+                'group'     => 'files',
                 'icon'      => '<span class="cauto-icon cauto-icon-pdf"></span>',
                 'step_indicator'    => [
                     'selector'      => ['#cauto_step_upload_pdf_alias_selector', '#cauto_step_upload_pdf_content_selector'],
                     'describe_text' => __(' - {#cauto_step_upload_pdf_alias_selector} is set to upload "{#cauto_step_upload_pdf_content_selector}"', 'autoqa-test-automation')
                 ],
                 'callback'  => 'cauto_default_upload_pdf_step'  
-            ],
-            'reload' => [
-                'label'         => __('Reload', 'autoqa-test-automation'),
-                'settings'      => [],
-                'icon'          => '<span class="cauto-icon cauto-icon-reload"></span>',
-                'group'         => 'events',
-                'callback'      => 'cauto_default_reload_page',
-                'no_settings'   => true
             ],
             'check_divider' => [
                 'divider'    => true,

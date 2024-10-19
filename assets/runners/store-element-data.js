@@ -13,7 +13,7 @@ var cauto_default_store_element_data = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -23,7 +23,7 @@ var cauto_default_store_element_data = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -41,7 +41,7 @@ var cauto_default_store_element_data = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.element_not_found
+                message: cauto_translable_labels['Matched 0: The element cannot be found.']
             }
         ];
     }
@@ -58,7 +58,7 @@ var cauto_default_store_element_data = (params = null) => {
                 return [
                     {
                         status: 'failed',
-                        message: 'Element attribute is unrecognizable to runner'
+                        message: cauto_translable_labels['Element attribute is unrecognizable to runner']
                     }
                 ];
             }
@@ -72,7 +72,7 @@ var cauto_default_store_element_data = (params = null) => {
     return [
         {
             status: 'passed',
-            message: '"' + data_to_store + '" is stored as "' + data_name + '"'
+            message: '"' + data_to_store + '" '+cauto_translable_labels['is stored as']+' "' + data_name + '"'
         }
     ];
 
