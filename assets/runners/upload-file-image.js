@@ -9,7 +9,7 @@ var cauto_default_upload_image_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -19,7 +19,7 @@ var cauto_default_upload_image_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
         }
@@ -44,7 +44,7 @@ var cauto_default_upload_image_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.element_not_found
+                    message: cauto_translable_labels['Matched 0: The element cannot be found.']
                 }
             ];
         }
@@ -79,18 +79,19 @@ var cauto_default_upload_image_step = (params = null) => {
                                 let dataTransfer = new DataTransfer();
                                 dataTransfer.items.add(file);
                                 jQuery(element)[0].files = dataTransfer.files;
+                                jQuery(element).trigger("change");
                                 cuato_resume_paused_runner('passed', '- ' + file_type + ' is assigned to field ' + file_alias);
     
                             } else {
-                                console.error('AutoQA Error: No payload found after the runner is paused. Please contact developer');
+                                console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused. Please contact developer']);
                             }
     
                         } else {
-                            console.error("autoQA Error: No data response from image generator, please contact developer");
+                            console.error(cauto_translable_labels["autoQA Error: No data response from image generator, please contact developer"]);
                         }
     
                     } else {
-                        console.error("autoQA Error: No data response from image generator, please contact developer");
+                        console.error(cauto_translable_labels["autoQA Error: No data response from image generator, please contact developer"]);
                     }
                 }
             }

@@ -12,7 +12,7 @@ var cauto_default_drag_drop_step = (params = []) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_drag_drop_step = (params = []) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
         }
@@ -47,11 +47,11 @@ var cauto_default_drag_drop_step = (params = []) => {
     let check_elements = [
         {
             el: source_element,
-            err_message: 'Source element is not found'
+            err_message: cauto_translable_labels['Source element is not found']
         },
         {
             el: target_element,
-            err_message: 'Target element is not found'
+            err_message: cauto_translable_labels['Target element is not found']
         }
     ]
 

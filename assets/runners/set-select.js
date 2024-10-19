@@ -12,7 +12,7 @@ var cauto_default_set_select_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_set_select_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -68,14 +68,14 @@ var cauto_default_set_select_step = (params = null) => {
                 return [
                     {
                         status: 'passed',
-                        message: '"' + value + '" is set to ' + params[2].value
+                        message: '"' + value + '" ' + cauto_translable_labels['is set to'] + ' ' + params[2].value
                     }
                 ];
             } else {
                 return [
                     {
                         status: 'failed',
-                        message: 'Action Failed: Runner cannot find "' + value + '" in the field ' + params[2].value
+                        message: cauto_translable_labels['Action Failed: Runner cannot find'] + ' "' + value + '" ' +cauto_translable_labels['in the field']+ ' ' + params[2].value
                     }
                 ];
             }
@@ -86,7 +86,7 @@ var cauto_default_set_select_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.element_not_found
+                    message: cauto_translable_labels['Matched 0: The element cannot be found.']
                 }
             ];
         }

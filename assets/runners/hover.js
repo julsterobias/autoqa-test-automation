@@ -11,7 +11,7 @@ cauto_default_hover_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -21,7 +21,7 @@ cauto_default_hover_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;

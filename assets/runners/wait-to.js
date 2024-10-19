@@ -13,7 +13,7 @@ var cauto_default_wait_for_selector = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -58,7 +58,7 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
     }
 
     switch (condition) {
-        case 'display': //check if element is displayed after waiting for 60 seconds
+        case 'display': 
 
             if ( !is_displayed && cauto_wait_for_time_duration < cauto_wait_for_max_time_duration ) {
                 setTimeout(function(){
@@ -69,25 +69,25 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: alias + ' is displayed after ' + cauto_wait_for_time_duration + ' second(s)',
+                            message: alias + ' ' +cauto_translable_labels['is displayed after']+ ' ' + cauto_wait_for_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
 
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             } else {
                 if (cauto_paused_data.length > 0) {
                     cauto_do_run_runner([
                         {
                             status: 'failed',
-                            message: alias + ' still not displayed after ' + cauto_wait_for_max_time_duration + ' seconds',
+                            message: alias + ' ' +cauto_translable_labels['still not displayed after']+ ' ' + cauto_wait_for_max_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             }
 
@@ -103,25 +103,25 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: alias + ' is not displayed after ' + cauto_wait_for_time_duration + ' second(s)',
+                            message: alias + ' '+ cauto_translable_labels['is not displayed after'] +' ' + cauto_wait_for_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
 
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             } else {
                 if (cauto_paused_data.length > 0) {
                     cauto_do_run_runner([
                         {
                             status: 'failed',
-                            message: alias + ' still displayed after '+ cauto_wait_for_max_time_duration + ' seconds',
+                            message: alias + ' ' + cauto_translable_labels['still displayed after'] +' '+ cauto_wait_for_max_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             }
 
@@ -139,25 +139,25 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: alias + ' have value after ' + cauto_wait_for_time_duration + ' second(s)',
+                            message: alias + ' '+ cauto_translable_labels['have value after'] +' ' + cauto_wait_for_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
 
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             } else {
                 if (cauto_paused_data.length > 0) {
                     cauto_do_run_runner([
                         {
                             status: 'failed',
-                            message: alias + ' still no have value after '+ cauto_wait_for_max_time_duration + ' seconds',
+                            message: alias + ' ' + cauto_translable_labels['still no have value after'] + ' ' + cauto_wait_for_max_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             }
 
@@ -175,24 +175,24 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: alias + ' is enable after ' + cauto_wait_for_time_duration + ' second(s)',
+                            message: alias + ' '+ cauto_translable_labels['is enable after'] +' ' + cauto_wait_for_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             } else {
                 if (cauto_paused_data.length > 0) {
                     cauto_do_run_runner([
                         {
                             status: 'failed',
-                            message: alias + ' still disabled after '+ cauto_wait_for_max_time_duration + ' seconds',
+                            message: alias + ' ' + cauto_translable_labels['still disabled after'] + ' '+ cauto_wait_for_max_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             }
 
@@ -212,25 +212,25 @@ const cauto_check_element_to_display = (selector, field_attr, condition, alias) 
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: alias + ' is disable after ' + cauto_wait_for_time_duration + ' second(s)',
+                            message: alias + ' ' +cauto_translable_labels['is disable after']+ ' ' + cauto_wait_for_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
 
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             } else {
                 if (cauto_paused_data.length > 0) {
                     cauto_do_run_runner([
                         {
                             status: 'failed',
-                            message: alias + ' still enabled after '+ cauto_wait_for_max_time_duration + ' seconds',
+                            message: alias + ' ' +cauto_translable_labels['still enabled after']+ ' '+ cauto_wait_for_max_time_duration + ' ' + cauto_translable_labels['second(s)'],
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             }
 
@@ -252,7 +252,7 @@ const cauto_verify_element_for_status = (element) => {
             cauto_do_run_runner([
                 {
                     status: 'failed',
-                    message: 'Runner can\'t verify the element to have enable property',
+                    message: cauto_translable_labels['Runner can\'t verify the element to have enable property'],
                     pause: true
                 }
             ], cauto_paused_data[1]);
@@ -260,7 +260,7 @@ const cauto_verify_element_for_status = (element) => {
             return true;
 
         } else {
-            console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+            console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
         }
     }
 }

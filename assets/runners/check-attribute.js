@@ -12,7 +12,7 @@ var cauto_default_check_attribute_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_check_attribute_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -47,9 +47,9 @@ var cauto_default_check_attribute_step = (params = null) => {
     }
     
     let value_recieved      = jQuery(element).attr(attr_to_check);
-    let passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
-    let failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', Received: ' +value_recieved;
-    let type_error          = 'Matched: 0, The value is not numeric for "' + params[3].value + '" operation';
+    let passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', ' +cauto_translable_labels['Received:']+ ' ' +value_recieved;
+    let failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ' ' + value_expected + ', ' +cauto_translable_labels['Received:']+ ' ' +value_recieved;
+    let type_error          = cauto_translable_labels['Matched: 0, The value is not numeric for'] + ' "' + params[3].value + '" ' + cauto_translable_labels['operation'];
 
     let number_data_set     = [];
 
@@ -246,8 +246,8 @@ var cauto_default_check_attribute_step = (params = null) => {
 
             break;
             case 'has any':
-                passed_message      = 'Matched: 1, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', Received: ' +value_recieved;
-                failed_message      = 'Matched: 0, Expected: ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', Received: ' +value_recieved;
+                passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', ' +cauto_translable_labels['Received:']+ ' ' +value_recieved;
+                failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' ' +alias+ ' ' +attr_to_check+ '  ' +operation+ ', ' +cauto_translable_labels['Received:']+ ' ' +value_recieved;
                 if (value_recieved && value_recieved.length > 0) {
                     return [
                         {
@@ -268,7 +268,7 @@ var cauto_default_check_attribute_step = (params = null) => {
         }
 
     } catch(error) {
-        console.error('Check Title Runner: '+error);
+        console.error( cauto_translable_labels['Check Title Runner:'] + ' '+error);
     }
 
 

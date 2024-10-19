@@ -27,7 +27,6 @@ jQuery(window).on('load',function(){
     });
 
     cauto_runner_delay = parseInt(cauto_runner_delay);
-
 });
 
 
@@ -299,7 +298,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.element_not_found
+                message: cauto_translable_labels['Matched 0: The element cannot be found.']
             }
         ];
     }
@@ -308,7 +307,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.multiple_element
+                message: cauto_translable_labels['Matched is greater than 1: Multiple elements were found, but the specific event cannot be dispatched.']
             }
         ];
     }
@@ -339,7 +338,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.element_not_found_dispatch
+                    message: cauto_translable_labels['Matched 0: The element cannot be found after dispatch.']
                 }
             ];
         }
@@ -382,7 +381,7 @@ const cauto_event_manager = (selector, field_attr, event_type, alias = '', other
     return [
         {
             status: 'passed',
-            message: 'Action Passed: '+ alias +' is ' + event_type + 'ed'
+            message: cauto_translable_labels['Action Passed:'] + ' '+ alias +' is ' + event_type + 'ed' //action-passed
         }
     ];
 
@@ -458,7 +457,7 @@ const cauto_save_element_to_data_action = (data_name, data_to_store) => {
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: '"'+data_to_store+'" is stored to data as '+data_name,
+                            message: '"'+data_to_store+'" ' +cauto_translable_labels['is stored to data as']+ ' '+data_name, //is-stored-to-data-as
                             pause: true
                         }
                     ], cauto_paused_data[1]);

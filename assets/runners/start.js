@@ -12,7 +12,7 @@ var cauto_default_do_start = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_do_start = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -32,27 +32,27 @@ var cauto_default_do_start = (params = null) => {
     let current_url     = String(window.location.href);
     current_url         = current_url.split("?flow");
     current_url         = current_url[0];
-    let part_message    = ', Expected: ' + params[0].value + ', Received: ' + current_url;
+    let part_message    = ', '+cauto_translable_labels['Expected:']+' ' + params[0].value + ', ' +cauto_translable_labels['Received:']+ ' ' + current_url;
 
     try {
         if (params[0].value === current_url) {
             return [
                 {
                     status: 'passed',
-                    message: 'Matched: 1' + part_message
+                    message: cauto_translable_labels['Matched: 1'] + part_message
                 }
             ];
         } else {
             return [
                 {
                     status: 'failed',
-                    message: 'Matched: 0' + part_message
+                    message: cauto_translable_labels['Matched: 0'] + part_message
                 }
             ];
         }
         
     } catch (error) {
-        console.error('Check Title Runner: ' + error);
+        console.error(cauto_translable_labels['Check Title Runner:'] + ' ' + error);
     }
 
 }

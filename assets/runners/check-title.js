@@ -14,7 +14,7 @@ var cauto_default_check_page_title_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -24,7 +24,7 @@ var cauto_default_check_page_title_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -34,7 +34,7 @@ var cauto_default_check_page_title_step = (params = null) => {
     let page_title_expected = cauto_translate_variable_in_steps_field(params[1].value);
 
     let page_title      = document.title;
-    let response_part   = ', Expected: '+ page_title_expected + ', Received: ' + page_title;
+    let response_part   = ', '+cauto_translable_labels['Expected:']+' '+ page_title_expected + ', ' +cauto_translable_labels['Received:']+ ' ' + page_title;
     
 
     try {
@@ -45,14 +45,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Matched: 1' + response_part
+                            message: cauto_translable_labels['Matched: 1'] + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Matched: 0' + response_part
+                            message: cauto_translable_labels['Matched: 0'] + response_part
                         }
                     ];
                 }
@@ -62,14 +62,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Not equals to ' + page_title_expected + ' - Matched: 0' + response_part
+                            message: cauto_translable_labels['Not equals to'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 0'] + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Not equals to ' + page_title_expected + ' - Matched: 1' + response_part
+                            message: cauto_translable_labels['Not equals to'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 1'] + response_part
                         }
                     ];
                 }
@@ -79,14 +79,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Contains with ' + page_title_expected + ' - Matched: 1' + response_part
+                            message: cauto_translable_labels['Contains with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 1'] + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Contains with ' + page_title_expected + ' - Matched: 0' + response_part
+                            message: cauto_translable_labels['Contains with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 0'] + response_part
                         }
                     ];
                 }
@@ -96,14 +96,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'Start with ' + page_title_expected + ' - Matched: 1' + response_part
+                            message: cauto_translable_labels['Start with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 1'] + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'Start with ' + page_title_expected + ' - Matched: 0' + response_part
+                            message: cauto_translable_labels['Start with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 0'] + response_part
                         }
                     ];
                 }
@@ -115,14 +115,14 @@ var cauto_default_check_page_title_step = (params = null) => {
                     return [
                         {
                             status: 'passed',
-                            message: 'End with ' + page_title_expected + ' - Matched: 1' + response_part
+                            message: cauto_translable_labels['End with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 1'] + response_part
                         }
                     ];
                 } else {
                     return [
                         {
                             status: 'failed',
-                            message: 'End with ' + page_title_expected + ' - Matched: 0' + response_part
+                            message: cauto_translable_labels['End with'] + ' ' + page_title_expected + ' - ' + cauto_translable_labels['Matched: 0'] + response_part
                         }
                     ];
                 }
@@ -130,6 +130,6 @@ var cauto_default_check_page_title_step = (params = null) => {
         }
 
     } catch(error) {
-        console.error('Check Title Runner: '+error);
+        console.error(cauto_translable_labels['Check Title Runner:'] + ' '+error);
     }
 }

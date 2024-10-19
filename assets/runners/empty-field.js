@@ -13,7 +13,7 @@ var cauto_default_empty_field_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -23,7 +23,7 @@ var cauto_default_empty_field_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -45,7 +45,7 @@ var cauto_default_empty_field_step = (params = null) => {
             return [
                 {
                     status: 'passed',
-                    message: alias + ' is emptied'
+                    message: alias + ' ' + cauto_translable_labels['is emptied']
                 }
             ];
 
@@ -54,7 +54,7 @@ var cauto_default_empty_field_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.element_not_found
+                    message: cauto_translable_labels['Matched 0: The element cannot be found.']
                 }
             ];
         }

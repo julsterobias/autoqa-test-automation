@@ -12,7 +12,7 @@ var cauto_default_check_data_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ var cauto_default_check_data_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -34,8 +34,8 @@ var cauto_default_check_data_step = (params = null) => {
     let value_expected  = cauto_translate_variable_in_steps_field(params[2].value);
 
     let value_recieved      = sessionStorage.getItem(data_name);
-    let passed_message      = 'Matched: 1, Expected: '+data_name+ ' ' + condition + ' "' + value_expected + '", Received: "'+ value_recieved + '"';
-    let failed_message      = 'Matched: 0, Expected: '+data_name+ ' ' + condition + ' "' + value_expected + '", Received: "'+ value_recieved + '"';
+    let passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' '+data_name+ ' ' + condition + ' "' + value_expected + '", '+cauto_translable_labels['Received:']+' "'+ value_recieved + '"';
+    let failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' '+data_name+ ' ' + condition + ' "' + value_expected + '", ' +cauto_translable_labels['Received:']+ ' "'+ value_recieved + '"';
 
     try {
         
@@ -230,8 +230,8 @@ var cauto_default_check_data_step = (params = null) => {
 
             break;
             case 'has any':
-                passed_message      = 'Matched: 1, Expected: '+data_name+ ' ' + condition + ', Received: "'+ value_recieved + '"';
-                failed_message      = 'Matched: 0, Expected: '+data_name+ ' ' + condition + ', Received: "'+ value_recieved + '"';
+                passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' '+data_name+ ' ' + condition + ', ' +cauto_translable_labels['Received:']+ ' "'+ value_recieved + '"';
+                failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' '+data_name+ ' ' + condition + ', ' +cauto_translable_labels['Received:']+ ' "'+ value_recieved + '"';
                 if (value_recieved && value_recieved.length > 0) {
                     return [
                         {
@@ -253,7 +253,7 @@ var cauto_default_check_data_step = (params = null) => {
         }
 
     } catch(error) {
-        console.error('Check Data Runner: '+error);
+        console.error(cauto_translable_labels['Check Data Runner:'] + ' '+error);
     }
 
 

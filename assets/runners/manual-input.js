@@ -11,7 +11,7 @@ var cauto_default_manual_input_event = () => {
     return [
         {
             status: 'passed',
-            message: 'Runner is paused for manual input',
+            message: cauto_translable_labels['Runner is paused for manual input'],
             pause: true
         }
     ];
@@ -23,7 +23,7 @@ jQuery(document).ready(function(){
             cauto_do_run_runner(cauto_paused_data[0], cauto_paused_data[1]);
             jQuery('.cauto-runner-manual-ui').removeClass('active');
         } else {
-            console.error('AutoQA Error: No payload found after the runner is paused. Please contact developer');
+            console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused. Please contact developer']);
         }
     });
 });

@@ -13,7 +13,7 @@ var cauto_default_set_scroll_to_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -23,7 +23,7 @@ var cauto_default_set_scroll_to_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -43,12 +43,12 @@ var cauto_default_set_scroll_to_step = (params = null) => {
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: 'Document scrolled down with '+distance,
+                            message: cauto_translable_labels['Document scrolled down with'] + ' '+distance,
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             });
             break;
@@ -60,12 +60,12 @@ var cauto_default_set_scroll_to_step = (params = null) => {
                     cauto_do_run_runner([
                         {
                             status: 'passed',
-                            message: 'Document scrolled up with '+distance,
+                            message: cauto_translable_labels['Document scrolled up with'] + ' '+distance,
                             pause: true
                         }
                     ], cauto_paused_data[1]);
                 } else {
-                    console.error('AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer');
+                    console.error(cauto_translable_labels['AutoQA Error: No payload found after the runner is paused to wait for. Please contact developer']);
                 }
             });
             break;

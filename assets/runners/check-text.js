@@ -12,7 +12,7 @@ cauto_default_check_text_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -22,7 +22,7 @@ cauto_default_check_text_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -45,8 +45,8 @@ cauto_default_check_text_step = (params = null) => {
     }
     
     let text_recieved       = jQuery(element).text();
-    let passed_message      = 'Matched: 1, Expected: '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", Received: "'+ text_recieved + '"';
-    let failed_message      = 'Matched: 0, Expected: '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", Received: "'+ text_recieved + '"';
+    let passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", ' +cauto_translable_labels['Received:']+ ' "'+ text_recieved + '"';
+    let failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' '+params[2].value+ ' ' + params[3].value + ' "' + text_expected + '", ' +cauto_translable_labels['Received:']+ ' "'+ text_recieved + '"';
 
     try {
         
@@ -139,8 +139,8 @@ cauto_default_check_text_step = (params = null) => {
                 }
                 break;
             case 'has any':
-                passed_message      = 'Matched: 1, Expected: '+params[2].value+ ' ' + params[3].value + ', Received: "'+ text_recieved + '"';
-                failed_message      = 'Matched: 0, Expected: '+params[2].value+ ' ' + params[3].value + ', Received: "'+ text_recieved + '"';
+                passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' ' + params[2].value+ ' ' + params[3].value + ', ' +cauto_translable_labels['Received:']+ ' "'+ text_recieved + '"';
+                failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' ' + params[2].value+ ' ' + params[3].value + ', ' +cauto_translable_labels['Received:']+ ' "'+ text_recieved + '"';
                 if (text_recieved.length > 0 && text_recieved) {
                     return [
                         {
@@ -161,7 +161,7 @@ cauto_default_check_text_step = (params = null) => {
         }
 
     } catch(error) {
-        console.error('Check Title Runner: '+error);
+        console.error(cauto_translable_labels['Check Title Runner:'] + ' '+error);
     }
 
 

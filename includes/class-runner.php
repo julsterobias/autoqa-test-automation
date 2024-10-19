@@ -48,37 +48,6 @@ class cauto_runner extends cauto_utils
 
         add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']); 
         add_action('wp_ajax_cauto_generate_pdf_step', [$this, 'do_generate_pdf']);
-        
-        add_action('init', function(){
-            if (isset($_GET['pdf'])) {
-                header('Content-Type: application/pdf');
-                header('Content-Disposition: inline; filename="simple.pdf"');
-
-                // Define the basic PDF structure
-                $pdf = "%PDF-1.4\n";
-                $pdf .= "1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj\n";
-                $pdf .= "2 0 obj << /Type /Pages /Kids [3 0 R] /Count 1 >> endobj\n";
-                $pdf .= "3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << >> >> endobj\n";
-                $pdf .= "4 0 obj << /Length 44 >> stream\n";
-                $pdf .= "BT\n/F1 12 Tf\n50 730 Td\n(Hello, Julius!) Tj\nET\n";
-                $pdf .= "endstream endobj\n";
-                $pdf .= "xref\n";
-                $pdf .= "0 5\n";
-                $pdf .= "0000000000 65535 f \n";
-                $pdf .= "0000000010 00000 n \n";
-                $pdf .= "0000000079 00000 n \n";
-                $pdf .= "0000000178 00000 n \n";
-                $pdf .= "0000000329 00000 n \n";
-                $pdf .= "trailer << /Size 5 /Root 1 0 R >>\n";
-                $pdf .= "startxref\n";
-                $pdf .= "394\n";
-                $pdf .= "%%EOF";
-
-                // Output the PDF content to the browser
-                echo $pdf;
-                die();
-            }
-        });
 
     }
 
@@ -131,15 +100,9 @@ class cauto_runner extends cauto_utils
             ]
         );        
 
-        //translatable will go here
-        $cauto_steps_text = [
-            'element_not_found' => __('Matched 0: The element cannot be found.', 'autoqa-test-automation'),
-            'multiple_element'  => __('Matched > 1: Multiple elements were found, but the specific event cannot be dispatched.', 'autoqa-test-automation'),
-            'element_not_found_dispatch'    => __('Matched 0: The element cannot be found after dispatch.', 'autoqa-test-automation'),
-            'event_validated'   => __('Matched 1: Event is validated.', 'autoqa-test-automation'),
-            'unconfigured_msg'  => __('The step is not configured','autoqa-test-automation')
-        ];
-        wp_localize_script('cauto-runner-js', 'cauto_step_text', $cauto_steps_text);
+        //updated translatables
+        wp_localize_script('cauto-runner-js', 'cauto_translable_labels', cauto_ui_translatables::ui_text()['runner']);
+        
 
         $footer_position = (is_admin())? 'admin_footer' : 'wp_footer';
         add_action($footer_position, function(){

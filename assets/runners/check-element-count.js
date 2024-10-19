@@ -13,7 +13,7 @@ var cauto_default_check_element_count_step = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -23,7 +23,7 @@ var cauto_default_check_element_count_step = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -39,9 +39,9 @@ var cauto_default_check_element_count_step = (params = null) => {
     let element             = cauto_prepare_element_selector(field_attr, selector);
 
     let value_recieved      = jQuery(element).length;
-    let passed_message      = 'Matched: 1, Expected ' + alias + ' ' + condition + ' "' + value_expected + '", Received: "' + value_recieved + '"';
-    let failed_message      = 'Matched: 0, Expected ' + alias + ' ' + condition + ' "' + value_expected + '", Received: "' + value_recieved + '"';
-    let type_error          = 'Matched: 0, The value is not numeric for "' + condition + '" operation';
+    let passed_message      = cauto_translable_labels['Matched: 1, Expected:'] + ' ' + alias + ' ' + condition + ' "' + value_expected + '", ' +cauto_translable_labels['Received:']+ ' "' + value_recieved + '"';
+    let failed_message      = cauto_translable_labels['Matched: 0, Expected:'] + ' ' + alias + ' ' + condition + ' "' + value_expected + '", ' +cauto_translable_labels['Received:']+ ' "' + value_recieved + '"';
+    let type_error          = cauto_translable_labels['Matched: 0, The value is not numeric for'] + ' "' + condition + '" ' + cauto_translable_labels['operation'];
 
     try {
         switch(condition) {
@@ -168,6 +168,6 @@ var cauto_default_check_element_count_step = (params = null) => {
         }
 
     } catch(error) {
-        console.error('Check Title Runner: '+error);
+        console.error(cauto_translable_labels['Check Title Runner:'] + ' '+error);
     }
 }

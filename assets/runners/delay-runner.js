@@ -13,7 +13,7 @@ var cauto_default_delay_runner_for = (params = null) => {
         return [
             {
                 status: 'failed',
-                message: cauto_step_text.unconfigured_msg
+                message: cauto_translable_labels['The step is not configured']
             }
         ];
     }
@@ -23,7 +23,7 @@ var cauto_default_delay_runner_for = (params = null) => {
             return [
                 {
                     status: 'failed',
-                    message: cauto_step_text.unconfigured_msg
+                    message: cauto_translable_labels['The step is not configured']
                 }
             ];
             break;
@@ -40,7 +40,7 @@ var cauto_default_delay_runner_for = (params = null) => {
     return [
         {
             status: 'passed',
-            message: 'Runner is delayed for ' + toseconds + 'ms'
+            message: cauto_translable_labels['Runner is delayed for'] + ' ' + toseconds + 'ms'
         }
     ];
 
