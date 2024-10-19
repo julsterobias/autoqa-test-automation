@@ -11,7 +11,7 @@
 * Plugin URI: https://julsterobias.github.io/autoqa
 * Version: 0.9.6
 * Text Domain: autoqa-test-automation
-* License:     GPLv3
+* License:     GPLv2 or later
 * License URI: https://www.gnu.org/licenses/gpl.html
 *
 *
