@@ -1,4 +1,17 @@
 <?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
+<?php 
 if (!empty($data['data']['fields'])): 
     foreach ($data['data']['fields'] as $field):  
         switch($field['field']):  
@@ -9,18 +22,23 @@ if (!empty($data['data']['fields'])):
                     <div class="cauto-input-wrapper">
                         <?php if ($field['attr']['type'] === 'checkbox'): ?>  
                         <label>
-                            <input <?php echo $field['iattr']; ?> <?php echo ($value)? 'checked' : null; ?>> <?php echo esc_html($field['label']); ?>
+                            <input <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> <?php echo ($value)? 'checked' : null; ?>> <?php echo esc_html($field['label']); ?>
                         </label>
                         <?php else: ?>
                         <label><?php echo esc_html($field['label']); ?>
-                            <input <?php echo $field['iattr']; ?> value="<?php echo esc_attr($value); ?>">
+                            <?php 
+                                if ($field['attr']['type'] === 'range') {
+                                    $value = ($value)? $value : 500;
+                                }
+                            ?>
+                            <input <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> value="<?php echo esc_attr($value); ?>">
                         </label>
                             <?php if (isset($field['help-text'])): ?>
                                 <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
                             <?php endif; ?>
                         <?php endif; ?>
                         <?php if ($field['attr']['type'] === 'range'): ?>  
-                            <span class="cauto-input-range-value"><span><?php echo esc_html($field['attr']['value']); ?></span>px</span>
+                            <span class="cauto-input-range-value"><span><?php echo ($value)? esc_html($value) : 500; ?></span>px</span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -32,7 +50,7 @@ if (!empty($data['data']['fields'])):
                 <div class="cauto-ui-wrapper">
                     <div class="cauto-input-wrapper">
                         <label><?php echo esc_html($field['label']); ?>
-                            <textarea <?php echo $field['iattr']; ?>><?php echo esc_attr($value); ?></textarea>
+                            <textarea <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?>><?php echo esc_attr($value); ?></textarea>
                             <?php if (isset($field['help-text'])): ?>
                                 <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
                             <?php endif; ?>
@@ -43,20 +61,19 @@ if (!empty($data['data']['fields'])):
             break;
             case 'select':
                 $selected               = $this->prepare_value($field, $data, $field['field']);
-                $inter_act_properties   = (isset($field['field-interact']))? esc_attr(json_encode($field['field-interact'])) : null;
-                $el_interaction         = ($inter_act_properties)? "data-interact=\"$inter_act_properties\"" : null;
+                $inter_act_properties   = (isset($field['field-interact']))? esc_attr(wp_json_encode($field['field-interact'])) : null;
+                $el_interaction         = ($inter_act_properties)? $inter_act_properties : null;
                 $select2                = null;
                 if (isset($field['select2'])) {
                     if (is_array($field['select2'])) {
-                        $select2_source = esc_attr(json_encode($field['select2'])); 
-                        $select2        = "data-select-source=\"{$select2_source}\"";
+                        $select2 = wp_json_encode($field['select2']); 
                     }
                 }
 ?>
             <div class="cauto-ui-wrapper">
-                <div class="cauto-select-wrapper"><?php if (isset($field['select2_allow_clear'])): ?><span class="cauto-clear-select2">Clear</span><?php endif; ?>
+                <div class="cauto-select-wrapper"><?php if (isset($field['select2_allow_clear'])): ?><span class="cauto-clear-select2"><?php esc_html_e('Clear', 'autoqa-test-automation') ?></span><?php endif; ?>
                     <label><?php echo esc_html($field['label']); ?>
-                        <select <?php echo $field['iattr'] ?> <?php echo $el_interaction; ?> <?php echo $select2; ?>>
+                        <select <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> data-interact="<?php echo esc_attr($el_interaction); ?>"  data-select-source="<?php echo esc_attr($select2); ?>">
                             <?php if (!empty($field['options'])): 
                                 foreach ($field['options'] as $value => $label):    
                             ?>
@@ -87,7 +104,7 @@ if (!empty($data['data']['fields'])):
 ?>
             <div class="cauto-ui-wrapper">
                 <div class="cauto-toggle-wrapper">
-                    <input <?php echo $field['iattr']; ?> /><label class="cauto-toggle-label" for="<?php echo (isset($field['attr']['id']))? $field['attr']['id'] : null; ?>"></label> <?php echo esc_html($field['label']); ?>
+                    <input <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> /><label class="cauto-toggle-label" for="<?php echo (isset($field['attr']['id']))? esc_attr($field['attr']['id']) : null; ?>"></label> <?php echo esc_html($field['label']); ?>
                 </div>
                 <?php if (isset($field['help-text'])): ?>
                     <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
@@ -106,7 +123,7 @@ if (!empty($data['data']['fields'])):
                             <?php foreach ($field['options'] as $option): ?>
                                 <li>
                                     <label>
-                                        <input <?php echo $field['iattr']; ?> value="<?php echo esc_attr($option['value']); ?>"> <?php echo esc_html($option['label']); ?>
+                                        <input <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> value="<?php echo esc_attr($option['value']); ?>"> <?php echo esc_html($option['label']); ?>
                                     </label>
                                 </li>
                             <?php endforeach; ?>
@@ -123,7 +140,7 @@ if (!empty($data['data']['fields'])):
             case 'custom':
 ?>
                 <div class="cauto-custom-wrapper">
-                <?php echo $field['html']; ?>
+                <?php echo htmlspecialchars_decode(esc_html($field['html'])); ?>
                 <?php if (isset($field['help-text'])): ?>
                     <span class="cauto-inline-tip"><?php echo esc_attr($field['help-text']); ?></span>
                 <?php endif; ?>

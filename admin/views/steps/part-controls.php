@@ -1,3 +1,16 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <div class="cauto-modal-control-area">
     <div class="wrapper">
         <div class="col-50">
@@ -14,8 +27,8 @@
                 endif;
             ?>
             <!-- call this using hook, not important -->
-            <input type="hidden" id="cauto_step_config_field_ids" value="<?php echo esc_attr(json_encode($data['field_ids'])); ?>">
-            <input type="hidden" id="cauto_step_config_describe" value="<?php echo esc_attr(json_encode($data['step_indicator'])); ?>">
+            <input type="hidden" id="cauto_step_config_field_ids" value="<?php echo esc_attr(wp_json_encode($data['field_ids'])); ?>">
+            <input type="hidden" id="cauto_step_config_describe" value="<?php echo esc_attr(wp_json_encode($data['step_indicator'])); ?>">
         </div>
     </div>
 </div>

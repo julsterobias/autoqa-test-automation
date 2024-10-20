@@ -38,20 +38,20 @@ class cauto_wp_runner extends cauto_utils
 
     public function check_meta_value()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $post       = (isset($_POST['wp_post']))? sanitize_text_field($_POST['wp_post']) : null;
-        $key        = (isset($_POST['key']))? sanitize_text_field($_POST['key']) : null;
-        $condition  = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
-        $value      = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
+        $post       = (isset($_POST['wp_post']))? sanitize_text_field(wp_unslash($_POST['wp_post'])) : null;
+        $key        = (isset($_POST['key']))? sanitize_text_field(wp_unslash($_POST['key'])) : null;
+        $condition  = (isset($_POST['condition']))? sanitize_text_field(wp_unslash($_POST['condition'])) : null;
+        $value      = (isset($_POST['value']))? sanitize_text_field(wp_unslash($_POST['value'])) : null;
 
         $check_status = [];
 
@@ -78,19 +78,19 @@ class cauto_wp_runner extends cauto_utils
 
     public function check_transient_value()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
         
-        $key        = (isset($_POST['key']))? sanitize_text_field($_POST['key']) : null;
-        $condition  = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
-        $value      = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
+        $key        = (isset($_POST['key']))? sanitize_text_field(wp_unslash($_POST['key'])) : null;
+        $condition  = (isset($_POST['condition']))? sanitize_text_field(wp_unslash($_POST['condition'])) : null;
+        $value      = (isset($_POST['value']))? sanitize_text_field(wp_unslash($_POST['value'])) : null;
 
         if ($key && $condition) {
             $check_status = $this->process_check_key(
@@ -113,18 +113,18 @@ class cauto_wp_runner extends cauto_utils
 
     public function check_scheduler()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $hook           = (isset($_POST['hook']))? sanitize_text_field($_POST['hook']) : null;
-        $condition      = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
+        $hook           = (isset($_POST['hook']))? sanitize_text_field(wp_unslash($_POST['hook'])) : null;
+        $condition      = (isset($_POST['condition']))? sanitize_text_field(wp_unslash($_POST['condition'])) : null;
 
         $timestamp = wp_next_scheduled($hook);
 
@@ -171,20 +171,20 @@ class cauto_wp_runner extends cauto_utils
 
     public function check_post_metadata()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $post           = (isset($_POST['wp_post']))? sanitize_text_field($_POST['wp_post']) : null;
-        $metadata       = (isset($_POST['metadata']))? sanitize_text_field($_POST['metadata']) : null;
-        $condition      = (isset($_POST['condition']))? sanitize_text_field($_POST['condition']) : null;
-        $value          = (isset($_POST['value']))? sanitize_text_field($_POST['value']) : null;
+        $post           = (isset($_POST['wp_post']))? sanitize_text_field(wp_unslash($_POST['wp_post'])) : null;
+        $metadata       = (isset($_POST['metadata']))? sanitize_text_field(wp_unslash($_POST['metadata'])) : null;
+        $condition      = (isset($_POST['condition']))? sanitize_text_field(wp_unslash($_POST['condition'])) : null;
+        $value          = (isset($_POST['value']))? sanitize_text_field(wp_unslash($_POST['value'])) : null;
 
         $this->validate_required_fields([$post, $metadata, $condition]);
 
@@ -195,7 +195,7 @@ class cauto_wp_runner extends cauto_utils
                 'status'    => 'success',
                 'step'      => [
                     'status'    => 'failed',
-                    'message'   => __('Step can\'t find a relevant post, please check the step settings', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Step can\'t find a relevant post, please check the step settings', 'autoqa-test-automation'))
                 ]
             ]);
             exit();
@@ -210,7 +210,7 @@ class cauto_wp_runner extends cauto_utils
         }
 
         if (is_array($post_meta_data)) {
-            $post_meta_data = json_encode($post_meta_data);
+            $post_meta_data = wp_json_encode($post_meta_data);
         }
 
         if (is_numeric($value)) {
@@ -334,7 +334,7 @@ class cauto_wp_runner extends cauto_utils
         }
 
         if (is_array($saved_wp_data)) {
-            $saved_wp_data      = json_encode($saved_wp_data);
+            $saved_wp_data      = wp_json_encode($saved_wp_data);
         } 
 
         $saved_wp_data  = stripslashes($saved_wp_data);      
@@ -373,7 +373,7 @@ class cauto_wp_runner extends cauto_utils
                     'status'    => 'success',
                     'step'      => [
                         'status'    => 'failed',
-                        'message'   => __('Step is not properly configured please check the settings', 'autoqa-test-automation')
+                        'message'   => esc_html(__('Step is not properly configured please check the settings', 'autoqa-test-automation'))
                     ]
                 ]);
                 exit();

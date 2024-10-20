@@ -277,7 +277,6 @@ const cauto_do_save_step = (source = null) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     //do this after saving
                     if (source === 'flow_save') {
@@ -410,7 +409,6 @@ const cauto_build_step_settings = (type) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     jQuery(cauto_step_popup_step+' .cauto-popup-content').html(data.html);
                 } else {
@@ -455,11 +453,10 @@ const cauto_do_save_flow = (btn, redirect_to = '') => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     window.location = data.redirect_to;
                 } else {
-                    alert(data.message);
+                    console.error(data.message);
                 }
             }
         }
@@ -482,7 +479,6 @@ const cauto_run_flow = (flow_id) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     let url = data.url;
                     if (url !== '') {
@@ -523,7 +519,6 @@ const cauto_get_flow_details = (flow_id = 0) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     jQuery('#cauto-new-flow-name').val(data.data.title);
                    if (data.data.stop_on_error) {
@@ -562,7 +557,6 @@ const cauto_load_runner_results = (runner_id = 0, flow_id = 0) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     jQuery('#cauto-result-steps').html(data.content);
                 } else {
@@ -608,8 +602,6 @@ const cauto_load_more_runners = () => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
-
                 if (data.status === 'success') {
                     if (typeof data.content !== 'undefined') {
                         jQuery('#cauto-results-list').append(data.content);
@@ -645,7 +637,6 @@ const cauto_get_available_variables = () => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     if (typeof data.variables !== 'undefined') {
                         jQuery('#cauto-variable-field-select').autocomplete({source: data.variables});
@@ -678,7 +669,6 @@ const cauto_do_delete_flow = ( flow_id = null ) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     window.location = data.redirect;
                 } else {
@@ -708,7 +698,6 @@ const cauto_do_save_settings = () => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     location.reload();
                 } else {

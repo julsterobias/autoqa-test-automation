@@ -1,8 +1,21 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <?php if (!empty($data['results'])): 
 do_action('autoqa-results-before-list', $data['results']);    
 ?>
 
-<ul id="cauto-results-list" data-rucnt="<?php echo $data['runner_count']; ?>" data-flow-id="<?php echo $data['flow_id']; ?>">
+<ul id="cauto-results-list" data-rucnt="<?php echo esc_attr($data['runner_count']); ?>" data-flow-id="<?php echo esc_attr($data['flow_id']); ?>">
     <?php foreach ($data['results'] as $result): ?>
         <li data-runner-id="<?php echo esc_attr($result['ID']); ?>">
             <div class="wrapper">

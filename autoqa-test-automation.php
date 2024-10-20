@@ -6,12 +6,13 @@
 * Plugin Name: AutoQA
 * Description: A plugin that will automate the testing of your website without the need of coding.
 * Author:      Juls Terobias
+* Contributors: julsterobias
 * Plugin Type: Test Tool
 * Author URI: https://julsterobias.github.io/autoqa/author/
 * Plugin URI: https://julsterobias.github.io/autoqa
 * Version: 0.9.6
 * Text Domain: autoqa-test-automation
-* License:     GPLv3
+* License:     GPLv2 or later
 * License URI: https://www.gnu.org/licenses/gpl.html
 *
 *
@@ -112,13 +113,9 @@ function cauto_init_classes()
                         }
                     } 
                 }
-            } else {
-                error_log('CAUTOMATION_ERR 01: File is not found');
-            }
+            } 
 
-        } else {
-            error_log(sprintf("CAUTOMATION_ERR 02: %s not found", $path));
-        } 
+        }  
 
     }
 

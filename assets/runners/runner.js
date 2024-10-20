@@ -43,7 +43,6 @@ const cauto_prepare_the_runner = () => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     if (typeof data.variables !== 'undefined') {
                         cauto_temp_runner_variables = data.variables;
@@ -82,7 +81,6 @@ const cauto_do_run_runner = (response = [], index = 0, status = null) =>
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     try {
             
@@ -451,7 +449,6 @@ const cauto_save_element_to_data_action = (data_name, data_to_store) => {
         success: function( data ) {
             //response data
             if (data) {
-                data = JSON.parse(data);
                 if (data.status === 'success') {
                     //continue the runner
                     cauto_do_run_runner([

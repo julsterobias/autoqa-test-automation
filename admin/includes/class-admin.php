@@ -104,7 +104,7 @@ class cauto_admin extends cauto_utils
 
         //pass the variable to inline js variable for editing
         if (!empty($_GET['flow'])) {
-            $cauto_variables['flow_id'] = $_GET['flow'];
+            $cauto_variables['flow_id'] = sanitize_text_field(wp_unslash($_GET['flow']));
         }
 
         wp_localize_script('cauto-admin-js', 'cauto_ajax', $cauto_variables);
@@ -196,8 +196,8 @@ class cauto_admin extends cauto_utils
         }
 
         $get_runners = [];
-        $is_result  = (isset($_GET['result']))? sanitize_text_field($_GET['result']) : null;
-        $flow_id    = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
+        $is_result  = (isset($_GET['result']))? sanitize_text_field(wp_unslash($_GET['result'])) : null;
+        $flow_id    = (isset($_GET['flow']))? sanitize_text_field(wp_unslash($_GET['flow'])) : null;
         if ($flow_id) {
             $runners = new cauto_test_runners();
             $runners->set_flow_id($flow_id);
@@ -218,7 +218,7 @@ class cauto_admin extends cauto_utils
         }
 
         if (isset($get_runners[0]['date'])) {
-            $last_run = __($get_runners[0]['date'], 'autoqa-test-automation');
+            $last_run = $get_runners[0]['date'];
         } else {
             $last_run = __('No history', 'autoqa-test-automation');
         }
@@ -247,21 +247,21 @@ class cauto_admin extends cauto_utils
     public function update_flow()
     {
     
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
 
-        $flowname       = (isset($_POST['name']))? sanitize_text_field($_POST['name']) : null;
+        $flowname       = (isset($_POST['name']))? sanitize_text_field(wp_unslash($_POST['name'])) : null;
         $stop_on_error  = ($_POST['stop_on_error'] === "true")? true : false;
-        $is_edit        = (isset($_POST['is_edit']))? sanitize_text_field($_POST['is_edit']) : null;
-        $redirect_to    = (isset($_POST['redirect_to']))? sanitize_text_field($_POST['redirect_to']) : null;
+        $is_edit        = (isset($_POST['is_edit']))? sanitize_text_field(wp_unslash($_POST['is_edit'])) : null;
+        $redirect_to    = (isset($_POST['redirect_to']))? sanitize_text_field(wp_unslash($_POST['redirect_to'])) : null;
 
         $flow_id        = 0;
         if ($is_edit) {
@@ -287,7 +287,7 @@ class cauto_admin extends cauto_utils
                     $redirect_url = admin_url('tools.php?page=cauto-test-tools');
                 }
 
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'        => 'success',
                         'message'       => __('Flow is added', 'autoqa-test-automation'),
@@ -297,7 +297,7 @@ class cauto_admin extends cauto_utils
                 );
             }
         } else {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
                     'message'   => __('Flow name is required', 'autoqa-test-automation')
@@ -319,28 +319,28 @@ class cauto_admin extends cauto_utils
      */
     public function save_steps()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
 
-        $step_data  = (isset($_POST['step']))? $_POST['step'] : null;
-        $flow_id    = (is_numeric($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $step_data  = (isset($_POST['step']))? $_POST['step'] : null; //this is sanitized below
+        $flow_id    = (is_numeric($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
 
 
         if ($step_data) {
-
+ 
             $step_data = json_decode(stripslashes($step_data));
 
             if (empty($step_data)) {
                 delete_post_meta($flow_id, $this->flow_steps_key);
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'    => 'success'
                     ]
@@ -359,9 +359,9 @@ class cauto_admin extends cauto_utils
                         foreach ($data as $x => $indata) {
                             $indata = (array) $indata;
                             if (is_array($indata['value'])) {
-                                $indata['value'] = array_map('sanitize_text_field', $indata['value']);
+                                $indata['value'] = array_map('sanitize_text_field', $indata['value']); // sanitize value in array
                             } else {
-                                $indata['value'] = sanitize_text_field($indata['value']);
+                                $indata['value'] = sanitize_text_field($indata['value']); // sanitize single value
                             }
                           
                             $data[$x] = $indata;
@@ -385,7 +385,7 @@ class cauto_admin extends cauto_utils
 
             do_action('autoqa_after_save_steps_action', $step_data, $flow_id);
 
-            echo json_encode([
+            wp_send_json([
                 'status'    => 'success',
                 'message'   => ''
             ]);
@@ -399,7 +399,7 @@ class cauto_admin extends cauto_utils
     {
         if (!isset($_GET['flow'])) return;
 
-        $flow_id = sanitize_text_field($_GET['flow']);
+        $flow_id = sanitize_text_field(wp_unslash($_GET['flow']));
         $get_steps = get_post_meta($flow_id, $this->flow_steps_key, true);
 
         if (!$get_steps) return;
@@ -483,24 +483,24 @@ class cauto_admin extends cauto_utils
     public function setup_run_flow()
     {
 
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id = ($_POST['flow_id'])? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id = ($_POST['flow_id'])? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
         $flow_id = (int) $flow_id;
 
         if (!$flow_id) {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('No flow is found', 'autoqa-test-automation')
+                    'message'   => esc_html(__('No flow is found', 'autoqa-test-automation'))
                 ]
             );
             exit();
@@ -510,10 +510,10 @@ class cauto_admin extends cauto_utils
         $target_url = '';
 
         if (empty($steps)) {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('No available steps to run', 'autoqa-test-automation')
+                    'message'   => esc_html(__('No available steps to run', 'autoqa-test-automation'))
                 ]
             );
             exit();
@@ -522,10 +522,10 @@ class cauto_admin extends cauto_utils
         //get the first step and validate
         if (!empty($steps)) {
             if ($steps[0]['step'] !== 'start') {
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'    => 'failed',
-                        'message'   => __('No valid step to start', 'autoqa-test-automation')
+                        'message'   => esc_html(__('No valid step to start', 'autoqa-test-automation'))
                     ]
                 );
                 exit();
@@ -534,10 +534,10 @@ class cauto_admin extends cauto_utils
             $target_url = (isset($steps[0]['record'][0]['value']))? $steps[0]['record'][0]['value'] : null;
 
             if (!$target_url) {
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'    => 'failed',
-                        'message'   => __('No valid URL to start', 'autoqa-test-automation')
+                        'message'   => esc_html(__('No valid URL to start', 'autoqa-test-automation'))
                     ]
                 );
                 exit();
@@ -558,7 +558,7 @@ class cauto_admin extends cauto_utils
         $target_url = get_site_url().'?'.http_build_query($params);
 
         if ($runner_id > 0) {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'success',
                     'message'   => '',
@@ -566,10 +566,10 @@ class cauto_admin extends cauto_utils
                 ]
             );
         } else {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Failed to save runner, contact developer', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Failed to save runner, contact developer', 'autoqa-test-automation'))
                 ]
             );
         }
@@ -586,23 +586,23 @@ class cauto_admin extends cauto_utils
      */
     public function flow_details()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
 
         if (!$flow_id) {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'        => 'failed',
-                    'message'       => __('No flow is found, please contact developer', 'autoqa-test-automation') 
+                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa-test-automation')) 
                 ]
             );
             exit();
@@ -612,7 +612,7 @@ class cauto_admin extends cauto_utils
         $details    = $flow->get_flow(); 
         
         if (!empty($details)) {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'        => 'success',
                     'data'          => [
@@ -622,10 +622,10 @@ class cauto_admin extends cauto_utils
                 ]
             );
         } else {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'        => 'failed',
-                    'message'       => __('No flow is found, please contact developer', 'autoqa-test-automation') 
+                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa-test-automation')) 
                 ]
             );
         }
@@ -641,18 +641,18 @@ class cauto_admin extends cauto_utils
      */
     public function load_more_runner()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
-        $offset     = (isset($_POST['offset']))?  sanitize_text_field($_POST['offset']) : 0;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
+        $offset     = (isset($_POST['offset']))?  sanitize_text_field(wp_unslash($_POST['offset'])) : 0;
 
         if ($flow_id) {
             $runner_class   = new cauto_test_runners();
@@ -693,7 +693,7 @@ class cauto_admin extends cauto_utils
                 $this->get_view('flow/part-results', ['path' => 'admin','runners' => $to_display_runners]);
                 $reponse = ob_get_clean();
 
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'    => 'success',
                         'content'   => $reponse
@@ -709,18 +709,18 @@ class cauto_admin extends cauto_utils
 
     public function load_runner_steps()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field(wp_unslash($_POST['runner_id'])) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
 
         if ($runner_id && $flow_id) {
             $runner_class = new cauto_test_runners($runner_id);
@@ -730,7 +730,7 @@ class cauto_admin extends cauto_utils
                 ob_start();
                 $this->get_view('flow/part-steps-results', ['path' => 'admin', 'steps' => $runner_steps]);
                 $reponse = ob_get_clean();
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'    => 'success',
                         'content'   => $reponse
@@ -738,10 +738,10 @@ class cauto_admin extends cauto_utils
                 );
             }
         } else {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('AutoQA Error: No runner ID or Flow ID found, please contact the developer.', 'autoqa-test-automation')
+                    'message'   => esc_html(__('AutoQA Error: No runner ID or Flow ID found, please contact the developer.', 'autoqa-test-automation'))
                 ]
             );
         }
@@ -778,20 +778,20 @@ class cauto_admin extends cauto_utils
 
     public function load_variables()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
         $default_runner_variables = $this->runner_available_variables($flow_id);
 
-        echo json_encode(
+        wp_send_json(
             [
                 'status'    => 'success',
                 'variables' => $default_runner_variables
@@ -803,17 +803,17 @@ class cauto_admin extends cauto_utils
 
     public function delete_flow()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
+        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
 
         if ($flow_id) {
 
@@ -832,7 +832,7 @@ class cauto_admin extends cauto_utils
             if ($deleted) {
 
                 $url = admin_url('tools.php?page=cauto-test-tools');
-                echo json_encode([
+                wp_send_json([
                     'status'    => 'success',
                     'redirect'  => $url
                 ]);
@@ -845,17 +845,17 @@ class cauto_admin extends cauto_utils
 
     public function cauto_save_settings()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $duration = (isset($_POST['duration']))? $_POST['duration'] : null;
+        $duration = (isset($_POST['duration']))? sanitize_text_field(wp_unslash($_POST['duration'])) : null;
         $options = get_option($this->settings_key);
         if ($duration) {
             if (!$options) {
@@ -873,7 +873,7 @@ class cauto_admin extends cauto_utils
             }
         }
 
-        echo json_encode([
+        wp_send_json([
             'status'    => 'success'
         ]);
 
@@ -882,23 +882,23 @@ class cauto_admin extends cauto_utils
 
     public function load_select2_data()
     {
-        if ( !wp_verify_nonce( $_GET['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_GET['nonce'])), $this->nonce ) ) {
+            echo wp_json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $search  = (isset($_GET['search']))? sanitize_text_field($_GET['search']) : null;
+        $search  = (isset($_GET['search']))? sanitize_text_field(wp_unslash($_GET['search'])) : null;
         $source  = (isset($_GET['source']))? $_GET['source'] : null;
        
         if ($search && $source) {
 
             $source = json_decode(stripslashes($source));
-            $source = array_map('sanitize_text_field', $source);
+            $source = array_map('sanitize_text_field', $source); // sanitize value inside array
             
             $args = [
                 'posts_per_page'    => -1,
@@ -916,7 +916,7 @@ class cauto_admin extends cauto_utils
                 }
             }
 
-            echo json_encode($result);
+            echo wp_json_encode($result);
 
         } 
 
