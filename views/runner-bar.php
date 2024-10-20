@@ -1,3 +1,16 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <div class="cuato-runner-indicator ended">
     <span class="cauto-warming-up"><?php esc_html_e('Preparing runner...', 'autoqa-test-automation'); ?></span>
     <div class="cauto-runner-bars"></div>

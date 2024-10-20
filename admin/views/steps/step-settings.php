@@ -1,6 +1,19 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <div class="cauto-step-config">
     <div class="cauto-step-config-header">
-        <h3><?php esc_html_e($data['title'], 'autoqa-test-automation'); ?></h3>
+        <h3><?php echo esc_html($data['title']); ?></h3>
     </div>
     <div class="cauto-fields auto-type-start">
         <?php 

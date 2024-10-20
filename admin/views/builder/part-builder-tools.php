@@ -1,3 +1,16 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <?php if (!empty($data['is_results'])): ?>
 
 <div class="builder-wrapper">
@@ -9,7 +22,7 @@
         </div>
         <div class="col-70">
             <div class="cauto-builder-area" id="cauto-result-steps">
-                <span class="cauto-result-opening-messsage"><?php esc_html_e('Select runner to display the steps results'); ?></span>
+                <span class="cauto-result-opening-messsage"><?php esc_html_e('Select runner to display the steps results', 'autoqa-test-automation'); ?></span>
             </div>
         </div>
     </div>

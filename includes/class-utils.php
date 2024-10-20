@@ -100,7 +100,7 @@ class cauto_utils
                         $composed_string = '';
                         foreach ($control as $iii => $attr) {
                             $attr = (is_array($attr))? implode(' ', $attr) : $attr;
-                            $composed_string .= sprintf("%s=\"%s\" ", $iii, $attr);
+                            $composed_string .= sprintf("%s=\"%s\" ", esc_attr($iii), esc_attr($attr));
                         }
                         $data[$i]['iattr'] = $composed_string; 
                     }
@@ -197,7 +197,7 @@ class cauto_utils
             __("Tenacious", 'autoqa-test-automation'),
             __("Vibrant", 'autoqa-test-automation')
         ];
-        $adjectives_index = rand(0, 19);
+        $adjectives_index = wp_rand(0, 19);
 
         $person_nouns = [
             __("Runner", 'autoqa-test-automation'),
@@ -221,7 +221,7 @@ class cauto_utils
             __("Explorer", 'autoqa-test-automation'),
             __("Fighter", 'autoqa-test-automation')
         ];
-        $person_nouns_index = rand(0, 19);
+        $person_nouns_index = wp_rand(0, 19);
 
         $human_animal_nouns = [
             __("Dog", 'autoqa-test-automation'),
@@ -245,7 +245,7 @@ class cauto_utils
             __("Monkey", 'autoqa-test-automation'),
             __("Cowboy", 'autoqa-test-automation')
         ];
-        $human_animal_nouns_index = rand(0, 19);
+        $human_animal_nouns_index = wp_rand(0, 19);
 
         return $adjectives[$adjectives_index].' '.$human_animal_nouns[$human_animal_nouns_index].' '.$person_nouns[$person_nouns_index];
     }

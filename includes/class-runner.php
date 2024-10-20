@@ -47,9 +47,68 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_execute_pre_run', [$this, 'pre_run']);
 
         add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']); 
-        add_action('wp_ajax_cauto_generate_pdf_step', [$this, 'do_generate_pdf']);
+        add_action('wp_ajax_cauto_generate_pdf_step', [$this, 'do_generate_pdf']);   
+        
+        
+        add_action('wp_enqueue_scripts', [$this, 'dequeue_all_scripts_and_styles'], 100);
+        //load runner assets
+        add_action('admin_enqueue_scripts', [$this, 'load_runner_frame_style']);
+        add_action('wp_enqueue_scripts', [$this, 'load_runner_frame_style']);
 
     }
+
+    public function load_runner_frame_style()
+    {
+        if (!isset($_GET['runner_id']) || !isset($_GET['flow_id'])) return;
+        wp_register_style('cauto-runner-frame-css', CAUTO_PLUGIN_URL.'assets/frame.css' , [], null);
+        wp_enqueue_style('cauto-runner-frame-css');
+
+    }
+
+    public function dequeue_all_scripts_and_styles() {
+
+        if (!isset($_GET['runner_id']) || !isset($_GET['flow_id'])) return;
+
+        // Dequeue all scripts
+        global $wp_scripts;
+        foreach ($wp_scripts->queue as $script) {
+            wp_dequeue_script($script);
+        }
+    
+        // Dequeue all styles
+        global $wp_styles;
+        foreach ($wp_styles->queue as $style) {
+            if ($style === 'cauto-runner-frame-css') {
+                continue;
+            }
+            wp_dequeue_style($style);
+        }
+
+        remove_action('wp_head', 'wp_generator'); // Removes WordPress version meta tag
+        remove_action('wp_head', 'rsd_link'); // Removes Really Simple Discovery link
+        remove_action('wp_head', 'wlwmanifest_link'); // Removes Windows Live Writer link
+        remove_action('wp_head', 'index_rel_link'); // Removes index link
+        remove_action('wp_head', 'parent_post_rel_link', 10, 0); // Removes parent link
+        remove_action('wp_head', 'start_post_rel_link', 10, 0); // Removes start link
+        remove_action('wp_head', 'adjacent_posts_rel_link', 10, 0); // Removes adjacent posts link
+
+        remove_action('wp_print_footer_scripts', 'print_emoji_detection_script', 7);
+        remove_action('wp_head', 'print_emoji_detection_script', 7);
+        remove_action('wp_print_styles', 'print_emoji_styles');
+
+        // Remove feed links from the head
+        remove_action('wp_head', 'feed_links', 2); // Removes all feed links
+        remove_action('wp_head', 'feed_links_extra', 3); // Removes extra feed links
+    
+        // Remove the RSS feed links for comments
+        remove_action('wp_head', 'rsd_link'); // Removes RSD link
+        remove_action('wp_head', 'wlwmanifest_link'); // Removes Windows Live Writer link
+        wp_dequeue_style('wp-fonts-local'); // Remove the wp-fonts-local style
+
+   
+
+    }
+
 
     public function load_global_assets()
     {
@@ -57,6 +116,7 @@ class cauto_runner extends cauto_utils
         if ( $logged_user && current_user_can('administrator') ) {
             wp_register_script('autoqa-runner-global-js', CAUTO_PLUGIN_URL.'assets/onloadrunner.js', ['jquery'], null );
             wp_enqueue_script('autoqa-runner-global-js');
+            wp_enqueue_style('cauto-runner-global-css', CAUTO_PLUGIN_URL.'assets/runner.css' , [], null);
         }
     }
 
@@ -112,18 +172,18 @@ class cauto_runner extends cauto_utils
 
     public function prepare_runner()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field($_POST['flow_id']) : null;
-        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field($_POST['runner_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
+        $runner_id  = (isset($_POST['runner_id']))? sanitize_text_field(wp_unslash($_POST['runner_id'])) : null;
 
         if ($flow_id && $runner_id) {
 
@@ -132,10 +192,10 @@ class cauto_runner extends cauto_utils
             $runner_steps = $runner->get_runner_flow_step();
 
             if (empty($runner_steps)) {
-                echo json_encode(
+                wp_send_json(
                     [
                         'status'     => 'failed',
-                        'message'    => __('No available steps to run', 'autoqa-test-automation') 
+                        'message'    => esc_html(__('No available steps to run', 'autoqa-test-automation')) 
                     ]
                 );
                 exit();
@@ -158,7 +218,7 @@ class cauto_runner extends cauto_utils
                     $available_variables[$i] = '$'.$variable;
                 }
             }
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'        => 'success',
                     'runner_steps'  => $available_runners,
@@ -173,8 +233,8 @@ class cauto_runner extends cauto_utils
 
     public function run_flow()
     {
-        $this->flow_id      = (isset($_GET['flow_id']))? $_GET['flow_id'] : null;
-        $this->runner_id    = (isset($_GET['runner_id']))? $_GET['runner_id'] : null;
+        $this->flow_id      = (isset($_GET['flow_id']))? sanitize_text_field(wp_unslash($_GET['flow_id'])) : null;
+        $this->runner_id    = (isset($_GET['runner_id']))? sanitize_text_field(wp_unslash($_GET['runner_id'])) : null;
 
         if ($this->flow_id > 0 && $this->runner_id > 0) {
             
@@ -236,20 +296,28 @@ class cauto_runner extends cauto_utils
 
     public function pre_run()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $flow_id    = (isset($_POST['flow_id']))? (int) sanitize_text_field($_POST['flow_id']) : null;
-        $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field($_POST['runner_id']) : null;
+        $flow_id    = (isset($_POST['flow_id']))? (int) sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
+        $runner_id  = (isset($_POST['runner_id']))? (int) sanitize_text_field(wp_unslash($_POST['runner_id'])) : null;
         $response   = (!empty($_POST['response']))? json_decode(stripslashes($_POST['response'])) : null;
-        $index      = (isset($_POST['index']))? (int)sanitize_text_field($_POST['index']) : null;
+        $index      = (isset($_POST['index']))? (int)sanitize_text_field(wp_unslash($_POST['index'])) : null;
+
+        //sanitize response
+        if (!empty($response)) {
+            foreach ($response as $respon_row) {
+                $respon_row->status     = sanitize_text_field($respon_row->status);
+                $respon_row->message    = sanitize_text_field($respon_row->message);
+            }
+        }
 
         $has_failed = false;
 
@@ -263,10 +331,10 @@ class cauto_runner extends cauto_utils
             $runner_steps   = $runner->get_runner_flow_step();
 
             if (empty($runner_steps)) {
-                echo json_encode([
+                wp_send_json([
                     'status'       => 'failed',
                     'payload'      => [],
-                    'message'      => __('Cannot run flow no steps found', 'autoqa-test-automation') 
+                    'message'      => esc_html(__('Cannot run flow no steps found', 'autoqa-test-automation')) 
                 ]);
                 exit();
             }
@@ -331,7 +399,7 @@ class cauto_runner extends cauto_utils
 
                     //update the postback step
                     if (!isset($runner_steps[$started_steps]['result'])) {
-                        $postback_result = (object) ['status' => 'passed', 'message' => __('step validated and continued', 'cauto-test-automation')];
+                        $postback_result = (object) ['status' => 'passed', 'message' => __('step validated and continued', 'autoqa-test-automation')];
                         $runner->update_runner_steps($started_steps, [$postback_result]);
                     }
                     $started_steps++;
@@ -354,7 +422,7 @@ class cauto_runner extends cauto_utils
                         'params'        => $runner_steps[$started_steps]['record']
                     ];
 
-                    echo json_encode([
+                    wp_send_json([
                         'status'       => 'continue',
                         'payload'      => $payload,
                         'message'      => null 
@@ -376,7 +444,7 @@ class cauto_runner extends cauto_utils
                     'params'        => $runner_steps[$step_index]['record']
                 ];
 
-                echo json_encode([
+                wp_send_json([
                     'status'       => 'success',
                     'payload'      => $payload,
                     'message'      => null 
@@ -426,7 +494,7 @@ class cauto_runner extends cauto_utils
                 'results'       => $runner_steps_
             ];
             
-            echo json_encode([
+            wp_send_json([
                 'status'       => 'success',
                 'payload'      => $payload,
                 'message'      => null 
@@ -435,10 +503,10 @@ class cauto_runner extends cauto_utils
 
 
         } else {
-            echo json_encode([
+            wp_send_json([
                 'status'       => 'failed',
                 'payload'      => [],
-                'message'      => __('No flow and runner were found', 'autoqa-test-automation') 
+                'message'      => esc_html(__('No flow and runner were found', 'autoqa-test-automation')) 
             ]);
         }
         exit();
@@ -450,7 +518,7 @@ class cauto_runner extends cauto_utils
         $flow_class = new cauto_test_automation($data['flow_id']);
         $flow_class->stop($data['runner_id']);
 
-        echo json_encode([
+        wp_send_json([
             'status'       => 'completed',
             'payload'      => $data['payload'],
             'message'      => null
@@ -476,20 +544,20 @@ class cauto_runner extends cauto_utils
     public function do_generate_image() 
     {
 
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $type       = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
-        $width      = (isset($_POST['width']))? sanitize_text_field($_POST['width']) : null;
-        $height     = (isset($_POST['height']))? sanitize_text_field($_POST['height']) : null;
-        $filename   = (isset($_POST['file_alias']))? sanitize_text_field($_POST['file_alias']) : uniqid();
+        $type       = (isset($_POST['type']))? sanitize_text_field(wp_unslash($_POST['type'])) : null;
+        $width      = (isset($_POST['width']))? sanitize_text_field(wp_unslash($_POST['width'])) : 500;
+        $height     = (isset($_POST['height']))? sanitize_text_field(wp_unslash($_POST['height'])) : 500;
+        $filename   = (isset($_POST['file_alias']))? sanitize_text_field(wp_unslash($_POST['file_alias'])) : uniqid();
         $filename   = strtolower(str_replace(' ','-', $filename)).'.'.$type;
         
         ob_start();
@@ -516,18 +584,18 @@ class cauto_runner extends cauto_utils
 
     public function do_generate_pdf()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $content    = (isset($_POST['content']))? sanitize_text_field($_POST['content']) : null;
-        $filename   = (isset($_POST['file_alias']))? sanitize_text_field($_POST['file_alias']) : uniqid();
+        $content    = (isset($_POST['content']))? sanitize_text_field(wp_unslash($_POST['content'])) : null;
+        $filename   = (isset($_POST['file_alias']))? sanitize_text_field(wp_unslash($_POST['file_alias'])) : uniqid();
         $filename   = strtolower(str_replace(' ','-', $filename)).'.pdf';
         
         ob_start();

@@ -130,7 +130,7 @@ class cauto_admin_ui extends cauto_utils
 
     public function load_top_meta()
     {
-        $flow_id = (isset($_GET['flow']))? sanitize_text_field($_GET['flow']) : null;
+        $flow_id = (isset($_GET['flow']))? sanitize_text_field(wp_unslash($_GET['flow'])) : null;
 
         if (!$flow_id) return;
 
@@ -334,18 +334,28 @@ class cauto_admin_ui extends cauto_utils
 
     public function load_step_ui()
     {
-        if ( !wp_verify_nonce( $_POST['nonce'], $this->nonce ) ) {
-            echo json_encode(
+        if ( !wp_verify_nonce( sanitize_text_field( wp_unslash($_POST['nonce']) ), $this->nonce ) ) {
+
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
                 ]
             );
             exit();
         }
 
-        $type           = (isset($_POST['type']))? sanitize_text_field($_POST['type']) : null;
-        $saved_steps    = (isset($_POST['saved_data']))? json_decode(stripslashes($_POST['saved_data'])) : null;
+        $type           = (isset($_POST['type']))? sanitize_text_field(wp_unslash($_POST['type'])) : null;
+        $saved_steps    = (isset($_POST['saved_data']))? json_decode( stripslashes( $_POST['saved_data'] ) ) : null;
+
+        //sanitize all value 
+        foreach ($saved_steps as $steps) {
+            $steps->field   = sanitize_text_field($steps->field);
+            $steps->type    = sanitize_text_field($steps->type);
+            $steps->class   = sanitize_text_field($steps->class);
+            $steps->id      = sanitize_text_field($steps->id);
+            $steps->value   = sanitize_text_field($steps->value);
+        }
 
         $title_type     = str_replace('-',' ',$type);
 
@@ -371,18 +381,20 @@ class cauto_admin_ui extends cauto_utils
             $this->get_view('steps/step-settings.php', ['path' => 'admin', 'config' => $setting_ui, 'field_ids' => $field_ids, 'step_indicator' => $describe_text, 'saved_steps' => $saved_steps, 'title' => $title_type]);
             $reponse = ob_get_clean();
 
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'success',
                     'html'   => $reponse
                 ]
             );
 
+            
+
         } else {
-            echo json_encode(
+            wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Step type is not found', 'autoqa-test-automation')
+                    'message'   => esc_html(__('Step type is not found', 'autoqa-test-automation'))
                 ]
             );
         }

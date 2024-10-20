@@ -544,8 +544,7 @@ class cauto_steps
                             'type'  => 'range',
                             'class' => 'cauto-step-nodes cauto-upload-image-width-step cauto-field wide cauto-range-value-change',
                             'min'   => 0,
-                            'max'   => 1000,
-                            'value' => 200
+                            'max'   => 1000
                         ],
                         'label'     => __('Width', 'autoqa-test-automation')
                     ],
@@ -556,8 +555,7 @@ class cauto_steps
                             'type'  => 'range',
                             'class' => 'cauto-step-nodes cauto-upload-image-height-step cauto-field wide cauto-range-value-change',
                             'min'   => 0,
-                            'max'   => 1000,
-                            'value' => 200
+                            'max'   => 1000
                         ],
                         'label'     => __('Height', 'autoqa-test-automation')
                     ],

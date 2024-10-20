@@ -1,7 +1,20 @@
+<?php 
+if ( !function_exists( 'add_action' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+
+if ( !function_exists( 'add_filter' ) ){
+    header( 'Status: 403 Forbidden' );
+    header( 'HTTP/1.1 403 Forbidden' );
+    exit();
+}
+?>
 <div class="cauto-settings-wrappers">
     <div class="head">
         <div class="wrapper">
-            <div class="col-70 title"><span><?php if (!empty($data['details'])): echo $data['details']->post_title; else: ?>
+            <div class="col-70 title"><span><?php if (!empty($data['details'])): echo esc_html($data['details']->post_title); else: ?>
                 <svg class="autoqa-logo" viewBox="0 0 1212 308" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M124.072 231.512V206.827H122.951C110.245 227.024 89.317 236 65.3995 236C32.1392 236 0 217.674 0 182.143C0 123.797 68.0155 119.683 112.861 119.683H124.072V114.821C124.072 92.7544 106.881 81.1601 82.9639 81.1601C64.2784 81.1601 47.0876 88.6402 35.1289 99.8605L11.5851 76.2979C31.3918 56.1014 59.4201 47.4992 87.8222 47.4992C164.433 47.4992 164.433 102.853 164.433 128.285V231.512H124.072ZM121.456 161.198V151.1H112.113C87.4485 151.1 44.8454 152.97 44.8454 178.777C44.8454 195.233 61.6624 202.339 76.2371 202.339C106.881 202.339 121.456 186.257 121.456 161.198Z" fill="#3A3A3A"/>
 <path d="M365.157 51.9873V231.512H322.554V202.713H321.806C313.585 220.666 296.768 236 266.871 236C218.662 236 201.471 201.965 201.471 165.312V51.9873H246.317V142.872C246.317 162.694 247.811 195.607 279.203 195.607C308.726 195.607 320.311 173.914 320.311 149.978V51.9873H365.157Z" fill="#3A3A3A"/>
@@ -15,7 +28,7 @@
             </span> 
             <?php if ($data['details']): ?><span class="dashicons dashicons-edit" id="cauto-edit-flow" title="<?php esc_attr_e('Edit Flow', 'autoqa-test-automation'); ?>"></span> <?php endif; ?></div>
             <div class="col-30 controls">
-                <span class="version"><?php esc_html_e('Version', 'autoqa-test-automation'); ?> <?php echo CAUTO_PLUGIN_VERSION.' '.CAUTO_PLUGIN_VERSION_CODE; ?></span>
+                <span class="version"><?php esc_html_e('Version', 'autoqa-test-automation'); ?> <?php echo esc_html(CAUTO_PLUGIN_VERSION.' '.CAUTO_PLUGIN_VERSION_CODE); ?></span>
                 <?php do_action('cauto_top_control'); ?>
             </div>
         </div>
