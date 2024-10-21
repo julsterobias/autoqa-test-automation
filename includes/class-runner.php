@@ -49,7 +49,6 @@ class cauto_runner extends cauto_utils
         add_action('wp_ajax_cauto_generate_image_step', [$this, 'do_generate_image']); 
         add_action('wp_ajax_cauto_generate_pdf_step', [$this, 'do_generate_pdf']);   
         
-        
         add_action('wp_enqueue_scripts', [$this, 'dequeue_all_scripts_and_styles'], 100);
         //load runner assets
         add_action('admin_enqueue_scripts', [$this, 'load_runner_frame_style']);
@@ -105,8 +104,6 @@ class cauto_runner extends cauto_utils
         remove_action('wp_head', 'wlwmanifest_link'); // Removes Windows Live Writer link
         wp_dequeue_style('wp-fonts-local'); // Remove the wp-fonts-local style
 
-   
-
     }
 
 
@@ -137,10 +134,15 @@ class cauto_runner extends cauto_utils
         wp_enqueue_script('cauto-runner-js');
         
         if (isset($this->flow_steps)) {
+            $main_steps = apply_filters('autoqa-steps', cauto_steps::steps());
             foreach ($this->flow_steps as $steps) {
                 if (!empty($steps)) {
                     foreach ($steps as $step) {
                         if (isset($step['step'])) {
+
+                            $step_meta = isset($main_steps[$step['step']]) ? $main_steps[$step['step']] : null;
+                            if (isset($step_meta['custom_callback'])) continue;
+
                             wp_register_script('cauto-runner-'.$step['step'], CAUTO_PLUGIN_URL.'assets/runners/'.$step['step'].'.js', ['jquery'], null );
                             wp_enqueue_script('cauto-runner-'.$step['step']);
                         }
@@ -323,7 +325,7 @@ class cauto_runner extends cauto_utils
 
         if ($flow_id && $runner_id) {
             
-            $steps_obj          = cauto_steps::steps();
+            $steps_obj          = apply_filters('autoqa-steps',cauto_steps::steps());
             $step_index         = $index;
             $runner             = new cauto_test_runners($runner_id);
             $runner->set_flow_id($flow_id);

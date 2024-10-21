@@ -404,7 +404,7 @@ class cauto_admin extends cauto_utils
 
         if (!$get_steps) return;
 
-        $data = cauto_steps::steps();
+        $data = apply_filters('autoqa-steps', cauto_steps::steps());
         $flow_steps = [];
 
         foreach ($get_steps as $steps) {
@@ -435,12 +435,17 @@ class cauto_admin extends cauto_utils
                 
 
             } else {
-                $clean_selector = substr($step_selectors, 1);
 
-                if (!empty($steps['record'])) {
-                    foreach ($steps['record'] as $record) {
-                        if ($record['id'] === $clean_selector) {
-                            $describe_text_set['#'.$record['id']] = $record['value'];
+                if (!$step_selectors) {
+                    $describe_text = NULL;
+                } else {
+                    $clean_selector = substr($step_selectors, 1);
+
+                    if (!empty($steps['record'])) {
+                        foreach ($steps['record'] as $record) {
+                            if ($record['id'] === $clean_selector) {
+                                $describe_text_set['#'.$record['id']] = $record['value'];
+                            }
                         }
                     }
                 }
@@ -451,7 +456,7 @@ class cauto_admin extends cauto_utils
                     $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
                 }
             } else {
-                $describe_text = null;
+                $describe_text = __('ERROR: Invalid node, please remove this step.', 'autoqa-test-automation');
             }
             
 
