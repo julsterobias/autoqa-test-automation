@@ -14,6 +14,12 @@ if ( !function_exists( 'add_filter' ) ){
 <?php if (!empty($data['is_results'])): ?>
 
 <div class="builder-wrapper">
+    <div class="wrapper cauto-runner-button-area">
+        <?php do_action('cauto_load_runner_buttons', $data['flow_id']); ?>
+    </div>
+</div>    
+
+<div class="builder-wrapper">
     <div class="wrapper">
         <div class="col-30">
             <div class="cauto-builder-steps cauto-runner-col" id="cauto-stepss">
@@ -40,7 +46,7 @@ if ( !function_exists( 'add_filter' ) ){
             <div class="cauto-builder-area">
                 <div class="builder-header">
                     <div class="builder-header-meta">
-                        <?php do_action('cauto_load_builder_meta', $data['details']); ?> <?php echo esc_html($data['last_run']); ?>
+                        <?php do_action('cauto_load_builder_meta', $data['details']); ?> &nbsp;<?php echo esc_html($data['last_run']); ?>
                     </div>
                     <div class="builder-header-controls">
                         <?php do_action('cauto_load_builder_control', $data['details']); ?>

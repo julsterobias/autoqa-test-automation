@@ -1,4 +1,4 @@
-# Ver 0.9.7 Beta
+# Ver 0.9.8 Beta
 
 # AutoQA
 Automate the testing of your WordPress sites and plugins without the need for coding.
