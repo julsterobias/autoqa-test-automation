@@ -1534,8 +1534,7 @@ class cauto_steps
             ]
             
         ];
-
-        return apply_filters('autoqa-steps', $steps);
+        return $steps;
     }
 }
 

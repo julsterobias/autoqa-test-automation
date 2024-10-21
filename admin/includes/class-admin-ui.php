@@ -258,6 +258,7 @@ class cauto_admin_ui extends cauto_utils
 
     public function load_steps()
     {
+        $this->steps = apply_filters('autoqa-steps', $this->steps);
         $this->render_ui($this->steps, 'steps', []);
     }
 
@@ -358,6 +359,7 @@ class cauto_admin_ui extends cauto_utils
         }
 
         $title_type     = str_replace('-',' ',$type);
+        $this->steps    = apply_filters('autoqa-steps', $this->steps);
 
         if (isset($this->steps[$type])) {
 

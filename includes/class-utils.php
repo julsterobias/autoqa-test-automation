@@ -270,7 +270,7 @@ class cauto_utils
             $flow_steps = get_post_meta($flow_id, $this->flow_steps_key, true);
             if ($flow_steps) {
 
-                $get_steps  = cauto_steps::steps();
+                $get_steps  = apply_filters('autoqa-steps',cauto_steps::steps());
                 $data_steps = []; 
                 foreach ($get_steps as $type => $step) {
 
