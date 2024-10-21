@@ -203,11 +203,25 @@ jQuery(document).ready(function(){
         }
     });
 
+    jQuery('#cauto-clear-result').on('click', function(){
+        jQuery('#cauto-popup-delete-results-confirmation').fadeIn(200);
+        let flow_id = jQuery(this).data('flow-id');
+        if (flow_id) {
+            jQuery('#cauto-delete-results-confirm').attr('data-flow-id', flow_id);
+        }
+    });
+
     jQuery('#cauto-delete-flow-confirm').on('click', function(){
         let flow_id = jQuery(this).data('flow-id');
         jQuery(this).prop('disabled', true);
         jQuery('.cauto-cancel').prop('disabled', true);
         cauto_do_delete_flow(flow_id);
+    });
+
+    jQuery('#cauto-delete-results-confirm').on('click', function(){
+        let flow_id = jQuery(this).data('flow-id');
+        jQuery(this).prop('disabled', true);
+        cauto_do_delete_flow_results(flow_id);
     });
 
     jQuery('#cauto-settings').on('click', function(){
@@ -671,6 +685,35 @@ const cauto_do_delete_flow = ( flow_id = null ) => {
             if (data) {
                 if (data.status === 'success') {
                     window.location = data.redirect;
+                } else {
+                    console.error('CAUTO ERROR: '+ data.message);
+                }
+                jQuery('#cauto-delete-flow-confirm').prop('disabled', false);
+                jQuery('.cauto-cancel').prop('disabled', false);
+            }           
+            
+        }
+    });
+
+}
+
+const cauto_do_delete_flow_results = ( flow_id = null ) => {
+
+    if (!flow_id) return;
+
+    jQuery.ajax( {
+        type : "post",  
+        url: cauto_ajax.ajaxurl,
+        data : {    
+            action: 'cauto_delete_flow_results', 
+            nonce: cauto_ajax.nonce,
+            flow_id: flow_id
+        },
+        success: function( data ) {
+            //response data
+            if (data) {
+                if (data.status === 'success') {
+                    location.reload();
                 } else {
                     console.error('CAUTO ERROR: '+ data.message);
                 }

@@ -69,6 +69,13 @@ class cauto_admin_ui extends cauto_utils
         //load settings button
         add_action('cauto_load_settings_buttons', [$this, 'load_settings_buttons']);
 
+        //load runner button
+        add_action('cauto_load_runner_buttons', [$this, 'load_runner_buttons']);
+        //load delete results popup
+        add_action('cauto_load_delete_results_buttons', [$this, 'load_delete_results_button']);
+        //load delete results popup confirm
+        add_action('cauto_load_delete_results_confirm', [$this,'load_delete_results_confirm']);
+
     }
 
     public function render_ui($data = [], $type = '', $value = [])
@@ -152,7 +159,6 @@ class cauto_admin_ui extends cauto_utils
                 'label' => __('View Results', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-menu-alt2"></span>'
             ]
-           
         ];
 
         $controls = apply_filters('cauto_top_meta_controls', $controls);
@@ -556,6 +562,63 @@ class cauto_admin_ui extends cauto_utils
         ];
         $fields = $this->prepare_attr($fields);
         $this->render_ui(['fields' => $fields], 'fields', []);
+    }
+
+    public function load_runner_buttons($flow)
+    {
+        $flow_id = (isset($_GET['flow']))? sanitize_text_field(wp_unslash($_GET['flow'])) : null;
+
+        if (!$flow_id) return;
+
+        $controls = [
+            [
+                'field'  => 'button',
+                'attr'  => [
+                    "class"         => "cauto-top-class cauto-button primary caut-ripple",
+                    "id"            => "cauto-clear-result",
+                    "data-flow-id"  => $flow_id
+                ],
+                'label' => __('Delete All Results', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-trash"></span>'
+            ]
+           
+        ];
+
+        $controls = apply_filters('cauto_top_runner_controls', $controls);
+        $controls = $this->prepare_attr($controls);
+        $this->render_ui(['buttons' => $controls], 'buttons', []);
+    }
+
+    public function load_delete_results_button($flow = null)
+    {
+        if (!$flow) return;
+
+        $buttons = [
+            [
+                'field'  => 'button',
+                'attr'  => [
+                    'id'    => 'cauto-delete-results-confirm',
+                    'class' => 'cauto-top-class cauto-button primary caut-ripple'
+                ],
+                'label'     => __('Let the world burn, do it!', 'autoqa-test-automation'),
+                'icon'      => '<span class="dashicons dashicons-saved"></span>'
+            ],
+            [
+                'field' => 'button',
+                'attr'  => [
+                    "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
+                ],
+                'label' =>  __('Nope', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-no"></span>'
+            ]
+        ];
+        $run_button = $this->prepare_attr($buttons);
+        $this->render_ui(['buttons' => $run_button], 'buttons', []);
+    }
+
+    public function load_delete_results_confirm()
+    {
+        $this->get_view('popups/delete-results', ['path' => 'admin']);
     }
 
 }

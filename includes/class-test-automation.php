@@ -187,6 +187,18 @@ class cauto_test_automation extends cauto_utils
         return $flow_details;
     }
 
+    public function get_flow_steps($flow_id = 0)
+    {
+        $steps = [];
+
+        $flow_id = ($flow_id > 0)? $flow_id : $this->id;
+        if ($flow_id > 0) {
+            $steps = get_post_meta($flow_id, $this->flow_steps_key, true);
+        }
+
+        return $steps;
+    }
+
 
     public function start($runner_id = 0)
     {

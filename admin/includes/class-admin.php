@@ -69,6 +69,8 @@ class cauto_admin extends cauto_utils
         add_action('wp_ajax_cauto_save_settings', [$this, 'cauto_save_settings']);
         //load data into select2 via source(ajax)
         add_action('wp_ajax_cauto_get_select2_data', [$this, 'load_select2_data']);
+        //delete flow results
+        add_action('wp_ajax_cauto_delete_flow_results', [$this, 'delete_flow_results']);
         
     }
 
@@ -172,7 +174,9 @@ class cauto_admin extends cauto_utils
                     $temp_flow['status'] = 'no-run';
                 }
 
-                $temp_flow['steps_number'] = $number_steps;
+                $runner_steps = $cflows->get_flow_steps($flow->ID);
+          
+                $temp_flow['steps_number'] = ($runner_steps)? count($runner_steps) : 0;
                 $data_flows[] = $temp_flow;
 
             }
@@ -840,6 +844,47 @@ class cauto_admin extends cauto_utils
                 wp_send_json([
                     'status'    => 'success',
                     'redirect'  => $url
+                ]);
+            }
+        }
+
+        exit();
+        
+    }
+
+    public function delete_flow_results()
+    {
+        if ( !wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['nonce'])), $this->nonce ) ) {
+            wp_send_json(
+                [
+                    'status'    => 'failed',
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                ]
+            );
+            exit();
+        }
+
+        $flow_id = (isset($_POST['flow_id']))? sanitize_text_field(wp_unslash($_POST['flow_id'])) : null;
+
+        if ($flow_id) {
+
+            $runners = new cauto_test_runners();
+            $runners->set_flow_id($flow_id);
+            $get_runners = $runners->get_runners();
+
+            $some_are_deleted = 0;
+            if (!empty($get_runners)) {
+                foreach ($get_runners as $index => $runner) {
+                    $res = wp_delete_post($runner['ID']);
+                    if ($res) {
+                        $some_are_deleted++;
+                    }
+                }
+            }
+
+            if ($some_are_deleted > 0) {
+                wp_send_json([
+                    'status'    => 'success'
                 ]);
             }
         }

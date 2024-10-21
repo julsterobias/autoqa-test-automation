@@ -3,7 +3,7 @@ Contributors: julsterobias
 Tags: test, QA, automation
 Requires at least: 4.7
 Tested up to: 6.6.2
-Stable tag: 0.9.7
+Stable tag: 0.9.8
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,7 +23,11 @@ AutoQA is a simple automation plugin designed to improve your regression testing
 Each flow acts as a customizable test case, allowing users to simulate and verify various processes within their application. A flow consists of a series of steps, which represent specific actions or interactions. Whether it's a simple user journey or a complex workflow, this feature enables detailed testing by breaking down tasks into manageable steps, ensuring that every aspect of your process works seamlessly from start to finish.
 
 == Steps ==
-Each flow acts as a customizable test case, allowing users to simulate and verify various processes within their application. A flow consists of a series of steps, which represent specific actions or interactions. Whether it's a simple user journey or a complex workflow, this feature enables detailed testing by breaking down tasks into manageable steps, ensuring that every aspect of your process works seamlessly from start to finish.
+The Steps feature in the Flow plugin is designed to automate user actions, emulating how a real user would interact with your website or WordPress application. Each step represents a specific action, such as clicking a button, filling out a form, or navigating through pages. These steps are built within a Flow, where they combine to form a comprehensive test case.
+
+By using Steps, you can easily automate repetitive user interactions, allowing the plugin to test your site or app seamlessly. This saves you time and ensures that all key functionalities are thoroughly verified without manual intervention.
+
+With Steps, you can ensure a smoother, error-free experience for your users, all while simplifying your testing process.
 
 == Runners ==
 Designed to efficiently handle and execute each step of your flow in sequence. It ensures that all steps are processed systematically, checking whether each step passes or fails based on predefined criteria. The Runner automatically records the results, including pass/fail status, directly into the database for easy tracking and review. This feature simplifies the management of test cases, making it easier to monitor progress and identify issues at any step in the process.

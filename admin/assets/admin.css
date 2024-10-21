@@ -941,3 +941,7 @@ select2 CSS adjustments
     z-index: 99999;
     cursor: pointer;
 }
+
+.cauto-runner-button-area {
+    padding-bottom: 20px;
+}
