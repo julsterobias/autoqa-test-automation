@@ -96,16 +96,23 @@
 }
 
 .cauto-runner-completed p {
-    margin: 25px 0 0 0;
+    margin: 0;
+}
+
+.autoqa-result-control-buttons {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    display: none;
 }
 
 .cauto-runner-completed p input,
-.cauto-runner-manual-ui input {
+.cauto-runner-manual-ui input,
+.autoqa-result-control-buttons input {
     display: inline-block;
     margin-right: 5px;
     text-decoration: none;
-    padding: 7px 15px;
-    border: 1px solid #f25405;
+    padding: 8px 16px;
     border-radius: 100px;
     font-size: 14px;
     line-height: 18px;
@@ -122,15 +129,23 @@
     margin-right: 0;
 }
 
-.cauto-runner-completed p input.primary {
+.cauto-runner-completed p input.primary,
+.autoqa-result-control-buttons input.primary{
     background-color: #f25405;
     color: white;
 }
 
+.cauto-completed-content {
+    overflow: auto;
+    position: relative;
+    height: 100%;
+}
+
 .cauto-completed-content .result {
     text-align: left;
-    height: calc(100vh - 160px);
-    overflow-y: auto;
+    /*height: calc(100vh - 150px);
+    overflow-y: auto;*/
+    margin-bottom: 15px;
 }
 
 .cauto-completed-content .result ul {
@@ -149,10 +164,9 @@
 
 .cauto-completed-content .result ul li div.status {
     display: inline-block;
-    width: 5%;
     vertical-align: top;
     position: relative;
-    padding: 20px;
+    width: 75px;
 }
 
 .cauto-completed-content .result ul li div.meta {
@@ -176,9 +190,10 @@
 }
 
 .cauto-completed-content .result ul li div.status svg {
-    position: relative;
+    position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .cauto-completed-content .result ul li div.passed svg {

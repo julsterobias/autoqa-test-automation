@@ -580,6 +580,16 @@ class cauto_admin_ui extends cauto_utils
                 ],
                 'label' => __('Delete All Results', 'autoqa-test-automation'),
                 'icon'  => '<span class="dashicons dashicons-trash"></span>'
+            ],
+            [
+                'field'  => 'a',
+                'attr'  => [
+                    "class"         => "cauto-top-class cauto-button caut-ripple",
+                    "id"            => "cauto-clear-result",
+                    'href'          => get_admin_url().'tools.php?page=cauto-test-tools&flow=1041'
+                ],
+                'label' => __('Back&nbsp;&nbsp;', 'autoqa-test-automation'),
+                'icon'  => '<span class="dashicons dashicons-arrow-left-alt2"></span>'
             ]
            
         ];

@@ -172,7 +172,7 @@ const cauto_plot_runner_status = (results = [], index, is_continue = false) => {
 
 const cauto_render_test_results = (payload = []) => {
     
-    jQuery('.cauto-runner-completed').show();
+    jQuery('.cauto-runner-completed, .autoqa-result-control-buttons').show();
 
     if (payload.length === 0) return;
 
