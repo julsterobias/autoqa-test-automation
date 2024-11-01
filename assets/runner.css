@@ -119,6 +119,7 @@
     color: #f25405;
     background-color: white;
     cursor: pointer;
+    border: 0;
 }
 .cauto-runner-completed p input:disabled {
     opacity: 0.5;

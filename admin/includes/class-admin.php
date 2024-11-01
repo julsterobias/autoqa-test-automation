@@ -224,7 +224,7 @@ class cauto_admin extends cauto_utils
         if (isset($get_runners[0]['date'])) {
             $last_run = $get_runners[0]['date'];
         } else {
-            $last_run = __('No history', 'autoqa-test-automation');
+            $last_run = __('No history', 'autoqa');
         }
         
         $this->get_view('builder/part-builder-tools', [
@@ -255,7 +255,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -294,7 +294,7 @@ class cauto_admin extends cauto_utils
                 wp_send_json(
                     [
                         'status'        => 'success',
-                        'message'       => __('Flow is added', 'autoqa-test-automation'),
+                        'message'       => __('Flow is added', 'autoqa'),
                         'flow_id'       => $post_id,
                         'redirect_to'   => $redirect_url
                     ]
@@ -304,7 +304,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => __('Flow name is required', 'autoqa-test-automation')
+                    'message'   => __('Flow name is required', 'autoqa')
                 ]
             );
         }
@@ -327,7 +327,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -460,7 +460,7 @@ class cauto_admin extends cauto_utils
                     $describe_text = str_replace("{".$index."}", $describe_set, $describe_text);
                 }
             } else {
-                $describe_text = __('ERROR: Invalid node, please remove this step.', 'autoqa-test-automation');
+                $describe_text = __('ERROR: Invalid node, please remove this step.', 'autoqa');
             }
             
 
@@ -496,7 +496,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -509,7 +509,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('No flow is found', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('No flow is found', 'autoqa'))
                 ]
             );
             exit();
@@ -522,7 +522,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('No available steps to run', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('No available steps to run', 'autoqa'))
                 ]
             );
             exit();
@@ -534,7 +534,7 @@ class cauto_admin extends cauto_utils
                 wp_send_json(
                     [
                         'status'    => 'failed',
-                        'message'   => esc_html(__('No valid step to start', 'autoqa-test-automation'))
+                        'message'   => esc_html(__('No valid step to start', 'autoqa'))
                     ]
                 );
                 exit();
@@ -546,7 +546,7 @@ class cauto_admin extends cauto_utils
                 wp_send_json(
                     [
                         'status'    => 'failed',
-                        'message'   => esc_html(__('No valid URL to start', 'autoqa-test-automation'))
+                        'message'   => esc_html(__('No valid URL to start', 'autoqa'))
                     ]
                 );
                 exit();
@@ -578,7 +578,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Failed to save runner, contact developer', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Failed to save runner, contact developer', 'autoqa'))
                 ]
             );
         }
@@ -599,7 +599,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -611,7 +611,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'        => 'failed',
-                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa-test-automation')) 
+                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa')) 
                 ]
             );
             exit();
@@ -634,7 +634,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'        => 'failed',
-                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa-test-automation')) 
+                    'message'       => esc_html(__('No flow is found, please contact developer', 'autoqa')) 
                 ]
             );
         }
@@ -654,7 +654,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -722,7 +722,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -750,7 +750,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('AutoQA Error: No runner ID or Flow ID found, please contact the developer.', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('AutoQA Error: No runner ID or Flow ID found, please contact the developer.', 'autoqa'))
                 ]
             );
         }
@@ -791,7 +791,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -816,7 +816,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -858,7 +858,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -899,7 +899,7 @@ class cauto_admin extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -936,7 +936,7 @@ class cauto_admin extends cauto_utils
             echo wp_json_encode(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();

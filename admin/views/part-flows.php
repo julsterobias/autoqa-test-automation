@@ -32,10 +32,10 @@ if ( !function_exists( 'add_filter' ) ){
                     <div class="col-87 col-details">
                         <h3><a href="<?php echo esc_url(admin_url('tools.php?page='.$this->settings_page.'&flow='.$flow['ID'])); ?>"><?php echo esc_html($flow['name']); ?></a></h3>
                             <div class="cauto-flow-meta">
-                            <div class="cauto-details-last-run"><?php esc_html_e('Last Run', 'autoqa-test-automation'); ?>
+                            <div class="cauto-details-last-run"><?php esc_html_e('Last Run', 'autoqa'); ?>
                                 <span><?php echo esc_html($flow['last_run']); ?></span>
                             </div>
-                            <div class="cauto-details-steps"><?php esc_html_e('Steps', 'autoqa-test-automation'); ?>
+                            <div class="cauto-details-steps"><?php esc_html_e('Steps', 'autoqa'); ?>
                                 <span><?php echo esc_html($flow['steps_number']); ?></span>    
                             </div>
                         </div>

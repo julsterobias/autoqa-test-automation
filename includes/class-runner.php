@@ -178,7 +178,7 @@ class cauto_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -197,7 +197,7 @@ class cauto_runner extends cauto_utils
                 wp_send_json(
                     [
                         'status'     => 'failed',
-                        'message'    => esc_html(__('No available steps to run', 'autoqa-test-automation')) 
+                        'message'    => esc_html(__('No available steps to run', 'autoqa')) 
                     ]
                 );
                 exit();
@@ -302,7 +302,7 @@ class cauto_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -336,7 +336,7 @@ class cauto_runner extends cauto_utils
                 wp_send_json([
                     'status'       => 'failed',
                     'payload'      => [],
-                    'message'      => esc_html(__('Cannot run flow no steps found', 'autoqa-test-automation')) 
+                    'message'      => esc_html(__('Cannot run flow no steps found', 'autoqa')) 
                 ]);
                 exit();
             }
@@ -401,7 +401,7 @@ class cauto_runner extends cauto_utils
 
                     //update the postback step
                     if (!isset($runner_steps[$started_steps]['result'])) {
-                        $postback_result = (object) ['status' => 'passed', 'message' => __('step validated and continued', 'autoqa-test-automation')];
+                        $postback_result = (object) ['status' => 'passed', 'message' => __('step validated and continued', 'autoqa')];
                         $runner->update_runner_steps($started_steps, [$postback_result]);
                     }
                     $started_steps++;
@@ -508,7 +508,7 @@ class cauto_runner extends cauto_utils
             wp_send_json([
                 'status'       => 'failed',
                 'payload'      => [],
-                'message'      => esc_html(__('No flow and runner were found', 'autoqa-test-automation')) 
+                'message'      => esc_html(__('No flow and runner were found', 'autoqa')) 
             ]);
         }
         exit();
@@ -518,7 +518,7 @@ class cauto_runner extends cauto_utils
     {
         //stop the running flow
         $flow_class = new cauto_test_automation($data['flow_id']);
-        $flow_class->stop($data['runner_id']);
+        $flow_class->stop();
 
         wp_send_json([
             'status'       => 'completed',
@@ -550,7 +550,7 @@ class cauto_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -590,7 +590,7 @@ class cauto_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
