@@ -12,17 +12,7 @@ namespace cauto\admin\includes;
 use cauto\includes\cauto_utils;
 use cauto\includes\cauto_steps;
 
-if ( !function_exists( 'add_action' ) ){
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit();
-}
-
-if ( !function_exists( 'add_filter' ) ){
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit();
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
 class cauto_admin_ui extends cauto_utils
 {
