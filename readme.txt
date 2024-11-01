@@ -3,12 +3,12 @@ Contributors: julsterobias
 Tags: test, QA, automation
 Requires at least: 4.7
 Tested up to: 6.6.2
-Stable tag: 0.9.8
+Stable tag: 0.9.8.3
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-= Ver 0.9.6 Beta = 
+= Ver 0.9.8.1 Beta = 
 
 == AutoQA ==
 Automate the testing of your WordPress sites and plugins without the need for coding.

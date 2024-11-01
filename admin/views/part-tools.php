@@ -26,9 +26,9 @@ if ( !function_exists( 'add_filter' ) ){
 </svg>
 </svg><?php endif; ?>
             </span> 
-            <?php if ($data['details']): ?><span class="dashicons dashicons-edit" id="cauto-edit-flow" title="<?php esc_attr_e('Edit Flow', 'autoqa-test-automation'); ?>"></span> <?php endif; ?></div>
+            <?php if ($data['details']): ?><span class="dashicons dashicons-edit" id="cauto-edit-flow" title="<?php esc_attr_e('Edit Flow', 'autoqa'); ?>"></span> <?php endif; ?></div>
             <div class="col-30 controls">
-                <span class="version"><?php esc_html_e('Version', 'autoqa-test-automation'); ?> <?php echo esc_html(CAUTO_PLUGIN_VERSION.' '.CAUTO_PLUGIN_VERSION_CODE); ?></span>
+                <span class="version"><?php esc_html_e('Version', 'autoqa'); ?> <?php echo esc_html(CAUTO_PLUGIN_VERSION.' '.CAUTO_PLUGIN_VERSION_CODE); ?></span>
                 <?php do_action('cauto_top_control'); ?>
             </div>
         </div>

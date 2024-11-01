@@ -71,7 +71,7 @@ if (!empty($data['data']['fields'])):
                 }
 ?>
             <div class="cauto-ui-wrapper">
-                <div class="cauto-select-wrapper"><?php if (isset($field['select2_allow_clear'])): ?><span class="cauto-clear-select2"><?php esc_html_e('Clear', 'autoqa-test-automation') ?></span><?php endif; ?>
+                <div class="cauto-select-wrapper"><?php if (isset($field['select2_allow_clear'])): ?><span class="cauto-clear-select2"><?php esc_html_e('Clear', 'autoqa') ?></span><?php endif; ?>
                     <label><?php echo esc_html($field['label']); ?>
                         <select <?php echo htmlspecialchars_decode(esc_attr($field['iattr'])); ?> data-interact="<?php echo esc_attr($el_interaction); ?>"  data-select-source="<?php echo esc_attr($select2); ?>">
                             <?php if (!empty($field['options'])): 

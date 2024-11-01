@@ -10,8 +10,8 @@
 * Plugin Type: Test Tool
 * Author URI: https://julsterobias.github.io/autoqa/author/
 * Plugin URI: https://julsterobias.github.io/autoqa
-* Version: 0.9.8
-* Text Domain: autoqa-test-automation
+* Version: 0.9.8.3
+* Text Domain: autoqa
 * License:     GPLv2 or later
 * License URI: https://www.gnu.org/licenses/gpl.html
 *
@@ -23,7 +23,7 @@
 defined( 'ABSPATH' ) or die( 'No access area' );
 define('CAUTO_PLUGIN_PATH', plugin_dir_path( __FILE__ ));
 define('CAUTO_PLUGIN_URL', plugin_dir_url( __FILE__ ));
-define('CAUTO_PLUGIN_VERSION','0.9.8');
+define('CAUTO_PLUGIN_VERSION','0.9.8.3');
 define('CAUTO_PLUGIN_VERSION_CODE','Beta');
 define('CAUTO_NAMESPACES', ['includes','admin/includes']);
 define('CAUTO_RUNNER_IS_RUNNING', false);
@@ -40,7 +40,7 @@ define('CAUTO_RUNNER_IS_RUNNING', false);
 add_action( 'init', 'cauto_load_text_domain' );
 
 function cauto_load_text_domain() {
-	load_plugin_textdomain( 'autoqa-test-automation', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'autoqa', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 }
 
 

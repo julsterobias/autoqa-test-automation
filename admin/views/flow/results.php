@@ -38,7 +38,7 @@ do_action('autoqa-results-before-list', $data['results']);
         </li>
     <?php endforeach; ?>
 </ul>
-<div class="cauto-see-other-runners"><span><?php esc_html_e('Show more', 'autoqa-test-automation'); ?></span></div>
+<div class="cauto-see-other-runners"><span><?php esc_html_e('Show more', 'autoqa'); ?></span></div>
 
 <?php 
 do_action('autoqa-results-end-list', $data['results']);    
