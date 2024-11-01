@@ -105,7 +105,7 @@ class cauto_admin_ui extends cauto_utils
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
                     "id"        => "cauto-new-case"
                 ],
-                'label' => __('New Test Flow', 'autoqa-test-automation'),
+                'label' => __('New Test Flow', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-insert"></span>'
             ],
             [
@@ -116,7 +116,7 @@ class cauto_admin_ui extends cauto_utils
                     "href"      => 'https://julsterobias.github.io/autoqa/documentation/',
                     "target"    => '_blank'
                 ],
-                'label' =>  __('Help', 'autoqa-test-automation'),
+                'label' =>  __('Help', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-sos"></span>'
             ],
             [
@@ -125,7 +125,7 @@ class cauto_admin_ui extends cauto_utils
                     "class" => "cauto-top-class cauto-button caut-ripple",
                     "id"    => "cauto-settings"
                 ],
-                'label' =>  __('Settings', 'autoqa-test-automation'),
+                'label' =>  __('Settings', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-admin-generic"></span>'
             ],
            
@@ -156,7 +156,7 @@ class cauto_admin_ui extends cauto_utils
                     "id"        => "cauto-new-case",
                     "href"      => $url
                 ],
-                'label' => __('View Results', 'autoqa-test-automation'),
+                'label' => __('View Results', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-menu-alt2"></span>'
             ]
         ];
@@ -176,7 +176,7 @@ class cauto_admin_ui extends cauto_utils
                     'class' => 'cauto-field wide',
                     'type'  => 'text'
                 ],
-                'label'     => __('Flow Name', 'autoqa-test-automation'),
+                'label'     => __('Flow Name', 'autoqa'),
                 'icon'      => null
             ],
             [
@@ -186,7 +186,7 @@ class cauto_admin_ui extends cauto_utils
                     'class' => 'cauto-toggle',
                     'type'  => 'checkbox'
                 ],
-                'label'     => __('Stop on error', 'autoqa-test-automation'),
+                'label'     => __('Stop on error', 'autoqa'),
                 'icon'      => null
             ]
         ];
@@ -201,7 +201,7 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-save-new-flow',
                     'class' => 'cauto-top-class cauto-button primary caut-ripple'
                 ],
-                'label'     => __('Save Flow', 'autoqa-test-automation'),
+                'label'     => __('Save Flow', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -209,7 +209,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'  => [
                     "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
                 ],
-                'label' =>  __('Cancel', 'autoqa-test-automation'),
+                'label' =>  __('Cancel', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-no"></span>'
             ]
         ];
@@ -227,7 +227,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon primary",
                     "id"        => "cauto-run-flow",
-                    "title"     => __('Run Flow', 'autoqa-test-automation'),
+                    "title"     => __('Run Flow', 'autoqa'),
                     'data-id'   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     => null,
@@ -238,7 +238,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon",
                     "id"        => "cauto-save-flow",
-                    "title"     => __('Save Changes', 'autoqa-test-automation')
+                    "title"     => __('Save Changes', 'autoqa')
                 ],
                 'label'     =>  null,
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
@@ -248,7 +248,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon cauto-flow-delete-flow",
                     "id"        => "cauto-delete-flow",
-                    "title"     => __('Delete Flow', 'autoqa-test-automation'),
+                    "title"     => __('Delete Flow', 'autoqa'),
                     "data-flow-id"   => (isset($data->ID))? sanitize_text_field($data->ID) : 0
                 ],
                 'label'     =>  null,
@@ -278,7 +278,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon primary cauto-flow-run-flow",
-                    "title"         => __('Run Flow', 'autoqa-test-automation'),
+                    "title"         => __('Run Flow', 'autoqa'),
                     "data-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -288,7 +288,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon cauto-flow-edit-flow",
-                    "title"         => __('Edit', 'autoqa-test-automation'),
+                    "title"         => __('Edit', 'autoqa'),
                     "data-flow-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -298,7 +298,7 @@ class cauto_admin_ui extends cauto_utils
                 'field'     => 'button',
                 'attr'      => [
                     "class"         => "cauto-button-icon cauto-flow-delete-flow",
-                    "title"         => __('Delete', 'autoqa-test-automation'),
+                    "title"         => __('Delete', 'autoqa'),
                     "data-flow-id"  => $flow['ID']
                 ],
                 'label'     => null,
@@ -322,7 +322,7 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-delete-flow-confirm',
                     'class' => 'cauto-top-class cauto-button primary caut-ripple'
                 ],
-                'label'     => __('Let the world burn, do it!', 'autoqa-test-automation'),
+                'label'     => __('Let the world burn, do it!', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -330,7 +330,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'  => [
                     "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
                 ],
-                'label' =>  __('Nope', 'autoqa-test-automation'),
+                'label' =>  __('Nope', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-no"></span>'
             ]
         ];
@@ -346,7 +346,7 @@ class cauto_admin_ui extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -354,6 +354,16 @@ class cauto_admin_ui extends cauto_utils
 
         $type           = (isset($_POST['type']))? sanitize_text_field(wp_unslash($_POST['type'])) : null;
         $saved_steps    = (isset($_POST['saved_data']))? json_decode( stripslashes( $_POST['saved_data'] ) ) : null;
+
+        //sanitize saved_steps
+        foreach($saved_steps as $index => $saved_step) {
+            $temp_saved_step = (array) $saved_step;
+            foreach ($temp_saved_step as $i => $line_step) {
+                $temp_saved_step[$i] = sanitize_text_field($line_step);
+            }
+            $saved_step = (object) $temp_saved_step;
+            $saved_steps[$index] = $saved_step;
+        }
 
         //sanitize all value 
         foreach ($saved_steps as $steps) {
@@ -402,7 +412,7 @@ class cauto_admin_ui extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Step type is not found', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Step type is not found', 'autoqa'))
                 ]
             );
         }
@@ -443,7 +453,7 @@ class cauto_admin_ui extends cauto_utils
                     'type'  => 'number',
                     'value' => (isset($data['settings']['step-duration']))? $data['settings']['step-duration'] : 3000
                 ],
-                'label'     => __('Runner duration in milliseconds(ms)', 'autoqa-test-automation'),
+                'label'     => __('Runner duration in milliseconds(ms)', 'autoqa'),
                 'icon'      => null
             ]
         ];
@@ -462,9 +472,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
                     "id"        => "cauto-save-settings",
-                    "title"     => __('Save', 'autoqa-test-automation')
+                    "title"     => __('Save', 'autoqa')
                 ],
-                'label'     => __('Save', 'autoqa-test-automation'),
+                'label'     => __('Save', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -472,9 +482,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button caut-ripple cauto-cancel",
                     "id"        => "cauto-cancel-settings",
-                    "title"     => __('Cancel', 'autoqa-test-automation')
+                    "title"     => __('Cancel', 'autoqa')
                 ],
-                'label'     => __('Cancel', 'autoqa-test-automation'),
+                'label'     => __('Cancel', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-no"></span>'
             ],
             
@@ -493,9 +503,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button primary caut-ripple",
                     "id"        => "cauto-save-step",
-                    "title"     => __('Save Changes', 'autoqa-test-automation')
+                    "title"     => __('Save Changes', 'autoqa')
                 ],
-                'label'     => __('Save', 'autoqa-test-automation'),
+                'label'     => __('Save', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -503,9 +513,9 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button caut-ripple cauto-cancel",
                     "id"        => "",
-                    "title"     => __('Abort Changes', 'autoqa-test-automation')
+                    "title"     => __('Abort Changes', 'autoqa')
                 ],
-                'label'     =>  __('Cancel', 'autoqa-test-automation'),
+                'label'     =>  __('Cancel', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-no"></span>'
             ],
         ];
@@ -519,7 +529,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-button-icon",
                     "id"        => "cauto-delete-step",
-                    "title"     => __('Delete Step', 'autoqa-test-automation')
+                    "title"     => __('Delete Step', 'autoqa')
                 ],
                 'label'     => null,
                 'icon'      => '<span class="dashicons dashicons-trash"></span>'
@@ -529,10 +539,10 @@ class cauto_admin_ui extends cauto_utils
                 'attr'      => [
                     "class"     => "cauto-top-class cauto-button caut-ripple",
                     "id"        => "cauto-delete-step-confirm",
-                    "title"     => __('Detele', 'autoqa-test-automation')
+                    "title"     => __('Detele', 'autoqa')
                 ],
-                'label'     => __("Yes", 'autoqa-test-automation'),
-                'text'      => __("You sure?", 'autoqa-test-automation'),
+                'label'     => __("Yes", 'autoqa'),
+                'text'      => __("You sure?", 'autoqa'),
                 'icon'      => null,
                 'hidden'    => true
             ]
@@ -578,7 +588,7 @@ class cauto_admin_ui extends cauto_utils
                     "id"            => "cauto-clear-result",
                     "data-flow-id"  => $flow_id
                 ],
-                'label' => __('Delete All Results', 'autoqa-test-automation'),
+                'label' => __('Delete All Results', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-trash"></span>'
             ],
             [
@@ -588,7 +598,7 @@ class cauto_admin_ui extends cauto_utils
                     "id"            => "cauto-clear-result",
                     'href'          => get_admin_url().'tools.php?page=cauto-test-tools&flow=1041'
                 ],
-                'label' => __('Back&nbsp;&nbsp;', 'autoqa-test-automation'),
+                'label' => __('Back&nbsp;&nbsp;', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-arrow-left-alt2"></span>'
             ]
            
@@ -610,7 +620,7 @@ class cauto_admin_ui extends cauto_utils
                     'id'    => 'cauto-delete-results-confirm',
                     'class' => 'cauto-top-class cauto-button primary caut-ripple'
                 ],
-                'label'     => __('Let the world burn, do it!', 'autoqa-test-automation'),
+                'label'     => __('Let the world burn, do it!', 'autoqa'),
                 'icon'      => '<span class="dashicons dashicons-saved"></span>'
             ],
             [
@@ -618,7 +628,7 @@ class cauto_admin_ui extends cauto_utils
                 'attr'  => [
                     "class" => "cauto-top-class cauto-button caut-ripple cauto-cancel"
                 ],
-                'label' =>  __('Nope', 'autoqa-test-automation'),
+                'label' =>  __('Nope', 'autoqa'),
                 'icon'  => '<span class="dashicons dashicons-no"></span>'
             ]
         ];

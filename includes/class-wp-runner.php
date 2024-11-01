@@ -42,7 +42,7 @@ class cauto_wp_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -82,7 +82,7 @@ class cauto_wp_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -117,7 +117,7 @@ class cauto_wp_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -175,7 +175,7 @@ class cauto_wp_runner extends cauto_utils
             wp_send_json(
                 [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Invalid nonce please contact developer or clear your cache', 'autoqa'))
                 ]
             );
             exit();
@@ -195,7 +195,7 @@ class cauto_wp_runner extends cauto_utils
                 'status'    => 'success',
                 'step'      => [
                     'status'    => 'failed',
-                    'message'   => esc_html(__('Step can\'t find a relevant post, please check the step settings', 'autoqa-test-automation'))
+                    'message'   => esc_html(__('Step can\'t find a relevant post, please check the step settings', 'autoqa'))
                 ]
             ]);
             exit();
@@ -276,7 +276,7 @@ class cauto_wp_runner extends cauto_utils
                     $payload = $this->process_numeric_data_type($payload);
                     $status = ($payload['received'] < $payload['expected'])? 'passed' : 'failed';
                 } else {
-                    $message = __('Expected value is invalid for the greater than operation','autoqa-test-automation');
+                    $message = __('Expected value is invalid for the greater than operation','autoqa');
                 } 
                 break;
             case 'is greater than':
@@ -284,7 +284,7 @@ class cauto_wp_runner extends cauto_utils
                     $payload = $this->process_numeric_data_type($payload);
                     $status = ($payload['received'] > $payload['expected'])? 'passed' : 'failed';
                 } else {
-                    $message = __('Expected value is invalid for the greater than operation','autoqa-test-automation');
+                    $message = __('Expected value is invalid for the greater than operation','autoqa');
                 } 
                 break;
             case 'is less than or equal to':
@@ -292,7 +292,7 @@ class cauto_wp_runner extends cauto_utils
                     $payload = $this->process_numeric_data_type($payload);
                     $status = ($payload['received'] <= $payload['expected'])? 'passed' : 'failed';
                 } else {
-                    $message = __('Expected value is invalid for the greater than operation','autoqa-test-automation');
+                    $message = __('Expected value is invalid for the greater than operation','autoqa');
                 } 
                 break;
             case 'is greater than or equal to':
@@ -300,7 +300,7 @@ class cauto_wp_runner extends cauto_utils
                     $payload = $this->process_numeric_data_type($payload);
                     $status = ($payload['received'] >= $payload['expected'])? 'passed' : 'failed';
                 } else {
-                    $message = __('Expected value is invalid for the greater than operation','autoqa-test-automation');
+                    $message = __('Expected value is invalid for the greater than operation','autoqa');
                 } 
                 break;
             case 'has any':
@@ -373,7 +373,7 @@ class cauto_wp_runner extends cauto_utils
                     'status'    => 'success',
                     'step'      => [
                         'status'    => 'failed',
-                        'message'   => esc_html(__('Step is not properly configured please check the settings', 'autoqa-test-automation'))
+                        'message'   => esc_html(__('Step is not properly configured please check the settings', 'autoqa'))
                     ]
                 ]);
                 exit();

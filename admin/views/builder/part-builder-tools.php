@@ -28,7 +28,7 @@ if ( !function_exists( 'add_filter' ) ){
         </div>
         <div class="col-70">
             <div class="cauto-builder-area" id="cauto-result-steps">
-                <span class="cauto-result-opening-messsage"><?php esc_html_e('Select runner to display the steps results', 'autoqa-test-automation'); ?></span>
+                <span class="cauto-result-opening-messsage"><?php esc_html_e('Select runner to display the steps results', 'autoqa'); ?></span>
             </div>
         </div>
     </div>
