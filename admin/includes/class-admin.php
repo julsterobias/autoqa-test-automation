@@ -15,17 +15,7 @@ use cauto\includes\cauto_steps;
 use cauto\includes\cauto_test_runners;
 use cauto\includes\cauto_ui_translatables;
 
-if ( !function_exists( 'add_action' ) ){
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit();
-}
-
-if ( !function_exists( 'add_filter' ) ){
-    header( 'Status: 403 Forbidden' );
-    header( 'HTTP/1.1 403 Forbidden' );
-    exit();
-}
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
 class cauto_admin extends cauto_utils
 {
